@@ -1,4 +1,4 @@
-package com.project.SportsStores.Toner.Controller.client;
+package com.project.SportsStores.Toner.controller.client;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -82,7 +82,7 @@ public class ClientUI {
     }
     @RequestMapping("/account")
     public String account() {
-        return "client/pages/users/auth";
+        return "client/pages/users/account";
     }
     @RequestMapping("/about-us")
     public String aboutUs() {
