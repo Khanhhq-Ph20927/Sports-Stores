@@ -21,28 +21,33 @@
                                 <input th:field="*{id}" type="hidden" class="form-control">
 
                                 <label class="lb-form">Tên voucher</label>
-                                <input th:field="*{name}" type="text" class="form-control">
-                                <p th:if="${#fields.hasErrors('name')}" th:errorclass="error" th:errors="*{name}" />
-
-                                <label class="lb-form">Loại voucher</label>
-                                <select th:field="*{voucherType}" class="form-control">
-                                    <option value="true">Giảm giá theo %</option>
-                                    <option value="false">Giảm giá theo số tiền</option>
-                                </select>
+                                <input th:field="*{tenKhuyenMai}" type="text" class="form-control">
+                                <p th:if="${#fields.hasErrors('tenKhuyenMai')}" th:errorclass="error" th:errors="*{tenKhuyenMai}" />
 
                                 <label class="lb-form">Giá trị giảm</label>
-                                <input th:field="*{discount}" type="number" class="form-control">
+                                <div class="row">
+                                    <div class="col-sm-9">
+                                        <input th:field="*{giaTriGiam}" type="number" class="form-control">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <select th:field="*{loaiKM}" class="form-control">
+                                            <option value="true">%</option>
+                                            <option value="false">VND</option>
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <label class="lb-form">Ảnh</label>
                                 <input type="file" onchange="loadAnh()" id="ipanh" class="form-control">
                                 <input th:field="*{banner}" id="linkanh" type="hidden" class="form-control">
-                                <img id="imgpreview" th:src="${image}" style="width: 170px;margin-top: 20px">
+                                <img id="imgpreview" th:src="${image}">
                             </div>
                             <div class="col-sm-5">
                                 <label class="lb-form">Ngày bắt đầu</label>
-                                <input required th:field="*{startDate}" type="date" class="form-control">
+                                <input required th:field="*{ngayBatDau}" type="date" class="form-control">
                                 <label class="lb-form">Ngày kết thúc</label>
-                                <input required th:field="*{endDate}" type="date" class="form-control">
-                                <p th:if="${#fields.hasErrors('endDate')}" th:errorclass="error" th:errors="*{endDate}" />
+                                <input required th:field="*{ngayKetThuc}" type="date" class="form-control">
+                                <p th:if="${#fields.hasErrors('ngayKetThuc')}" th:errorclass="error" th:errors="*{ngayKetThuc}" />
                                 <br>
                                 <label class="lb-form">Trạng thái</label>
                                 <input th:field="*{trangThai}" class="form-control"><br><br>

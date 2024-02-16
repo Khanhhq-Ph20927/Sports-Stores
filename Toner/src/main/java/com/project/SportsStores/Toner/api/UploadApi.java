@@ -1,11 +1,13 @@
 package com.project.SportsStores.Toner.api;
 
-import com.project.SportsStores.Toner.utils.CloudinayService;
+import com.project.SportsStores.Toner.utils.CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class UploadApi {
 
     @Autowired
-    private CloudinayService cloudinaryService;
+    private CloudinaryService cloudinaryService;
 
     @PostMapping("/public/upload-file")
     public String uploadFile(@RequestParam("file") MultipartFile file){

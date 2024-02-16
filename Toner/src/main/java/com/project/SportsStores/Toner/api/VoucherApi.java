@@ -1,7 +1,7 @@
 package com.project.SportsStores.Toner.api;
 
-import com.project.SportsStores.Toner.model.Voucher;
-import com.project.SportsStores.Toner.service.VoucherService;
+import com.project.SportsStores.Toner.Model.KhuyenMai;
+import com.project.SportsStores.Toner.Service.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +24,7 @@ public class VoucherApi {
 
 
     @DeleteMapping("/admin/delete")
-    public ResponseEntity<?> delete(@RequestParam("id") Integer id){
+    public ResponseEntity<?> delete(@RequestParam("id") Long id){
         voucherService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -33,7 +33,7 @@ public class VoucherApi {
     public ResponseEntity<?> findAll(@RequestParam(value = "start", required = false) Date start,
                                      @RequestParam(value = "end", required = false) Date end,
                                      Pageable pageable){
-        Page<Voucher> result = voucherService.findAll(start,end, pageable);
+        Page<KhuyenMai> result = voucherService.findAll(start,end, pageable);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 

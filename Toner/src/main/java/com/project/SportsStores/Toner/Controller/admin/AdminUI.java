@@ -1,16 +1,11 @@
-package com.project.SportsStores.Toner.controller.admin;
+package com.project.SportsStores.Toner.Controller.admin;
 
-import com.project.SportsStores.Toner.model.Voucher;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminUI {
-
-
     @RequestMapping("/index")
     public String home() {
         return "admin/index";
@@ -18,12 +13,12 @@ public class AdminUI {
 
     @RequestMapping("/account")
     public String account() {
-        return "admin/profile/account";
+        return "admin/profile/auth";
     }
 
     @RequestMapping("/account-settings")
     public String accountSeetting() {
-        return "admin/profile/account-settings";
+        return "admin/profile/auth-settings";
     }
 
     @RequestMapping("/invoices-create")
@@ -165,5 +160,4 @@ public class AdminUI {
     public String usersList() {
         return "admin/users-list";
     }
-
 }

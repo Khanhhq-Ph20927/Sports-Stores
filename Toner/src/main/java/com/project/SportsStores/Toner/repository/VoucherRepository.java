@@ -1,6 +1,6 @@
-package com.project.SportsStores.Toner.repository;
+package com.project.SportsStores.Toner.Repository;
 
-import com.project.SportsStores.Toner.model.Voucher;
+import com.project.SportsStores.Toner.Model.KhuyenMai;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,15 +11,15 @@ import java.sql.Date;
 import java.util.Optional;
 
 @Repository
-public interface VoucherRepository extends JpaRepository<Voucher, Integer> {
+public interface VoucherRepository extends JpaRepository<KhuyenMai, Long> {
 
-    @Query("select v from Voucher v where v.startDate >= ?1 and v.endDate <= ?2")
-    public Page<Voucher> findByDate(Date start, Date end, Pageable pageable);
+    @Query("select v from KhuyenMai v where v.ngayBatDau >= ?1 and v.ngayKetThuc <= ?2")
+    public Page<KhuyenMai> findByDate(Date start, Date end, Pageable pageable);
 
-    @Query("select v from Voucher v where v.name = ?1 ")
-    public Optional<Voucher> findByName(String name);
+    @Query("select v from KhuyenMai v where v.tenKhuyenMai = ?1 ")
+    public Optional<KhuyenMai> findByName(String name);
 
-    @Query("select v from Voucher v where v.name = ?1 and v.id <> ?2")
-    public Optional<Voucher> findByNameAndId(String code, Integer id);
+    @Query("select v from KhuyenMai v where v.tenKhuyenMai = ?1 and v.id <> ?2")
+    public Optional<KhuyenMai> findByNameAndId(String code, Long id);
 
 }

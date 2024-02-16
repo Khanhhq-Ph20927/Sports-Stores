@@ -1,7 +1,7 @@
-package com.project.SportsStores.Toner.controller.admin;
+package com.project.SportsStores.Toner.Controller.admin;
 
-import com.project.SportsStores.Toner.model.Voucher;
-import com.project.SportsStores.Toner.service.VoucherService;
+import com.project.SportsStores.Toner.Model.KhuyenMai;
+import com.project.SportsStores.Toner.Service.VoucherService;
 import com.project.SportsStores.Toner.validate.VoucherValidate;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Controller
@@ -33,13 +34,13 @@ public class VoucherController {
     }
 
     @RequestMapping("/add-voucher")
-    public String addvoucher(Model model, @RequestParam(value = "id", required = false) Integer id) {
+    public String addvoucher(Model model, @RequestParam(value = "id", required = false) Long id) {
         if(id == null){
-            model.addAttribute("voucher", new Voucher());
+            model.addAttribute("voucher", new KhuyenMai());
             model.addAttribute("image", "");
         }
         else{
-            Optional<Voucher> voucher = voucherService.findById(id);
+            Optional<KhuyenMai> voucher = voucherService.findById(id);
             if(voucher.isEmpty()){
                 return "redirect:voucher";
             }
@@ -50,13 +51,13 @@ public class VoucherController {
     }
 
     @RequestMapping(value = "/add-voucher", method = RequestMethod.POST)
-    public String addvoucherAction(@Valid @ModelAttribute("voucher") Voucher voucher, BindingResult bindingResult) {
+    public String addvoucherAction(@Valid @ModelAttribute("voucher") KhuyenMai voucher, BindingResult bindingResult) {
         System.out.println(voucher);
         voucherValidate.validate(voucher, bindingResult);
         if (bindingResult.hasErrors()) {
             return "admin/voucher/add-voucher";
         }
-        voucher.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+        voucher.setNgayTao(LocalDateTime.now());
         voucherService.create(voucher);
         return "redirect:voucher";
     }

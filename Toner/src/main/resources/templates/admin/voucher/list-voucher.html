@@ -126,7 +126,7 @@
     window.onload = function (){
         loadVoucher(0);
     }
-    var size = 2;
+    var size = 15;
     async function loadVoucher(page) {
         var sort = document.getElementById("sort").value;
         var start = document.getElementById("start").value;
@@ -147,13 +147,12 @@
             main += `<tr>
                     <td>${list[i].id}</td>
                     <td><img src="${list[i].banner}" style="width: 100px"></td>
-                    <td>${list[i].name}</td>
-                    <td>${list[i].voucherType == 0?formatmoney(list[i].discount):list[i].discount+'%'}</td>
-                    <td>${list[i].startDate}</td>
-                    <td>${list[i].endDate}</td>
+                    <td>${list[i].tenKhuyenMai}</td>
+                    <td>${list[i].loaiKM == 0?formatmoney(list[i].giaTriGiam):list[i].giaTriGiam+'%'}</td>
+                    <td>${list[i].ngayBatDau}</td>
+                    <td>${list[i].ngayKetThuc}</td>
                     <td>${list[i].trangThai}</td>
                     <td class="sticky-col">
-                        <i onclick="deleteVoucher(${list[i].id})" class="fa fa-trash iconaction"></i><br>
                         <a href="add-voucher?id=${list[i].id}"><i class="fa fa-edit iconaction"></i></a>
                     </td>
                 </tr>`

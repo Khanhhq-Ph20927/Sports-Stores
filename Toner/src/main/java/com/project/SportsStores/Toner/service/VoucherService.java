@@ -1,6 +1,6 @@
-package com.project.SportsStores.Toner.service;
+package com.project.SportsStores.Toner.Service;
 
-import com.project.SportsStores.Toner.model.Voucher;
+import com.project.SportsStores.Toner.Model.KhuyenMai;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,13 +12,13 @@ import java.util.Optional;
 @Service
 public interface VoucherService {
 
-    public Voucher create(Voucher voucher);
+    public KhuyenMai create(KhuyenMai voucher);
 
-    public void delete(Integer id);
+    public void delete(Long id);
 
-    public Page<Voucher> findAll(Date start, Date end,Pageable pageable);
+    public Page<KhuyenMai> findAll(Date start, Date end,Pageable pageable);
 
-    public Optional<Voucher> findById(Integer id);
+    public Optional<KhuyenMai> findById(Long id);
 
 
 }
