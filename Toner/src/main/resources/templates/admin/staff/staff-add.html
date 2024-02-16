@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+      data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<head th:replace="admin/fragments/head::head"></head>
+<body>
+<!-- Begin page -->
+<div id="layout-wrapper">
+    <div th:replace="admin/fragments/header::header"></div>
+    <!-- ========== App Menu ========== -->
+    <div th:replace="admin/fragments/sidebar::sidebar"></div>
+    <!-- Left Sidebar End -->
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">Thêm mới nhân viên</h4>
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Nhân viên</a></li>
+                                    <li class="breadcrumb-item active">Thêm mới</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <form id="createproduct-form" autocomplete="off" class="needs-validation" novalidate method="post"
+                      th:action="@{/admin/staff/add}" th:object="${nhanVien}">
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0 me-3">
+                                        <div class="avatar-sm">
+                                            <div class="avatar-title rounded-circle bg-light text-primary fs-20">
+                                                <i class="bi bi-person-fill-add"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="card-title mb-1">Thông tin nhân viên</h5>
+                                        <p class="text-muted mb-0">Điền đầy đủ thông tin bên dưới.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="hoTen-input">Họ tên</label>
+                                            <input type="text" class="form-control" id="hoTen-input"
+                                                   placeholder="Họ tên" required th:field="*{hoTen}">
+                                            <div class="invalid-feedback">Please enter a staff.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="sdt-input">Số điện thoại</label>
+                                            <input type="text" class="form-control" id="sdt-input"
+                                                   placeholder="Số điện thoại" required th:field="*{sdt}">
+                                            <div class="invalid-feedback">Please enter a staff.</div>
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                </div>
+                                <!-- end row -->
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="email-input">Email</label>
+                                            <input type="text" class="form-control" id="email-input" placeholder="Email"
+                                                   required th:field="*{email}">
+                                            <div class="invalid-feedback">Please enter a staff.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label for="date-field" class="form-label">Ngày sinh</label>
+                                            <input type="date" id="date-field" class="form-control"
+                                                   data-provider="flatpickr" required data-date-format="d M, Y"
+                                                   placeholder="Ngày sinh" th:field="*{ngaySinh}"/>
+                                            <div class="invalid-feedback">Please enter a staff.</div>
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                </div>
+                                <!-- end row -->
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="hinhAnh-input">Hình ảnh</label>
+                                            <input type="file" class="form-control" id="hinhAnh-input"
+                                                   placeholder="Hình ảnh" required th:field="*{anhNhanVien}">
+                                            <div class="invalid-feedback">Please enter a staff.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label for="chucVu-field" class="form-label">Chức vụ</label>
+                                            <select class="form-control" required id="chucVu-field" th:field="*{cv}">
+                                                <option th:value="0">Chức vụ</option>
+                                                <option th:each="position:${chucVu}" th:value="${position.id}"
+                                                        th:text="${position.tenChucVu}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                </div>
+                                <!-- end row -->
+                            </div>
+                        </div>
+                        <!-- end card -->
+                        <div class="text-end mb-3">
+                            <a th:href="@{/admin/staff}" class="btn btn-danger w-sm">Close</a>
+                            <button type="submit" class="btn btn-success w-sm">Submit</button>
+                        </div>
+                    </div>
+                    <!-- end col -->
+            </div>
+            <!-- end row -->
+            </form>
+        </div>
+        <!-- End Page-content -->
+    </div>
+    <!-- end main content-->
+</div>
+<!-- END layout-wrapper -->
+</div>
+<div th:replace="admin/fragments/chat::chat"></div>
+<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+<div th:replace="admin/fragments/script::script"></div>
+</body>
+</html>
