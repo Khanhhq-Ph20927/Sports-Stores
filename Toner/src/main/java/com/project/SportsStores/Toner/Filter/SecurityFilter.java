@@ -35,7 +35,7 @@ public class SecurityFilter {
                 .requestMatchers("/index/home").permitAll()
                 .requestMatchers("/api/admin/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
+                .requestMatchers("/admin/**").permitAll()
                 .requestMatchers("/assets/**").permitAll()
                 .requestMatchers("/assets/images/**").permitAll()
                 .requestMatchers("/templates/**").permitAll()
