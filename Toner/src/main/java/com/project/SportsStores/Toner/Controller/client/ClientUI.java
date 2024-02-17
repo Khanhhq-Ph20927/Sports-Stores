@@ -4,9 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/index")
+@RequestMapping("")
 public class ClientUI {
-    @RequestMapping("/home")
+    @RequestMapping("")
     public String home() {
         return "client/index";
     }

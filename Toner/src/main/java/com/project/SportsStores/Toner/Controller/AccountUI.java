@@ -1,10 +1,9 @@
-package com.project.SportsStores.Toner.Controller.auth;
+package com.project.SportsStores.Toner.Controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/auth")
 public class AccountUI {
     @RequestMapping("/auth-logout-basic")
     public String logout() {
@@ -24,10 +23,5 @@ public class AccountUI {
     @RequestMapping("/auth-signup-basic")
     public String signup() {
         return "auth/auth-signup-basic";
-    }
-
-    @RequestMapping("/403-error")
-    public String error403() {
-        return "auth/auth-404";
     }
 }
