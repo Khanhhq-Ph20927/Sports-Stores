@@ -49,13 +49,16 @@ public class RestControllerSanPham {
                                                   @PathVariable("collection") String collection) {
         Pageable pageable = PageRequest.of(Integer.parseInt(pageNumber), 5, Sort.by("ngayTao").descending());
         Page<SanPham> page = sv.getPagination(pageable);
+        if (Integer.parseInt(status) == -1 && Integer.parseInt(collection) == -1 && !keyWord.equals("null")) {
+            page = sv.seacrhProduct(keyWord,pageable);
+        }
         if (Integer.parseInt(status) != -1 && Integer.parseInt(collection) == -1 && keyWord.equalsIgnoreCase("null")) {
             page = sv.filterByStatusNoSearch(pageable, status);
         }
         if (Integer.parseInt(status) == -1 && Integer.parseInt(collection) != -1 && keyWord.equalsIgnoreCase("null")) {
             page = sv.filterByCollectionNoSearch(pageable, collection);
         }
-        if(Integer.parseInt(status) != -1 && Integer.parseInt(collection) != -1 && keyWord.equalsIgnoreCase("null")) {
+        if (Integer.parseInt(status) != -1 && Integer.parseInt(collection) != -1 && keyWord.equalsIgnoreCase("null")) {
             page = sv.filterByStatusAndCollectionNoSearch(pageable, status, collection);
         }
         return new ResponseEntity<>(page, HttpStatus.OK);
