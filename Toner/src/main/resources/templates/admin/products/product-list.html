@@ -424,15 +424,15 @@
         var status = document.getElementById("filter-status").value;
         var collection = document.getElementById("filter-collections").value;
         var url;
-        if (pageNumber === undefined && keyword === '') {
+        if (pageNumber === undefined && keyword === '' && status === -1 && collection === -1) {
             url = "/api/admin/product/page/search/" + 0 + "/" + "null";
             console.log(url);
         }
-        else if (pageNumber === undefined && keyword !== '') {
+        else if (pageNumber === undefined && keyword !== '' && status === -1 && collection === -1) {
             url = "/api/admin/product/page/search/" + 0 + "/" + keyword;
             console.log(url);
         }
-        else if (pageNumber !== undefined && keyword !== '') {
+        else if (pageNumber !== undefined && keyword !== '' && status === -1 && collection === -1) {
             url = "/api/admin/product/page/search/" + pageNumber + "/" + keyword;
             console.log(url);
         }
@@ -447,10 +447,6 @@
         else if (pageNumber !== undefined && (status !== -1 || collection !== -1) && keyword !== '') {
             url = "/api/admin/product/page/" + keyword + "/" + pageNumber + "/" + status + "/" + collection;
             console.log(url);
-        } else {
-            url = "/api/admin/product/page/" + keyword + "/" + pageNumber + "/" + status + "/" + collection;
-            console.log(url);
-            //
         }
         const response = await fetch(url, {
             method: 'GET'
@@ -480,22 +476,22 @@
         document.getElementById("list_Product").innerHTML = main;
         var currentPage = `
             <li class="page-item">
+                    <button class="page-link" onclick="searchProduct(0)" aria-label="First">First</button>
+            </li>
+            <li class="page-item">
                     <button class="page-link" aria-label="Previous" onclick="searchProduct(${number - 1 < 0 ? totalPage - 1 : number - 1})"><span aria-hidden="true">&laquo;</span></button>
             </li>
             <li class="page-item">
-                    <button class="page-link" onclick="searchProduct(0)">1</button>
-            </li>
-            <li class="page-item">
-                    <button class="page-link">...</button>
-            </li>
-            <li class="page-item">
-                    <button class="page-link" onclick="searchProduct(${totalPage - 1})">${totalPage}</button>
+                    <button class="page-link">${number + 1}</button>
             </li>
             </li>
             <li class="page-item">
                     <button class="page-link" aria-label="Next" onclick="searchProduct(${number + 1 === totalPage ? 0 : number + 1})">
                        <span aria-hidden="true">&raquo;</span>
                      </button>
+            </li>
+            <li class="page-item">
+                    <button class="page-link" onclick="searchProduct(${totalPage - 1})" aria-label="Last">Last</button>
             </li>
         `;
         document.getElementById("pagination").innerHTML = currentPage;
