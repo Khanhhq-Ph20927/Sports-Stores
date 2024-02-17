@@ -447,6 +447,10 @@
         else if (pageNumber !== undefined && (status !== -1 || collection !== -1) && keyword !== '') {
             url = "/api/admin/product/page/" + keyword + "/" + pageNumber + "/" + status + "/" + collection;
             console.log(url);
+        } else {
+            url = "/api/admin/product/page/" + keyword + "/" + pageNumber + "/" + status + "/" + collection;
+            console.log(url);
+            //
         }
         const response = await fetch(url, {
             method: 'GET'
