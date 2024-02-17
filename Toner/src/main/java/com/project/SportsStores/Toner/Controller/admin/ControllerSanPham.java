@@ -71,7 +71,7 @@ public class ControllerSanPham {
             isValid = true;
             model.addAttribute("errorPrice", "Please Choose Price");
         }
-        if (isValid == false) {
+        if (isValid) {
             sv.save(sp);
             redirectAttributes.addFlashAttribute("message", true);
             return "redirect:/api/admin/product/create_product";
