@@ -13,12 +13,12 @@ public class AdminUI {
 
     @RequestMapping("/account")
     public String account() {
-        return "admin/profile/auth";
+        return "admin/profile/account";
     }
 
     @RequestMapping("/account-settings")
     public String accountSeetting() {
-        return "admin/profile/auth-settings";
+        return "admin/profile/account-settings";
     }
 
     @RequestMapping("/invoices-create")
@@ -160,4 +160,5 @@ public class AdminUI {
     public String usersList() {
         return "admin/users-list";
     }
+
 }

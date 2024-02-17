@@ -1,8 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
-<head th:replace="account/fragments/head::head"></head>
+<head th:replace="auth/fragments/head::head"></head>
     <body>
-
         <section class="auth-page-wrapper position-relative bg-light min-vh-100 d-flex align-items-center justify-content-between">
             <div class="w-100">
                 <div class="container">
@@ -23,20 +22,19 @@
                                     <div class="card-body">
                                         <p class="text-muted fs-15">Sign in to continue to Toner.</p>
                                         <div class="p-2">
-                                            <form action="https://themesbrand.com/toner/html/backend/index.html">
-                
+                                            <form th:action="@{/api/v2/auth/login}" method="post" th:object="${authRequest}">
                                                 <div class="mb-3">
                                                     <label for="username" class="form-label">Username</label>
-                                                    <input type="text" class="form-control" id="username" placeholder="Enter username">
+                                                    <input type="text" class="form-control" id="username" placeholder="Enter username" th:name="username">
                                                 </div>
                 
                                                 <div class="mb-3">
                                                     <div class="float-end">
                                                         <a href="auth-pass-reset-basic.html" class="text-muted">Forgot password?</a>
                                                     </div>
-                                                    <label class="form-label" for="password-input">Password</label>
+                                                    <label class="form-label" for="password">Password</label>
                                                     <div class="position-relative auth-pass-inputgroup mb-3">
-                                                        <input type="password" class="form-control pe-5 password-input" placeholder="Enter password" id="password-input">
+                                                        <input type="password" class="form-control pe-5 password-input" placeholder="Enter password" id="password" th:name="password">
                                                         <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
                                                     </div>
                                                 </div>
@@ -75,6 +73,6 @@
                 </div><!--end container-->
             </div>
         </section>
-        <div th:replace="account/fragments/script::script"></div>
+        <div th:replace="auth/fragments/script::script"></div>
     </body>
 </html>

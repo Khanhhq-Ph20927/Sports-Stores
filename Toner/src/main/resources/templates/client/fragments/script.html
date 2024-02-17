@@ -1,7 +1,4 @@
 <div th:fragment="script">
-
-
-
     <!-- JAVASCRIPT -->
     <script th:src="@{/assets/libs/bootstrap/js/bootstrap.bundle.min.js}"></script>
     <script th:src="@{/assets/libs/simplebar/simplebar.min.js}"></script>
@@ -15,4 +12,9 @@
 
     <!-- menu init js -->
     <script th:src="@{/assets/js/frontend/menu.init.js}"></script>
+    <script th:inline="javascript">
+        function logout(){
+
+        }
+    </script>
 </div>
