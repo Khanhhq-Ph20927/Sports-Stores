@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<head th:replace="admin/fragments/head::head"></head>
+<body>
+
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+        <div th:replace="admin/fragments/header::header"></div>
+        <!-- ========== App Menu ========== -->
+        <div th:replace="admin/fragments/sidebar::sidebar"></div>
+        <!-- Left Sidebar End -->
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+
+            <div class="page-content">
+                <div class="container-fluid">
+
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                <h4 class="mb-sm-0">Brands</h4>
+
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Toner</a></li>
+                                        <li class="breadcrumb-item active">Brands</li>
+                                    </ol>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end page title -->
+
+                    <div class="row align-items-center mb-4">
+                        <div class="col-xxl-3 col-lg-4 col-sm-9">
+                            <div class="search-box mb-3 mb-sm-0">
+                                <input type="text" class="form-control" id="searchInputList" autocomplete="off" placeholder="Search brands...">
+                                <i class="ri-search-line search-icon"></i>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-lg-auto ms-auto col-sm-3">
+                            <button data-bs-target="#createModal" data-bs-toggle="modal" class="btn btn-success w-100"><i class="bi bi-plus-circle me-1 align-middle"></i> Add Brand</button>
+                        </div><!--end col-->
+                    </div>
+
+                    <div class="row row-cols-xxl-5 row-cols-lg-4 row-cols-sm-2 row-cols-1" id="brand-list">
+                       <!--  <div class="col">
+                            <div class="card brand-widget card-animate">
+                                <div class="card-body text-center pb-2">
+                                    <img src="../assets/images/brands/img-1.png" alt="" class="brand-img">
+                                </div>
+                                <div class="card-footer text-center border-0">
+                                    <h6 class="fs-17">Michelin</h6>
+                                    <p class="mb-0"><a href="#!" class="link-success stretched-link">362 Items</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card brand-widget card-animate">
+                                <div class="card-body text-center pb-2">
+                                    <img src="../assets/images/brands/img-2.png" alt="" class="brand-img">
+                                </div>
+                                <div class="card-footer text-center border-0">
+                                    <h6 class="fs-17">Rolex</h6>
+                                    <p class="mb-0"><a href="#!" class="link-success stretched-link">471 Items</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card brand-widget card-animate">
+                                <div class="card-body text-center pb-2">
+                                    <img src="../assets/images/brands/img-3.png" alt="" class="brand-img">
+                                </div>
+                                <div class="card-footer text-center border-0">
+                                    <h6 class="fs-17">Huawel</h6>
+                                    <p class="mb-0"><a href="#!" class="link-success stretched-link">3654 Items</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card brand-widget card-animate">
+                                <div class="card-body text-center pb-2">
+                                    <img src="../assets/images/brands/img-4.png" alt="" class="brand-img">
+                                </div>
+                                <div class="card-footer text-center border-0">
+                                    <h6 class="fs-17">Puma</h6>
+                                    <p class="mb-0"><a href="#!" class="link-success stretched-link">1548 Items</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card brand-widget card-animate">
+                                <div class="card-body text-center pb-2">
+                                    <img src="../assets/images/brands/img-5.png" alt="" class="brand-img">
+                                </div>
+                                <div class="card-footer text-center border-0">
+                                    <h6 class="fs-17">Fastrack</h6>
+                                    <p class="mb-0"><a href="#!" class="link-success stretched-link">645 Items</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card brand-widget card-animate">
+                                <div class="card-body text-center pb-2">
+                                    <img src="../assets/images/brands/img-6.png" alt="" class="brand-img">
+                                </div>
+                                <div class="card-footer text-center border-0">
+                                    <h6 class="fs-17">Nautica</h6>
+                                    <p class="mb-0"><a href="#!" class="link-success stretched-link">702 Items</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card brand-widget card-animate">
+                                <div class="card-body text-center pb-2">
+                                    <img src="../assets/images/brands/img-7.png" alt="" class="brand-img">
+                                </div>
+                                <div class="card-footer text-center border-0">
+                                    <h6 class="fs-17">Mochup</h6>
+                                    <p class="mb-0"><a href="#!" class="link-success stretched-link">945 Items</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card brand-widget card-animate">
+                                <div class="card-body text-center pb-2">
+                                    <img src="../assets/images/brands/img-8.png" alt="" class="brand-img">
+                                </div>
+                                <div class="card-footer text-center border-0">
+                                    <h6 class="fs-17">Bosch</h6>
+                                    <p class="mb-0"><a href="#!" class="link-success stretched-link">3625 Items</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card brand-widget card-animate">
+                                <div class="card-body text-center pb-2">
+                                    <img src="../assets/images/brands/img-9.png" alt="" class="brand-img">
+                                </div>
+                                <div class="card-footer text-center border-0">
+                                    <h6 class="fs-17">Diesel</h6>
+                                    <p class="mb-0"><a href="#!" class="link-success stretched-link">415 Items</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card brand-widget card-animate">
+                                <div class="card-body text-center pb-2">
+                                    <img src="../assets/images/brands/img-10.png" alt="" class="brand-img">
+                                </div>
+                                <div class="card-footer text-center border-0">
+                                    <h6 class="fs-17">Reebok</h6>
+                                    <p class="mb-0"><a href="#!" class="link-success stretched-link">362 Items</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card brand-widget card-animate">
+                                <div class="card-body text-center pb-2">
+                                    <img src="../assets/images/brands/img-11.png" alt="" class="brand-img">
+                                </div>
+                                <div class="card-footer text-center border-0">
+                                    <h6 class="fs-17">Eagle</h6>
+                                    <p class="mb-0"><a href="#!" class="link-success stretched-link">650 Items</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card brand-widget card-animate">
+                                <div class="card-body text-center pb-2">
+                                    <img src="../assets/images/brands/img-12.png" alt="" class="brand-img">
+                                </div>
+                                <div class="card-footer text-center border-0">
+                                    <h6 class="fs-17">Adidas</h6>
+                                    <p class="mb-0"><a href="#!" class="link-success stretched-link">931 Items</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card brand-widget card-animate">
+                                <div class="card-body text-center pb-2">
+                                    <img src="../assets/images/brands/img-1.png" alt="" class="brand-img">
+                                </div>
+                                <div class="card-footer text-center border-0">
+                                    <h6 class="fs-17">Michelin</h6>
+                                    <p class="mb-0"><a href="#!" class="link-success stretched-link">1462 Items</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card brand-widget card-animate">
+                                <div class="card-body text-center pb-2">
+                                    <img src="../assets/images/brands/img-13.png" alt="" class="brand-img">
+                                </div>
+                                <div class="card-footer text-center border-0">
+                                    <h6 class="fs-17">Kinetic</h6>
+                                    <p class="mb-0"><a href="#!" class="link-success stretched-link">3621 Items</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card brand-widget card-animate">
+                                <div class="card-body text-center pb-2">
+                                    <img src="../assets/images/brands/img-14.png" alt="" class="brand-img">
+                                </div>
+                                <div class="card-footer text-center border-0">
+                                    <h6 class="fs-17">Soriana</h6>
+                                    <p class="mb-0"><a href="#!" class="link-success stretched-link">1024 Items</a></p>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+
+                    <div id="noresult" class="d-none">
+                        <div class="text-center py-4">
+                            <div class="avatar-md mx-auto mb-4">
+                                <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-24">
+                                    <i class="bi bi-search"></i>
+                                </div>
+                            </div>
+                            <h5 class="mt-2">Sorry! No Result Found</h5>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4" id="pagination-element">
+                        <div class="col-lg-12">
+                            <div class="pagination-block pagination pagination-separated justify-content-center justify-content-sm-end mb-sm-0">
+                                <div class="page-item">
+                                    <a href="" class="page-link" id="page-prev"><i class="mdi mdi-chevron-left"></i></a>
+                                </div>
+                                <span id="page-num" class="pagination"></span>
+                                <div class="page-item">
+                                    <a href="" class="page-link" id="page-next"><i class="mdi mdi-chevron-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end pagination-element -->
+                    
+                </div>
+                <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+        </div>
+        <!-- end main content-->
+
+    </div>
+    <!-- END layout-wrapper -->
+<div th:replace="admin/fragments/chat::chat"></div>
+    <div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+    <div th:replace="admin/fragments/script::script"></div>
+</body>
+</html>
