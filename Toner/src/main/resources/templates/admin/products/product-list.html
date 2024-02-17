@@ -424,23 +424,27 @@
         var status = document.getElementById("filter-status").value;
         var collection = document.getElementById("filter-collections").value;
         var url;
-        if (pageNumber === undefined && keyword === undefined) {
+        if (pageNumber === undefined && keyword === '') {
             url = "/api/admin/product/page/search/" + 0 + "/" + "null";
             console.log(url);
         }
-        if (pageNumber !== undefined && keyword !== '') {
+        else if (pageNumber === undefined && keyword !== '') {
+            url = "/api/admin/product/page/search/" + 0 + "/" + keyword;
+            console.log(url);
+        }
+        else if (pageNumber !== undefined && keyword !== '') {
             url = "/api/admin/product/page/search/" + pageNumber + "/" + keyword;
             console.log(url);
         }
-        if (pageNumber === undefined && keyword === '' && (status !== -1 || collection !== -1)) {
+        else if (pageNumber === undefined && keyword === '' && (status !== -1 || collection !== -1)) {
             url = "/api/admin/product/page/" + "null" + "/" + 0 + "/" + status + "/" + collection;
             console.log(url);
         }
-        if (pageNumber !== undefined && keyword === '' && (status !== -1 || collection !== -1)) {
+        else if (pageNumber !== undefined && keyword === '' && (status !== -1 || collection !== -1)) {
             url = "/api/admin/product/page/" + "null" + "/" + pageNumber + "/" + status + "/" + collection;
             console.log(url);
         }
-        if (pageNumber !== undefined && (status !== -1 || collection !== -1) && keyword !== '') {
+        else if (pageNumber !== undefined && (status !== -1 || collection !== -1) && keyword !== '') {
             url = "/api/admin/product/page/" + keyword + "/" + pageNumber + "/" + status + "/" + collection;
             console.log(url);
         }

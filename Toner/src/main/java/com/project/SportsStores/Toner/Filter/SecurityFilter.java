@@ -40,7 +40,7 @@ public class SecurityFilter {
                 .requestMatchers("/assets/images/**").permitAll()
                 .requestMatchers("/templates/**").permitAll()
                 .requestMatchers("/api/register/**").permitAll()
-                .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
+//                .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
                 .requestMatchers("/api/staff/**").hasAnyAuthority("STAFF")
                 .requestMatchers("/api/customer/**").hasAnyAuthority("CUSTOMER")
                 .anyRequest().authenticated()
