@@ -1,6 +1,8 @@
 package com.project.SportsStores.Toner.Model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -27,10 +29,10 @@ public class SanPham {
     private String tenSP;
 
     @Column(name="LoaiSanPham")
-    private int loaiSanPham;
+    private Integer loaiSanPham;
 
     @Column(name="SoLuong")
-    private int soLuong;
+    private Integer soLuong;
 
     @Column(name="NgayTao")
     private LocalDateTime ngayTao;
@@ -42,10 +44,10 @@ public class SanPham {
     private String moTa;
 
     @Column(name="TrangThai")
-    private int trangThai;
+    private Integer trangThai;
 
     @Column(name="DanhMuc")
-    private int danhMuc;
+    private Integer danhMuc;
 
     @ManyToOne
     @JoinColumn(name="IdNhaCungCap")
@@ -57,6 +59,6 @@ public class SanPham {
 
     @ManyToOne
     @JoinColumn(name="IdThuongHieu")
-    private ThuongHieu th;
+    private ThuongHieu thieu;
 
 }
