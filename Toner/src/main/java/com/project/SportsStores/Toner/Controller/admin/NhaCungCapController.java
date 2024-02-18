@@ -1,23 +1,24 @@
-package com.project.SportsStores.Toner.controller.admin;
+package com.project.SportsStores.Toner.Controller.admin;
 
-import com.project.SportsStores.Toner.model.NhaCungCap;
-import com.project.SportsStores.Toner.service.NhaCungCapService;
+import com.project.SportsStores.Toner.Model.NhaCungCap;
+import com.project.SportsStores.Toner.Repository.NCCRepository;
+import com.project.SportsStores.Toner.Service.NhaCungCapService;
 import com.project.SportsStores.Toner.validate.NCCValidate;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
 public class NhaCungCapController {
+    @Autowired
+    private NCCRepository nhaCungCapRepository;
 
     @Autowired
     private NhaCungCapService nccService;
@@ -25,25 +26,32 @@ public class NhaCungCapController {
     @Autowired
     NCCValidate nccValidate;
 
-    @RequestMapping("/ncc")
-    public String ncc() {
+
+    @GetMapping("/ncc")
+    public String listNhaCungCap(Model model) {
+        List<NhaCungCap> listNhaCungCap = nccService.findAll();
+        model.addAttribute("nccList", listNhaCungCap);
         return "admin/ncc/list-ncc";
     }
 
     @RequestMapping("/add-ncc")
     public String addncc(Model model, @RequestParam(value = "id", required = false) Integer id) {
-        if(id == null){
+        // Lấy danh sách nhà cung cấp
+        List<NhaCungCap> nccList = nccService.findAll();
+        model.addAttribute("nccList", nccList);
+
+        if (id == null) {
             model.addAttribute("ncc", new NhaCungCap());
-        }
-        else{
+        } else {
             Optional<NhaCungCap> ncc = nccService.findById(id);
-            if(ncc.isEmpty()){
+            if (ncc.isEmpty()) {
                 return "redirect:ncc";
             }
             model.addAttribute("ncc", ncc.get());
         }
         return "admin/ncc/add-ncc";
     }
+
 
     @RequestMapping(value = "/add-ncc", method = RequestMethod.POST)
     public String addnccAction(@Valid @ModelAttribute("ncc") NhaCungCap ncc, BindingResult bindingResult) {
