@@ -239,33 +239,27 @@
                                 <div class="row g-lg-2 g-4">
                                     <div class="col-lg-3">
                                         <div class="search-box">
-                                            <input type="text" class="form-control search"
-                                                   placeholder="Tìm kiếm nhân viên...">
+                                            <input type="text" class="form-control search" id="staff-search-input"
+                                                   placeholder="Tìm kiếm nhân viên..." onchange="search()">
                                             <i class="ri-search-line search-icon"></i>
                                         </div>
                                     </div>
                                     <div class="col-lg-auto col-sm-3">
-                                        <select class="form-control" data-choices data-choices-search-false
-                                                name="choices-single-default" id="idStatus">
-                                            <option value="all" selected>Tất cả</option>
-                                            <option value="Today">Hôm nay</option>
-                                            <option value="Yesterday">Hôm qua</option>
-                                            <option value="Last 7 Days">7 ngày qua</option>
-                                            <option value="Last 30 Days">30 ngày trước</option>
-                                            <option value="This Month">Tháng này</option>
-                                            <option value="Last Month">Tháng trước</option>
+                                        <select class="form-control" required id="staff-status-filter"
+                                                onchange="search()">
+                                            <option value="-1">Trạng thái</option>
+                                            <!--                                            <option th:value="-1">Tất cả</option>-->
+                                            <option value="0">Đang làm</option>
+                                            <option value="1">Đã nghỉ</option>
                                         </select>
                                     </div>
-                                    <div class="col-lg-auto col-sm-3">
-                                        <select class="form-control" data-choices data-choices-search-false
-                                                name="choices-single-default" id="idStatus">
-                                            <option value="all" selected>Tất cả</option>
-                                            <option value="Today">Hôm nay</option>
-                                            <option value="Yesterday">Hôm qua</option>
-                                            <option value="Last 7 Days">7 ngày qua</option>
-                                            <option value="Last 30 Days">30 ngày trước</option>
-                                            <option value="This Month">Tháng này</option>
-                                            <option value="Last Month">Tháng trước</option>
+                                    <div class="col-lg-auto col-sm-3 ">
+                                        <select class="form-control" required id="staff-position-filter"
+                                                onchange="search()">
+                                            <option value="0">Chức vụ</option>
+                                            <!--                                            <option th:value="0">Tất cả</option>-->
+                                            <option th:each="position:${chucVu}" th:value="${position.id}"
+                                                    th:text="${position.tenChucVu}"></option>
                                         </select>
                                     </div>
                                     <div class="col-lg-auto col-sm-3 ms-auto">
@@ -309,22 +303,10 @@
                                             <th>Action</th>
                                         </tr>
                                         </thead>
-                                        <tbody class="list form-check-all" id="list_staff">
+                                        <tbody class="list form-check-all" id="list_Staff">
                                         </tbody>
                                     </table>
-                                    <div class="noresult" style="display: none">
-                                        <div class="text-center">
-                                            <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                                                       colors="primary:#121331,secondary:#08a88a"
-                                                       style="width:75px;height:75px"></lord-icon>
-                                            <h5 class="mt-2">Sorry! No Result Found</h5>
-                                            <p class="text-muted mb-0">We've searched more than 150+ Orders We did not
-                                                find any orders for you search.</p>
-                                        </div>
-                                    </div>
                                 </div>
-
-
                                 <div class="d-grid justify-content-center" id="pagination">
                                     <!--                                                                        <div class="pagination-wrap hstack gap-2">-->
                                     <!--                                                                            <a th:if="${number>1}" class="page-item pagination-prev"-->
@@ -357,7 +339,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <!-- container-fluid -->
         </div>
@@ -376,7 +357,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                         id="close-modal"></button>
             </div>
-            <form class="tablelist-form" novalidate autocomplete="off" id="update-form" method="post" th:object="${nhanVien}">
+            <form class="tablelist-form" novalidate autocomplete="off" id="update-form" method="post"
+                  th:object="${nhanVien}">
                 <div class="modal-body p-4">
                     <div id="alert-error-msg" class="d-none alert alert-danger py-2"></div>
                     <input type="hidden" id="id-field"/>
@@ -403,6 +385,25 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- style="display: none"-->
+                    <div style="display: none">
+                        <div class="mb-3">
+                            <label for="staff-code-input" class="form-label">Mã NV</label>
+                            <input type="text" id="staff-code-input" class="form-control" required th:name="maNV"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="staff-password-input" class="form-label">Mật khẩu</label>
+                            <input type="text" id="staff-password-input" class="form-control" required
+                                   th:name="matKhau"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="staff-datecreated-input" class="form-label">Ngày tạo</label>
+                            <input type="text" id="staff-datecreated-input" class="form-control" required
+                                   th:name="ngayTao"/>
+                        </div>
+                    </div>
+                    <!-- End style="display: none"-->
 
                     <div class="mb-3">
                         <label for="staff-name-input" class="form-label">Họ Tên</label>
@@ -442,9 +443,12 @@
                     <div class="modal-footer">
                         <div class="hstack gap-2 justify-content-end">
                             <button type="button" class="btn btn-ghost-danger" data-bs-dismiss="modal">Đóng</button>
-                            <button type="button" class="btn btn-success" id="add-btn" onclick="showConfirmPopup()">Sửa</button>
+                            <button type="button" class="btn btn-success" id="add-btn" onclick="showConfirmPopup()">
+                                Sửa
+                            </button>
                         </div>
                     </div>
+                </div>
             </form>
         </div>
     </div>
@@ -473,6 +477,11 @@
         }).then(data => {
             console.log(data);
             // document.getElementById('staff-image-input').value = data.hinhAnhNhanVien;
+            // none
+            document.getElementById('staff-code-input').value = data.maNV;
+            document.getElementById('staff-password-input').value = data.matKhau;
+            document.getElementById('staff-datecreated-input').value = data.ngayTao;
+            // none
             document.getElementById('staff-name-input').value = data.hoTen;
             document.getElementById('staff-phone-input').value = data.sdt;
             document.getElementById('staff-email-input').value = data.email;
@@ -525,7 +534,7 @@
         var number = result.number;
         var main = '';
         for (i = 0; i < list.length; i++) {
-            var trangThaiBadge = (list[i].trangThai == 0) ? '   <div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked/></div>' :
+            var trangThaiBadge = (list[i].trangThai == 0) ? '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked/></div>' :
                 '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox"/></div>';
             main += `<tr >
                             <td scope="row">${list[i].maNV}</td>
@@ -543,72 +552,75 @@
                             </td>
                      </tr>`
         }
-        document.getElementById("list_staff").innerHTML = main;
+        document.getElementById("list_Staff").innerHTML = main;
         var currentPage = `
      <div class="pagination-wrap hstack gap-2">
        <a class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${totalPage - totalPage})"  >
        <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </a></a>
        <a class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number - 1})">
        <i class="mdi mdi-chevron-left align-middle ms-1"></i> </a></a>
-       <ul class="pagination listjs-pagination mb-0">
-       <li >
-       <a class="page"></a></li></ul>
-       <a class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number + 1})">
+       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
+       <a class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
        <i class="mdi mdi-chevron-right align-middle ms-1"></i></a></a>
-       <a class="page-item pagination-next" id="pagination-next" onclick="loadPage(${totalPage-1})">
+       <a class="page-item pagination-next" id="pagination-next" onclick="loadPage(${totalPage - 1})">
        <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></a></a>
       </div>
-            <li class="page-item">
-                    <button class="page-link" aria-label="Previous" onclick="loadPage(${number - 1 === 0 ? totalPage : number - 1})"><span aria-hidden="true">&laquo;</span></button>
-            </li>
-            <li class="page-item">
-                    <button class="page-link" onclick="loadPage(0)">1</button>
-            </li>
-            <li class="page-item">
-                    <button class="page-link" onclick="loadPage(1)">2</button>
-            </li>
-            <li class="page-item">
-<!--                    <button class="page-link" onclick="loadPage(2)">3</button>-->
-            </li>
-            <li class="page-item">
-                    <button class="page-link" aria-label="Next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
-                       <span aria-hidden="true">&raquo;</span>
-                     </button>
-            </li>
         `;
+        // <li class="page-item">
+        //     className <button class="page-link" aria-lclassName"Previous"
+        //                       onclick="loadPage(${numbonClick=== 0 ? totalPage : number - 1})"><span
+        //     aria-hidden="true">&laquo;</span></button>
+        // </li>
+        // <li class="page-item">
+        //     className <button class="page-link" onclicclassNameadPage(0)">1
+        //     <onClick>
+        // </li>
+        // <li class="page-item">
+        //     className <button class="page-link" onclicclassNameadPage(1)">2
+        //     <onClick>
+        // </li>
+        // <li class="page-item">
+        //     <!-- className              <button class="page-link" onclick="loadPage(2)">3</button>-->
+        // </li>
+        // <li class="page-item">
+        //     className <button class="page-link" aria-lclassName"Next"
+        //                       onclick="loadPage(${numbonClick=== totalPage ? 0 : number + 1})">
+        //     <span aria-hidden="true">&raquo;</span>
+        // </button>
+        // </li>
         document.getElementById("pagination").innerHTML = currentPage;
     }
 
-    function formatMoney(money) {
-        const VND = new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-        });
-        return VND.format(money);
-    }
+    // function formatMoney(money) {
+    //     const VND = new Intl.NumberFormat('vi-VN', {
+    //         style: 'currency',
+    //         currency: 'VND',
+    //     });
+    //     return VND.format(money);
+    // }
 
-    async function searchProduct(pageNumber) {
-        var keyword = document.getElementById("searchProductList").value.trim().toLowerCase();
-        var status = document.getElementById("filter-status").value;
-        var collection = document.getElementById("filter-collections").value;
+    async function search(pageNumber) {
+        var keyword = document.getElementById("staff-search-input").value.trim().toLowerCase();
+        var status = document.getElementById("staff-status-filter").value;
+        var position = document.getElementById("staff-position-filter").value;
         var url;
         if (pageNumber === undefined && keyword === '') {
-            url = "/api/admin/product/page/search/" + 0 + "/" + "null";
+            url = "/api/admin/staff/page/" + 0 + "/" + "null";
             console.log(url);
         } else if (pageNumber === undefined && keyword !== '') {
-            url = "/api/admin/product/page/search/" + 0 + "/" + keyword;
+            url = "/api/admin/staff/page/" + 0 + "/" + keyword;
             console.log(url);
         } else if (pageNumber !== undefined && keyword !== '') {
-            url = "/api/admin/product/page/search/" + pageNumber + "/" + keyword;
+            url = "/api/admin/staff/page/" + pageNumber + "/" + keyword;
             console.log(url);
-        } else if (pageNumber === undefined && keyword === '' && (status !== -1 || collection !== -1)) {
-            url = "/api/admin/product/page/" + "null" + "/" + 0 + "/" + status + "/" + collection;
+        } else if (pageNumber === undefined && keyword === '' && (status !== -1 || position !== 0)) {
+            url = "/api/admin/staff/page/" + 0 + "/" + "null" + "/" + status + "/" + position;
             console.log(url);
-        } else if (pageNumber !== undefined && keyword === '' && (status !== -1 || collection !== -1)) {
-            url = "/api/admin/product/page/" + "null" + "/" + pageNumber + "/" + status + "/" + collection;
+        } else if (pageNumber !== undefined && keyword === '' && (status !== -1 || position !== 0)) {
+            url = "/api/admin/staff/page/" + pageNumber + "/" + "null" + "/" + status + "/" + position;
             console.log(url);
-        } else if (pageNumber !== undefined && (status !== -1 || collection !== -1) && keyword !== '') {
-            url = "/api/admin/product/page/" + keyword + "/" + pageNumber + "/" + status + "/" + collection;
+        } else if (pageNumber !== undefined && (status !== -1 || position !== 0) && keyword !== '') {
+            url = "/api/admin/staff/page/" + pageNumber + "/" + keyword + "/" + status + "/" + position;
             console.log(url);
         }
         const response = await fetch(url, {
@@ -621,41 +633,37 @@
         var number = result.number;
         var main = '';
         for (i = 0; i < list.length; i++) {
-            var trangThaiBadge = (list[i].trangThai == 0) ? '<span class="badge bg-success">Chưa Mở Bán</span>' : '<span class="badge bg-success">Đang Mở Bán</span>';
+            var trangThaiBadge = (list[i].trangThai == 0) ? '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked/></div>' :
+                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox"/></div>';
             main += `<tr >
-                            <td scope="row">${list[i].maSP}</td>
-                            <td scope="row">${list[i].tenSP}</td>
-                            <td scope="row">${formatMoney(list[i].donGia)}</td>
-                            <td scope="row">${list[i].danhMuc == 0 ? 'Quần' : 'Áo'}</td>
-                            <td>${trangThaiBadge}</td>
+                            <td scope="row">${list[i].maNV}</td>
+                            <td scope="row">${list[i].hoTen}</td>
+                            <td scope="row">${list[i].sdt}</td>
+                            <td scope="row">${list[i].email}</td>
+                            <td scope="row">${list[i].ngaySinh}</td>
+                            <td scope="row">${list[i].cv.tenChucVu}</td>
+                            <td scope="row">${trangThaiBadge}</td>
                             <td>
                                 <div class="hstack gap-3 flex-warp">
-                                <div onclick="detailProduct(${list[i].id})"
+                                <div onclick="detail(${list[i].id})"
                                      class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
                                  </div>
                             </td>
                      </tr>`
         }
-        document.getElementById("list_Product").innerHTML = main;
+        document.getElementById("list_Staff").innerHTML = main;
         var currentPage = `
-            <li class="page-item">
-                    <button class="page-link" aria-label="Previous" onclick="searchProduct(${number - 1 < 0 ? totalPage - 1 : number - 1})"><span aria-hidden="true">&laquo;</span></button>
-            </li>
-            <li class="page-item">
-                    <button class="page-link" onclick="searchProduct(0)">1</button>
-            </li>
-            <li class="page-item">
-                    <button class="page-link">...</button>
-            </li>
-            <li class="page-item">
-                    <button class="page-link" onclick="searchProduct(${totalPage - 1})">${totalPage}</button>
-            </li>
-            </li>
-            <li class="page-item">
-                    <button class="page-link" aria-label="Next" onclick="searchProduct(${number + 1 === totalPage ? 0 : number + 1})">
-                       <span aria-hidden="true">&raquo;</span>
-                     </button>
-            </li>
+     <div class="pagination-wrap hstack gap-2">
+       <a class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${totalPage - totalPage})"  >
+       <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </a></a>
+       <a class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number - 1})">
+       <i class="mdi mdi-chevron-left align-middle ms-1"></i> </a></a>
+       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
+       <a class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
+       <i class="mdi mdi-chevron-right align-middle ms-1"></i></a></a>
+       <a class="page-item pagination-next" id="pagination-next" onclick="loadPage(${totalPage - 1})">
+       <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></a></a>
+      </div>
         `;
         document.getElementById("pagination").innerHTML = currentPage;
     }

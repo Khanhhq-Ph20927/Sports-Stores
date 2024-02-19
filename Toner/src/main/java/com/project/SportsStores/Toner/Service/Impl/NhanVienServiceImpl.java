@@ -44,8 +44,8 @@ public class NhanVienServiceImpl implements NhanVienService {
     }
 
     @Override
-    public Page<NhanVien> SearchAllCustom(Pageable pageable,String keyword, int status, Long position) {
-        return repository.SearchAllCustom(pageable,keyword,status,position);
+    public Page<NhanVien> SearchAndFilter(Pageable pageable,String keyword, int status, Long position) {
+        return repository.SearchAndFilter(pageable,keyword,status,position);
     }
 
 }

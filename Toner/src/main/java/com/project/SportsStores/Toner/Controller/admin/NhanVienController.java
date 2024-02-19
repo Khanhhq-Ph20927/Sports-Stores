@@ -81,8 +81,8 @@ public class NhanVienController {
         if (isValid==false) {
             service.save(nhanVien);
             redirectAttributes.addFlashAttribute("message", true);
-//            return "redirect:/api/admin/staff/add";
-            return "admin/staff/staff-add";
+            return "redirect:/api/admin/staff/add";
+//            return "admin/staff/staff-add";
         } else {
             return "admin/staff/staff-add";
         }
@@ -107,6 +107,7 @@ public class NhanVienController {
         service.save(nhanVien);
         redirectAttributes.addFlashAttribute("updateSuccess", true);
         return "redirect:/api/admin/staff";
+//        return "admin/staff/staff-list";
     }
 
 }

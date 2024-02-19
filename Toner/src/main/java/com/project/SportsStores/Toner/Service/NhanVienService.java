@@ -21,6 +21,6 @@ public interface NhanVienService {
 
     Page<NhanVien> SearchPage(Pageable pageable,String keyword);
 
-    Page<NhanVien> SearchAllCustom(Pageable pageable,String keyword,int status,Long position);
+    Page<NhanVien> SearchAndFilter(Pageable pageable,String keyword,int status,Long position);
 
 }

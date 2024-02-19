@@ -44,6 +44,6 @@ public interface NhanVienRepository extends JpaRepository<NhanVien, Long> {
     @Query("SELECT nv from NhanVien nv where (:keyword is null or nv.maNV like %:keyword% or nv.hoTen like %:keyword% or nv.sdt like %:keyword% or nv.email like %:keyword%)")
     Page<NhanVien> SearchPage(Pageable pageable,@Param("keyword") String keyword);
 
-    @Query("SELECT nv from NhanVien nv where (:keyword is null or nv.maNV like %:keyword% or nv.hoTen like %:keyword% or nv.sdt like %:keyword% or nv.email like %:keyword%) and (nv.trangThai=:status) and (nv.cv.id=:position)")
-    Page<NhanVien> SearchAllCustom(Pageable pageable,@Param("keyword") String keyword,@Param("status") int status,@Param("position") Long position);
+    @Query("SELECT nv from NhanVien nv where (:keyword is null or nv.maNV like %:keyword% or nv.hoTen like %:keyword% or nv.sdt like %:keyword% or nv.email like %:keyword%) and nv.trangThai=:status and nv.cv.id=:position")
+    Page<NhanVien> SearchAndFilter(Pageable pageable,@Param("keyword") String keyword,@Param("status") int status,@Param("position") Long position);
 }

@@ -11,9 +11,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/admin/staff")
@@ -24,19 +25,21 @@ public class NhanVienRestController {
     @Autowired
     ChucVuService chucVuService;
 
-//        @GetMapping("/page/{number}/{keyword}/{status}/{position}")
-//    public ResponseEntity<?> getPage(Model model, @PathVariable("keyword") String keyword
-//            , @PathVariable("status") int status
-//            , @PathVariable("position") Long position
-//            , @PathVariable("number") int number) {
-//        Pageable pageable = PageRequest.of(number, 5, Sort.by("ngayTao").descending());
-////        service.page(pageable);
-//        model.addAttribute("number", number);
-//        model.addAttribute("totalPages", service.page(pageable).getTotalPages());
-//        model.addAttribute("totalElements", service.page(pageable).getTotalElements());
-//        model.addAttribute("list", service.page(pageable).getContent());
-//        return new ResponseEntity<>(service.SearchAllCustom(pageable,keyword,status,position), HttpStatus.OK);
-//    }
+    @GetMapping("/page/{number}/{keyword}/{status}/{position}")
+    public ResponseEntity<?> getPageAndSearchAndFilter(Model model, @PathVariable("number") int number
+            , @PathVariable("keyword") String keyword
+            , @PathVariable("status") int status
+            , @PathVariable("position") Long position
+    ) {
+        Pageable pageable = PageRequest.of(number, 5, Sort.by("ngayTao").descending());
+//        service.page(pageable);
+        model.addAttribute("number", number);
+        model.addAttribute("totalPages", service.page(pageable).getTotalPages());
+        model.addAttribute("totalElements", service.page(pageable).getTotalElements());
+        model.addAttribute("list", service.page(pageable).getContent());
+        return new ResponseEntity<>(service.SearchAndFilter(pageable, keyword, status, position), HttpStatus.OK);
+    }
+
     @GetMapping("/page/{number}/{keyword}")
     public ResponseEntity<?> getPage(Model model, @PathVariable("keyword") String keyword
             , @PathVariable("number") int number) {
