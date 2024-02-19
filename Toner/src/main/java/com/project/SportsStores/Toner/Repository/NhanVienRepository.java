@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface NhanVienRepository extends JpaRepository<NhanVien,Long> {
+public interface NhanVienRepository extends JpaRepository<NhanVien, Long> {
     @Override
     <S extends NhanVien> S saveAndFlush(S entity);
 
@@ -39,5 +39,11 @@ public interface NhanVienRepository extends JpaRepository<NhanVien,Long> {
     Page<NhanVien> findAll(Pageable pageable);
 
     @Query("Select nv from NhanVien nv where nv.email = :email")
-    Optional<NhanVien> getByEmail(@Param("email")String email);
+    Optional<NhanVien> getByEmail(@Param("email") String email);
+
+    @Query("SELECT nv from NhanVien nv where (:keyword is null or nv.maNV like %:keyword% or nv.hoTen like %:keyword% or nv.sdt like %:keyword% or nv.email like %:keyword%)")
+    Page<NhanVien> SearchPage(Pageable pageable,@Param("keyword") String keyword);
+
+    @Query("SELECT nv from NhanVien nv where (:keyword is null or nv.maNV like %:keyword% or nv.hoTen like %:keyword% or nv.sdt like %:keyword% or nv.email like %:keyword%) and (nv.trangThai=:status) and (nv.cv.id=:position)")
+    Page<NhanVien> SearchAllCustom(Pageable pageable,@Param("keyword") String keyword,@Param("status") int status,@Param("position") Long position);
 }
