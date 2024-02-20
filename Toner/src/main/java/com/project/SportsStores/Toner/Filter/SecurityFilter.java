@@ -33,7 +33,7 @@ public class SecurityFilter {
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/api/v2/auth/**").permitAll()
                 .requestMatchers("/index/home").permitAll()
-                .requestMatchers("/api/admin/**").permitAll()
+                .requestMatchers("/api/admin/product/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/admin/**").permitAll()
                 .requestMatchers("/assets/**").permitAll()

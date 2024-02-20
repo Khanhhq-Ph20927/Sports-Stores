@@ -3,6 +3,8 @@ package com.project.SportsStores.Toner.Model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name="SanPhamChiTiet")
 @Data
@@ -16,11 +18,18 @@ public class SanPhamChiTiet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="MauSac")
-    private String mauSac;
-
     @Column(name="Size")
-    private int size;
+    private String size;
+
+    @Column(name="ngayTao")
+    private LocalDateTime ngayTao;
+
+    @Column(name="SoLuong")
+    private int soLuong;
+
+    @ManyToOne
+    @JoinColumn(name="MauSac")
+    private MauSac ms;
 
     @ManyToOne
     @JoinColumn(name="idSanPham")

@@ -76,7 +76,8 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     public boolean update(SanPham sp) {
-        return false;
+        rp.saveAndFlush(sp);
+        return true;
     }
 
     @Override

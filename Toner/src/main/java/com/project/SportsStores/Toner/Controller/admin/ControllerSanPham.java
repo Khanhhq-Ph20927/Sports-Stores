@@ -1,6 +1,5 @@
 package com.project.SportsStores.Toner.Controller.admin;
 
-
 import com.project.SportsStores.Toner.Model.DTO.SanPhamDTO;
 import com.project.SportsStores.Toner.Model.SanPham;
 import com.project.SportsStores.Toner.Repository.NhaCungCapRepository;
@@ -38,6 +37,11 @@ public class ControllerSanPham {
         return "admin/products/product-create";
     }
 
+    @RequestMapping(value = "/product_detail", method = RequestMethod.GET)
+    private String viewProductDetail() {
+        return "admin/products/product-detailed";
+    }
+
     @RequestMapping(value = "/save_product", method = RequestMethod.POST)
     private String saveProduct(@ModelAttribute("product") SanPham sp,
                                RedirectAttributes redirectAttributes,
@@ -49,26 +53,26 @@ public class ControllerSanPham {
                 sp.setMaSP("SP" + (sv.getAll().size() + 1));
             }
         }
-        boolean isValid = false;
+        boolean isValid = true;
         sp.setNgayTao(LocalDateTime.now());
         if (sp.getDanhMuc() == -1) {
-            isValid = true;
+            isValid = false;
             model.addAttribute("errorCollections", "Please Choose Collections");
         }
         if (sp.getTenSP().isEmpty()) {
-            isValid = true;
+            isValid = false;
             model.addAttribute("errorName", "Please Choose Name");
         }
         if (sp.getThieu() == null) {
-            isValid = true;
+            isValid = false;
             model.addAttribute("errorBrand", "Please Choose Brand");
         }
         if (sp.getNcc() == null) {
-            isValid = true;
+            isValid = false;
             model.addAttribute("errorProvider", "Please Choose Provider");
         }
         if (sp.getDonGia() == null) {
-            isValid = true;
+            isValid = false;
             model.addAttribute("errorPrice", "Please Choose Price");
         }
         if (isValid) {
