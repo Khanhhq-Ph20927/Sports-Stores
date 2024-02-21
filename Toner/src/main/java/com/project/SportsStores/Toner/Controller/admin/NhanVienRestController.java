@@ -25,36 +25,70 @@ public class NhanVienRestController {
     @Autowired
     ChucVuService chucVuService;
 
+    //Page
+//            model.addAttribute("number", number);
+//        model.addAttribute("totalPages", service.page(pageable).getTotalPages());
+//        model.addAttribute("totalElements", service.page(pageable).getTotalElements());
+//        model.addAttribute("list", service.page(pageable).getContent());
     @GetMapping("/page/{number}/{keyword}/{status}/{position}")
     public ResponseEntity<?> getPageAndSearchAndFilter(Model model, @PathVariable("number") int number
             , @PathVariable("keyword") String keyword
-            , @PathVariable("status") int status
-            , @PathVariable("position") Long position
+            , @PathVariable("status") String status
+            , @PathVariable("position") String position
     ) {
         Pageable pageable = PageRequest.of(number, 5, Sort.by("ngayTao").descending());
 //        service.page(pageable);
-        model.addAttribute("number", number);
-        model.addAttribute("totalPages", service.page(pageable).getTotalPages());
-        model.addAttribute("totalElements", service.page(pageable).getTotalElements());
-        model.addAttribute("list", service.page(pageable).getContent());
-        return new ResponseEntity<>(service.SearchAndFilter(pageable, keyword, status, position), HttpStatus.OK);
+        Page<NhanVien> page = service.page(pageable);
+        if (Integer.parseInt(status) == -1 && Long.parseLong(position) == 0 && !keyword.equals("null")) {
+            page = service.SearchPage(pageable, keyword);
+        }
+        if (Integer.parseInt(status) != -1 && Long.parseLong(position) == 0 && keyword.equalsIgnoreCase("null")) {
+            page = service.filterByStatusNoSearch(pageable, Integer.parseInt(status));
+        }
+        if (Integer.parseInt(status) != -1 && Long.parseLong(position) == 0 && !keyword.equalsIgnoreCase("null")) {
+            page = service.filterByStatusAndSearch(pageable, keyword, Integer.parseInt(status));
+        }
+        if (Integer.parseInt(status) == -1 && Long.parseLong(position) != 0 && keyword.equalsIgnoreCase("null")) {
+            page = service.filterByPositionNoSearch(pageable, Long.parseLong(position));
+        }
+        if (Integer.parseInt(status) == -1 && Long.parseLong(position) != 0 && !keyword.equalsIgnoreCase("null")) {
+            page = service.filterByPositionAndSearch(pageable, keyword,Long.parseLong(position));
+        }
+        if (Integer.parseInt(status) != -1 && Long.parseLong(position) != 0 && keyword.equalsIgnoreCase("null")) {
+            page = service.filterByStatusAndPositionNoSearch(pageable, Integer.parseInt(status), Long.parseLong(position));
+        }
+        if (Integer.parseInt(status) != -1 && Long.parseLong(position) != 0 && !keyword.equals("null")) {
+            page = service.SearchAndFilter(pageable, keyword, Integer.parseInt(status), Long.parseLong(position));
+        }
+        return new ResponseEntity<>(page, HttpStatus.OK);
+//        return new ResponseEntity<>(service.SearchAndFilter(pageable, keyword, status, position), HttpStatus.OK);
     }
 
-    @GetMapping("/page/{number}/{keyword}")
-    public ResponseEntity<?> getPage(Model model, @PathVariable("keyword") String keyword
-            , @PathVariable("number") int number) {
-        Pageable pageable = PageRequest.of(number, 5, Sort.by("ngayTao").descending());
-        model.addAttribute("number", number);
-        model.addAttribute("totalPages", service.page(pageable).getTotalPages());
-        model.addAttribute("totalElements", service.page(pageable).getTotalElements());
-        model.addAttribute("list", service.page(pageable).getContent());
-//        service.page(pageable);
-        if (keyword.equals("null")) {
-            Page<NhanVien> page = service.page(pageable);
-            return new ResponseEntity<>(page, HttpStatus.OK);
+//    @GetMapping("/page/search/{number}/{keyword}")
+//    public ResponseEntity<?> getPageAndSearch(Model model, @PathVariable("keyword") String keyword
+//            , @PathVariable("number") int number) {
+//        Pageable pageable = PageRequest.of(number, 5, Sort.by("ngayTao").descending());
+////        service.page(pageable);
+//        if (keyword.equals("null")) {
+//            Page<NhanVien> page = service.page(pageable);
+//            return new ResponseEntity<>(page, HttpStatus.OK);
+//        } else {
+//            Page<NhanVien> page = service.SearchPage(pageable, keyword);
+//            return new ResponseEntity<>(page, HttpStatus.OK);
+//        }
+//    }
+
+    @GetMapping("/update_status/{id}/{status}")
+    public ResponseEntity<?> updateStatus(@PathVariable("id") String id
+            , @PathVariable("status") String status) {
+        boolean isExist = service.findById(Long.parseLong(id)).isPresent();
+        if (isExist == true) {
+            NhanVien nv = service.findById(Long.parseLong(id)).get();
+            nv.setTrangThai(Integer.parseInt(status));
+            service.save(nv);
+            return new ResponseEntity<>("success", HttpStatus.OK);
         } else {
-            Page<NhanVien> page = service.SearchPage(pageable, keyword);
-            return new ResponseEntity<>(page, HttpStatus.OK);
+            return new ResponseEntity<>("fail", HttpStatus.OK);
         }
     }
 }

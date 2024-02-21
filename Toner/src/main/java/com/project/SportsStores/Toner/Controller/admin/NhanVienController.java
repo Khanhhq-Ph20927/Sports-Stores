@@ -84,6 +84,7 @@ public class NhanVienController {
             return "redirect:/api/admin/staff/add";
 //            return "admin/staff/staff-add";
         } else {
+            model.addAttribute("message", false);
             return "admin/staff/staff-add";
         }
     }
@@ -105,7 +106,7 @@ public class NhanVienController {
         updateNV.setCv(nhanVien.getCv());
 //        updateNV.setAnhNhanVien(nhanVien.getAnhNhanVien());
         service.save(nhanVien);
-        redirectAttributes.addFlashAttribute("updateSuccess", true);
+        redirectAttributes.addFlashAttribute("message", true);
         return "redirect:/api/admin/staff";
 //        return "admin/staff/staff-list";
     }

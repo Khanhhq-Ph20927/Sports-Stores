@@ -237,4 +237,7 @@
 <script th:if="${message == true}">
     swal.fire("Saved!", "", "success");
 </script>
+<script th:if="${message == false}">
+    swal.fire("Changes have not been saved!", "", "error");
+</script>
 </html>

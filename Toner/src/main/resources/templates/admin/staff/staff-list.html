@@ -240,7 +240,7 @@
                                     <div class="col-lg-3">
                                         <div class="search-box">
                                             <input type="text" class="form-control search" id="staff-search-input"
-                                                   placeholder="Tìm kiếm nhân viên..." onchange="search()">
+                                                   placeholder="Tìm kiếm nhân viên..." onkeyup="search()">
                                             <i class="ri-search-line search-icon"></i>
                                         </div>
                                     </div>
@@ -460,7 +460,8 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script th:inline="javascript">
-
+    // lưu page index đang select của table
+    var page;
     window.onload = function () {
         loadPage(0);
     }
@@ -523,10 +524,11 @@
     }
 
     async function loadPage(pageNumber) {
-        var url = "/api/admin/staff/page/" + pageNumber + "/" + "null";
+        var url = "/api/admin/staff/page/" + pageNumber + "/" + "null" + "/" + -1 + "/" + 0;
         const response = await fetch(url, {
             method: 'GET'
         });
+        page = pageNumber;
         var result = await response.json();
         console.log(result);
         var list = result.content;
@@ -534,8 +536,8 @@
         var number = result.number;
         var main = '';
         for (i = 0; i < list.length; i++) {
-            var trangThaiBadge = (list[i].trangThai == 0) ? '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked/></div>' :
-                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox"/></div>';
+            var trangThaiBadge = (list[i].trangThai == 0) ? '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked id="input-status-" onchange="updateStatus(' + list[i].id + ',0)"/></div>' :
+                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" id="input-status-" onchange="updateStatus(' + list[i].id + ',1)"/></div>';
             main += `<tr >
                             <td scope="row">${list[i].maNV}</td>
                             <td scope="row">${list[i].hoTen}</td>
@@ -553,8 +555,7 @@
                      </tr>`
         }
         document.getElementById("list_Staff").innerHTML = main;
-        var currentPage = `
-     <div class="pagination-wrap hstack gap-2">
+        var currentPage = `<div class="pagination-wrap hstack gap-2">
        <a class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${totalPage - totalPage})"  >
        <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </a></a>
        <a class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number - 1})">
@@ -564,64 +565,50 @@
        <i class="mdi mdi-chevron-right align-middle ms-1"></i></a></a>
        <a class="page-item pagination-next" id="pagination-next" onclick="loadPage(${totalPage - 1})">
        <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></a></a>
-      </div>
-        `;
-        // <li class="page-item">
-        //     className <button class="page-link" aria-lclassName"Previous"
-        //                       onclick="loadPage(${numbonClick=== 0 ? totalPage : number - 1})"><span
-        //     aria-hidden="true">&laquo;</span></button>
-        // </li>
-        // <li class="page-item">
-        //     className <button class="page-link" onclicclassNameadPage(0)">1
-        //     <onClick>
-        // </li>
-        // <li class="page-item">
-        //     className <button class="page-link" onclicclassNameadPage(1)">2
-        //     <onClick>
-        // </li>
-        // <li class="page-item">
-        //     <!-- className              <button class="page-link" onclick="loadPage(2)">3</button>-->
-        // </li>
-        // <li class="page-item">
-        //     className <button class="page-link" aria-lclassName"Next"
-        //                       onclick="loadPage(${numbonClick=== totalPage ? 0 : number + 1})">
-        //     <span aria-hidden="true">&raquo;</span>
-        // </button>
-        // </li>
+      </div>`;
         document.getElementById("pagination").innerHTML = currentPage;
     }
-
-    // function formatMoney(money) {
-    //     const VND = new Intl.NumberFormat('vi-VN', {
-    //         style: 'currency',
-    //         currency: 'VND',
-    //     });
-    //     return VND.format(money);
-    // }
 
     async function search(pageNumber) {
         var keyword = document.getElementById("staff-search-input").value.trim().toLowerCase();
         var status = document.getElementById("staff-status-filter").value;
         var position = document.getElementById("staff-position-filter").value;
+        pageNumber === undefined ? page = 0 : page = pageNumber;
+        console.log(keyword);
+        console.log(status);
+        console.log(position);
+        console.log(pageNumber);
         var url;
-        if (pageNumber === undefined && keyword === '') {
-            url = "/api/admin/staff/page/" + 0 + "/" + "null";
+        if (pageNumber === undefined && keyword === '' && status === -1 && position === 0) {
+            loadPage(0);
+        } else if (pageNumber === undefined && keyword !== '' && status === "-1" && position === "0") {
+            url = "/api/admin/staff/page/" + 0 + "/" + keyword + "/" + -1 + "/" + 0;
             console.log(url);
-        } else if (pageNumber === undefined && keyword !== '') {
-            url = "/api/admin/staff/page/" + 0 + "/" + keyword;
+            console.log(1);
+        } else if (pageNumber !== undefined && keyword !== '' && status === "-1" && position === "0") {
+            url = "/api/admin/staff/page/" + pageNumber + "/" + keyword + "/" + -1 + "/" + 0;
             console.log(url);
-        } else if (pageNumber !== undefined && keyword !== '') {
-            url = "/api/admin/staff/page/" + pageNumber + "/" + keyword;
-            console.log(url);
-        } else if (pageNumber === undefined && keyword === '' && (status !== -1 || position !== 0)) {
+            console.log(2);
+        } else if (pageNumber === undefined && keyword === '' && (status !== "-1" || position !== "0")) {
             url = "/api/admin/staff/page/" + 0 + "/" + "null" + "/" + status + "/" + position;
             console.log(url);
-        } else if (pageNumber !== undefined && keyword === '' && (status !== -1 || position !== 0)) {
+            console.log(3);
+        } else if (pageNumber !== undefined && keyword === '' && (status !== "-1" || position !== "0")) {
             url = "/api/admin/staff/page/" + pageNumber + "/" + "null" + "/" + status + "/" + position;
             console.log(url);
-        } else if (pageNumber !== undefined && (status !== -1 || position !== 0) && keyword !== '') {
+            console.log(4);
+        }else if (pageNumber === undefined && keyword !== '' && (status !== "-1" || position !== "0")) {
+            url = "/api/admin/staff/page/" + 0 + "/" + keyword + "/" + status + "/" + position;
+            console.log(url);
+            console.log(5);
+        }else if (pageNumber !== undefined && keyword !== '' && (status !== "-1" || position !== "0")) {
             url = "/api/admin/staff/page/" + pageNumber + "/" + keyword + "/" + status + "/" + position;
             console.log(url);
+            console.log(6);
+        } else if (pageNumber !== undefined && keyword !== '' && status !== "-1" && position !== "0") {
+            url = "/api/admin/staff/page/" + pageNumber + "/" + keyword + "/" + status + "/" + position;
+            console.log(url);
+            console.log(7);
         }
         const response = await fetch(url, {
             method: 'GET'
@@ -629,12 +616,13 @@
         var result = await response.json();
         console.log(result);
         var list = result.content;
+        console.log(list);
         var totalPage = result.totalPages;
         var number = result.number;
         var main = '';
         for (i = 0; i < list.length; i++) {
-            var trangThaiBadge = (list[i].trangThai == 0) ? '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked/></div>' :
-                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox"/></div>';
+            var trangThaiBadge = (list[i].trangThai == 0) ? '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked id="input-status" onchange="updateStatus(' + list[i].id + ',1)"/></div>' :
+                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" id="input-status" onchange="updateStatus(' + list[i].id + ',1)"/></div>';
             main += `<tr >
                             <td scope="row">${list[i].maNV}</td>
                             <td scope="row">${list[i].hoTen}</td>
@@ -667,11 +655,39 @@
         `;
         document.getElementById("pagination").innerHTML = currentPage;
     }
+
+    function updateStatus(id, status) {
+        swal.fire({
+            title: "Bạn Có Muốn Thay Đổi Trạng Thái?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Lưu Thay Đổi",
+            denyButtonText: `Quay Về`
+        }).then((result) => {
+            var url = "/api/admin/staff/update_status/" + id + "/" + status;
+            if (result.isConfirmed) {
+                fetch(url, {
+                    method: 'GET'
+                }).then(response => {
+                    return response.json();
+                }).then(data => {
+                    console.log(data)
+                }).catch(error => console.log('Error:', error));
+            } else {
+                // If the user has not confirmed, then check the status of the checkbox and return it to its original state.
+                if (status === 1) {
+                    document.getElementById("input-status" + id).checked = false;
+                } else {
+                    document.getElementById("input-status" + id).checked = true;
+                }
+            }
+        });
+    }
 </script>
-<script th:if="${updateSuccess == true}">
+<script th:if="${message == true}">
     swal.fire("Changes have been Saved!", "", "success");
 </script>
-<script th:if="${updateFailure == false}">
+<script th:if="${message == false}">
     swal.fire("Changes have not been saved!", "", "error");
 </script>
 </html>

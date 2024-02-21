@@ -42,8 +42,23 @@ public interface NhanVienRepository extends JpaRepository<NhanVien, Long> {
     Optional<NhanVien> getByEmail(@Param("email") String email);
 
     @Query("SELECT nv from NhanVien nv where (:keyword is null or nv.maNV like %:keyword% or nv.hoTen like %:keyword% or nv.sdt like %:keyword% or nv.email like %:keyword%)")
-    Page<NhanVien> SearchPage(Pageable pageable,@Param("keyword") String keyword);
+    Page<NhanVien> SearchPage(Pageable pageable, @Param("keyword") String keyword);
+
+    @Query("SELECT nv from NhanVien nv where nv.trangThai=:status")
+    Page<NhanVien> filterByStatusNoSearch(Pageable pageable, @Param("status") int status);
+
+    @Query("SELECT nv from NhanVien nv where (:keyword is null or nv.maNV like %:keyword% or nv.hoTen like %:keyword% or nv.sdt like %:keyword% or nv.email like %:keyword%) and nv.trangThai=:status")
+    Page<NhanVien> filterByStatusAndSearch(Pageable pageable,@Param("keyword") String keyword, @Param("status") int status);
+
+    @Query("SELECT nv from NhanVien nv where nv.cv.id=:position")
+    Page<NhanVien> filterByPositionNoSearch(Pageable pageable, @Param("position") Long position);
+
+    @Query("SELECT nv from NhanVien nv where (:keyword is null or nv.maNV like %:keyword% or nv.hoTen like %:keyword% or nv.sdt like %:keyword% or nv.email like %:keyword%) and nv.cv.id=:position")
+    Page<NhanVien> filterByPositionAndSearch(Pageable pageable,@Param("keyword") String keyword, @Param("position") Long position);
+
+    @Query("SELECT nv from NhanVien nv where (nv.trangThai=:status and nv.cv.id=:position)")
+    Page<NhanVien> filterByStatusAndPositionNoSearch(Pageable pageable, @Param("status") int status, @Param("position") Long position);
 
     @Query("SELECT nv from NhanVien nv where (:keyword is null or nv.maNV like %:keyword% or nv.hoTen like %:keyword% or nv.sdt like %:keyword% or nv.email like %:keyword%) and nv.trangThai=:status and nv.cv.id=:position")
-    Page<NhanVien> SearchAndFilter(Pageable pageable,@Param("keyword") String keyword,@Param("status") int status,@Param("position") Long position);
+    Page<NhanVien> SearchAndFilter(Pageable pageable, @Param("keyword") String keyword, @Param("status") int status, @Param("position") Long position);
 }
