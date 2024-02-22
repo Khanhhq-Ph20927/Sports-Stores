@@ -33,43 +33,49 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Long> {
     @Override
     Page<SanPham> findAll(Pageable pageable);
 
+    // search query
     @Query("SELECT sp FROM SanPham sp WHERE sp.tenSP LIKE %:keyword% OR sp.maSP LIKE %:keyword%")
     Page<SanPham> searchProduct(@Param("keyword") String keyword, Pageable pageable);
 
-    @Query("SELECT sp FROM SanPham sp WHERE sp.tenSP LIKE %:keyword% OR sp.maSP LIKE %:keyword% " +
+    //search and filter by collection
+    @Query("SELECT sp FROM SanPham sp WHERE (sp.tenSP LIKE %:keyword% OR sp.maSP LIKE %:keyword%) " +
             "and sp.danhMuc = :collection")
     Page<SanPham> searchAndFilterProductByCollection(@Param("keyword") String keyword, Pageable pageable,
                                                      @Param("collection") String collection);
-
+    //filter by collection
     @Query("SELECT sp FROM SanPham sp WHERE" +
             " sp.danhMuc = :collection")
     Page<SanPham> filterProductByCollection(Pageable pageable,
                                             @Param("collection") String collection);
 
-    @Query("SELECT sp FROM SanPham sp WHERE sp.tenSP LIKE %:keyword% OR sp.maSP LIKE %:keyword% " +
+    //search and filter by status
+    @Query("SELECT sp FROM SanPham sp WHERE (sp.tenSP LIKE %:keyword% OR sp.maSP LIKE %:keyword%) " +
             "and sp.trangThai = :status")
-    Page<SanPham> searchAndFilterProductStatus(@Param("keyword") String keyword, Pageable pageable,
+    Page<SanPham> searchAndFilterProductByStatus(@Param("keyword") String keyword, Pageable pageable,
                                                @Param("status") String status);
-
+    //filter by status
     @Query("SELECT sp FROM SanPham sp WHERE " +
             " sp.trangThai = :status")
-    Page<SanPham> filterProductStatus(Pageable pageable,
+    Page<SanPham> filterProductByStatus(Pageable pageable,
                                       @Param("status") String status);
-
+    //filter by status and collection
     @Query("SELECT sp FROM SanPham sp WHERE " +
             " sp.trangThai = :status and sp.danhMuc = :collection")
-    Page<SanPham> filterProductStatusAndCollection(Pageable pageable,
-                                                   @Param("status") String status, @Param("collection") String collection);
+    Page<SanPham> filterProductByStatusAndCollection(Pageable pageable,
+                                                   @Param("status") String status,
+                                                   @Param("collection") String collection);
+    // search and filter by status + collection
+    @Query("SELECT sp FROM SanPham sp WHERE (sp.tenSP LIKE %:keyword% OR sp.maSP LIKE %:keyword%) " +
+            "and sp.trangThai = :status and sp.danhMuc = :collection")
+    Page<SanPham> searchAndFilterProductByStatusAndCollection(Pageable pageable,
+                                                   @Param("keyword") String keyword,
+                                                   @Param("status") String status,
+                                                   @Param("collection") String collection);
 
-    @Query("SELECT sp FROM SanPham sp WHERE sp.tenSP LIKE %:keyword% OR sp.maSP LIKE %:keyword% " +
+    @Query("SELECT sp FROM SanPham sp WHERE (sp.tenSP LIKE %:keyword% OR sp.maSP LIKE %:keyword%) " +
             "and sp.donGia <= :priceEnd and sp.donGia >= :priceStart")
     Page<SanPham> searchAndFilterProductByPrice(@Param("keyword") String keyword, Pageable pageable,
                                                 @Param("priceStart") String priceStart, @Param("priceEnd") String priceEnd);
-
-    @Query("SELECT sp FROM SanPham sp WHERE sp.tenSP LIKE %:keyword% OR sp.maSP LIKE %:keyword% " +
-            "and sp.trangThai = :status and sp.danhMuc = :collection")
-    Page<SanPham> searchAndFilterProductByStatusAndCollection(@Param("keyword") String keyword, Pageable pageable,
-                                                              @Param("status") String status, @Param("collection") String collection);
 
     @Query("SELECT sp FROM SanPham sp WHERE sp.tenSP LIKE %:keyword% OR sp.maSP LIKE %:keyword% " +
             "and sp.trangThai = :status and sp.donGia <= :priceEnd and sp.donGia >= :priceStart")

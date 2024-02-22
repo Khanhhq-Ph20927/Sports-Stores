@@ -23,11 +23,11 @@ public interface SanPhamService {
 
     Page<SanPham> seacrhProduct(String keyword,Pageable pageable);
 
-    Page<SanPham> filterByCollection (String keyword,Pageable pageable,String collection);
+    Page<SanPham> searchAndfilterByCollection (String keyword,Pageable pageable,String collection);
 
-    Page<SanPham> filterByStatus (String keyword,Pageable pageable,String status);
+    Page<SanPham> searchAndfilterByStatus (String keyword,Pageable pageable,String status);
 
-    Page<SanPham> filterByStatusAndCollection (String keyword,Pageable pageable,String status,String collection);
+    Page<SanPham> searchAndfilterByStatusAndCollection (String keyword,Pageable pageable,String status,String collection);
 
     Page<SanPham> filterByStatusNoSearch(Pageable pageable,String status);
 

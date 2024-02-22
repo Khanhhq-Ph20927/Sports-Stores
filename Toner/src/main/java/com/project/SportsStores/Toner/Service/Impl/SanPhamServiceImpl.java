@@ -29,18 +29,18 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
 
     @Override
-    public Page<SanPham> filterByCollection(String keyword, Pageable pageable, String collection) {
+    public Page<SanPham> searchAndfilterByCollection(String keyword, Pageable pageable, String collection) {
         return rp.searchAndFilterProductByCollection(keyword,pageable,collection);
     }
 
     @Override
-    public Page<SanPham> filterByStatus(String keyword, Pageable pageable, String status) {
-        return rp.searchAndFilterProductStatus(keyword, pageable, status);
+    public Page<SanPham> searchAndfilterByStatus(String keyword, Pageable pageable, String status) {
+        return rp.searchAndFilterProductByStatus(keyword, pageable, status);
     }
 
     @Override
-    public Page<SanPham> filterByStatusAndCollection(String keyword, Pageable pageable, String status, String collection) {
-        return rp.searchAndFilterProductByStatusAndCollection(keyword,pageable,status,collection);
+    public Page<SanPham> searchAndfilterByStatusAndCollection(String keyword, Pageable pageable, String status, String collection) {
+        return rp.searchAndFilterProductByStatusAndCollection(pageable,keyword,status,collection);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     public Page<SanPham> filterByStatusNoSearch(Pageable pageable, String status) {
-        return rp.filterProductStatus(pageable,status);
+        return rp.filterProductByStatus(pageable,status);
     }
 
     @Override
@@ -103,6 +103,6 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     public Page<SanPham> filterByStatusAndCollectionNoSearch(Pageable pageable, String status, String collection) {
-        return rp.filterProductStatusAndCollection(pageable,status,collection);
+        return rp.filterProductByStatusAndCollection(pageable,status,collection);
     }
 }

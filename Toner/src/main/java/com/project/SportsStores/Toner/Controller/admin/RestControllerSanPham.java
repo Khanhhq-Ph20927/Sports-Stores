@@ -65,17 +65,33 @@ public class RestControllerSanPham {
                                                   @PathVariable("collection") String collection) {
         Pageable pageable = PageRequest.of(Integer.parseInt(pageNumber), 5, Sort.by("ngayTao").descending());
         Page<SanPham> page = sv.getPagination(pageable);
+        //search
         if (Integer.parseInt(status) == -1 && Integer.parseInt(collection) == -1 && !keyWord.equals("null")) {
-            page = sv.seacrhProduct(keyWord, pageable);
+            page = sv.seacrhProduct(keyWord,pageable);
         }
+        //filter by status
         if (Integer.parseInt(status) != -1 && Integer.parseInt(collection) == -1 && keyWord.equalsIgnoreCase("null")) {
-            page = sv.filterByStatusNoSearch(pageable, status);
+            page = sv.filterByStatusNoSearch(pageable,status);
         }
+        //filter by collection
         if (Integer.parseInt(status) == -1 && Integer.parseInt(collection) != -1 && keyWord.equalsIgnoreCase("null")) {
-            page = sv.filterByCollectionNoSearch(pageable, collection);
+            page = sv.filterByCollectionNoSearch(pageable,collection);
         }
+        //filter by status and collection
         if (Integer.parseInt(status) != -1 && Integer.parseInt(collection) != -1 && keyWord.equalsIgnoreCase("null")) {
-            page = sv.filterByStatusAndCollectionNoSearch(pageable, status, collection);
+            page = sv.filterByStatusAndCollectionNoSearch(pageable,status,collection);
+        }
+        //search and filter by status
+        if (Integer.parseInt(status) != -1 && Integer.parseInt(collection) == -1 && !keyWord.equalsIgnoreCase("null")) {
+            page = sv.searchAndfilterByStatus(keyWord,pageable,status);
+        }
+        //search and filter by collection
+        if (Integer.parseInt(status) == -1 && Integer.parseInt(collection) != -1 && !keyWord.equalsIgnoreCase("null")) {
+            page = sv.searchAndfilterByCollection(keyWord,pageable,collection);
+        }
+        //search and filter by status + collection
+        if (Integer.parseInt(status) != -1 && Integer.parseInt(collection) != -1 && !keyWord.equalsIgnoreCase("null")) {
+            page = sv.searchAndfilterByStatusAndCollection(keyWord,pageable,status,collection);
         }
         return new ResponseEntity<>(page, HttpStatus.OK);
     }

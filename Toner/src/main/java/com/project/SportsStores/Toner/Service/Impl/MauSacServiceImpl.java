@@ -10,9 +10,10 @@ import org.springframework.stereotype.Service;
 public class MauSacServiceImpl implements MauSacService {
     @Autowired
     private MauSacRepository rp;
+
     @Override
     public MauSac getById(Integer id) {
-        if(rp.findById(id).isPresent()) {
+        if (rp.findById(id).isPresent()) {
             return rp.findById(id).get();
         } else {
             return null;

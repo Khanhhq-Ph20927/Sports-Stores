@@ -396,26 +396,43 @@
         var status = document.getElementById("filter-status").value;
         var collection = document.getElementById("filter-collections").value;
         var url;
+        console.log(status);
+        console.log(collection);
 
         pageNumber === undefined ? page = 0 : page = pageNumber;
 
-        if (pageNumber === undefined && keyword === '' && status === -1 && collection === -1) {
+        if (pageNumber === undefined && keyword === '' && status === "-1" && collection === "-1") {
             loadPage(0);
-        } else if (pageNumber === undefined && keyword !== '' && status === -1 && collection === -1) {
+        }// if start search with keyword
+        else if (pageNumber === undefined && keyword !== '' && status === "-1" && collection === "-1") {
             url = "/api/admin/product/page/search/" + 0 + "/" + keyword;
             console.log(url);
-        } else if (pageNumber !== undefined && keyword !== '' && status === -1 && collection === -1) {
+            console.log(1);
+        }// search and paging
+        else if (pageNumber !== undefined && keyword !== '' && status === "-1" && collection === "-1") {
             url = "/api/admin/product/page/search/" + pageNumber + "/" + keyword + "/" + -1 + "/" - 1;
             console.log(url);
-        } else if (pageNumber === undefined && keyword !== '' && (status !== -1 || collection !== -1)) {
+            console.log(2);
+        }// filter
+        else if (pageNumber === undefined && keyword === '' && (status !== "-1" || collection !== "-1")) {
+            url = "/api/admin/product/page/" + "null" + "/" + 0 + "/" + status + "/" + collection;
+            console.log(url);
+            console.log(3);
+        }// filter and search
+        else if (pageNumber === undefined && keyword !== '' && (status !== "-1" || collection !== "-1")) {
             url = "/api/admin/product/page/" + keyword + "/" + 0 + "/" + status + "/" + collection;
             console.log(url);
-        } else if (pageNumber !== undefined && keyword === '' && (status !== -1 || collection !== -1)) {
+            console.log(4);
+        }// filter and paging
+        else if (pageNumber !== undefined && keyword === '' && (status !== "-1" || collection !== "-1")) {
             url = "/api/admin/product/page/" + "null" + "/" + pageNumber + "/" + status + "/" + collection;
             console.log(url);
-        } else if (pageNumber !== undefined && (status !== -1 || collection !== -1) && keyword !== '') {
+            console.log(5);
+        }// filter, search and paging
+        else if (pageNumber !== undefined && (status !== "-1" || collection !== "-1") && keyword !== '') {
             url = "/api/admin/product/page/" + keyword + "/" + pageNumber + "/" + status + "/" + collection;
             console.log(url);
+            console.log(6);
         }
         const response = await fetch(url, {
             method: 'GET'
