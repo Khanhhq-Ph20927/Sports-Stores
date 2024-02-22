@@ -361,7 +361,6 @@
                                                                     <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
                                                                            for="productsize-radio4">XL</label>
                                                                 </div>
-
                                                                 <div data-bs-toggle="tooltip" data-bs-trigger="hover"
                                                                      data-bs-placement="top">
                                                                     <input type="checkbox" class="btn-check"
@@ -678,7 +677,7 @@
                                 <div onclick="editProductDetail(${list[i].id})"
                                      class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
                                  </div>
-                            </td>
+</td>
                      </tr>`
             }
         } else {
@@ -748,7 +747,6 @@
             checkbox.checked = false;
         });
     });
-
     document.getElementById('myModal').addEventListener('hide.bs.modal', function (event) {
 
         var colorCheckboxes = document.querySelectorAll('[name="mauSac"]');
@@ -807,7 +805,7 @@
             </li>
             <li class="page-item">
                     <button class="page-link" onclick="loadPage(2)">3</button>
-            </li>
+</li>
             <li class="page-item">
                     <button class="page-link" aria-label="Next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
                        <span aria-hidden="true">&raquo;</span>
