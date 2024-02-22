@@ -30,9 +30,6 @@ public class NhanVien implements UserDetails {
     @Column(name="HoTen")
     private String hoTen;
 
-    @Column(name="SDT")
-    private String sdt;
-
     @Column(name="NgaySinh")
     private Date ngaySinh;
 
