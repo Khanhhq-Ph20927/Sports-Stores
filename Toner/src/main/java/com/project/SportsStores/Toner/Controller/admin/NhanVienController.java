@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @Controller
-@RequestMapping("/api/admin/staff")
+@RequestMapping("/admin/staff")
 //@RestController
 public class NhanVienController {
     @Autowired

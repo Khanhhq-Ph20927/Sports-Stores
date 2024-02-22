@@ -31,10 +31,12 @@ public class NhanVienRestController {
 //        model.addAttribute("totalElements", service.page(pageable).getTotalElements());
 //        model.addAttribute("list", service.page(pageable).getContent());
     @GetMapping("/page/{number}/{keyword}/{status}/{position}")
+    ///{sort}
     public ResponseEntity<?> getPageAndSearchAndFilter(Model model, @PathVariable("number") int number
             , @PathVariable("keyword") String keyword
             , @PathVariable("status") String status
             , @PathVariable("position") String position
+//            , @PathVariable("sort") String sort
     ) {
         Pageable pageable = PageRequest.of(number, 5, Sort.by("ngayTao").descending());
 //        service.page(pageable);
@@ -52,7 +54,7 @@ public class NhanVienRestController {
             page = service.filterByPositionNoSearch(pageable, Long.parseLong(position));
         }
         if (Integer.parseInt(status) == -1 && Long.parseLong(position) != 0 && !keyword.equalsIgnoreCase("null")) {
-            page = service.filterByPositionAndSearch(pageable, keyword,Long.parseLong(position));
+            page = service.filterByPositionAndSearch(pageable, keyword, Long.parseLong(position));
         }
         if (Integer.parseInt(status) != -1 && Long.parseLong(position) != 0 && keyword.equalsIgnoreCase("null")) {
             page = service.filterByStatusAndPositionNoSearch(pageable, Integer.parseInt(status), Long.parseLong(position));
@@ -61,7 +63,6 @@ public class NhanVienRestController {
             page = service.SearchAndFilter(pageable, keyword, Integer.parseInt(status), Long.parseLong(position));
         }
         return new ResponseEntity<>(page, HttpStatus.OK);
-//        return new ResponseEntity<>(service.SearchAndFilter(pageable, keyword, status, position), HttpStatus.OK);
     }
 
 //    @GetMapping("/page/search/{number}/{keyword}")
@@ -82,7 +83,7 @@ public class NhanVienRestController {
     public ResponseEntity<?> updateStatus(@PathVariable("id") String id
             , @PathVariable("status") String status) {
         boolean isExist = service.findById(Long.parseLong(id)).isPresent();
-        if (isExist == true) {
+        if (isExist) {
             NhanVien nv = service.findById(Long.parseLong(id)).get();
             nv.setTrangThai(Integer.parseInt(status));
             service.save(nv);
