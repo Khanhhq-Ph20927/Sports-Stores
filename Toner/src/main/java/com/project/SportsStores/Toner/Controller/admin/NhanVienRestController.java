@@ -65,20 +65,6 @@ public class NhanVienRestController {
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
-//    @GetMapping("/page/search/{number}/{keyword}")
-//    public ResponseEntity<?> getPageAndSearch(Model model, @PathVariable("keyword") String keyword
-//            , @PathVariable("number") int number) {
-//        Pageable pageable = PageRequest.of(number, 5, Sort.by("ngayTao").descending());
-////        service.page(pageable);
-//        if (keyword.equals("null")) {
-//            Page<NhanVien> page = service.page(pageable);
-//            return new ResponseEntity<>(page, HttpStatus.OK);
-//        } else {
-//            Page<NhanVien> page = service.SearchPage(pageable, keyword);
-//            return new ResponseEntity<>(page, HttpStatus.OK);
-//        }
-//    }
-
     @GetMapping("/update_status/{id}/{status}")
     public ResponseEntity<?> updateStatus(@PathVariable("id") String id
             , @PathVariable("status") String status) {
