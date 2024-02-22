@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+      data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<head th:replace="admin/fragments/head::head"></head>
+<body>
+<!-- Begin page -->
+<div id="layout-wrapper">
+    <div th:replace="admin/fragments/header::header"></div>
+    <!-- ========== App Menu ========== -->
+    <div th:replace="admin/fragments/sidebar::sidebar"></div>
+    <!-- Left Sidebar End -->
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">Thêm mới nhà cung cấp</h4>
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Nhà cung cấp</a></li>
+                                    <li class="breadcrumb-item active">Thêm mới</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <form id="createproduct-form" autocomplete="off" class="needs-validation" novalidate method="post"
+                      th:action="@{/admin/nhacungcap/add}" th:object="${nhaCungCap}">
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0 me-3">
+                                        <div class="avatar-sm">
+                                            <div class="avatar-title rounded-circle bg-light text-primary fs-20">
+                                                <i class="bi bi-person-fill-add"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="card-title mb-1">Thông tin nhà cung cấp</h5>
+                                        <p class="text-muted mb-0">Điền đầy đủ thông tin bên dưới.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="name-input">Họ tên</label>
+                                            <input type="text" class="form-control" id="name-input"
+                                                   placeholder="Họ tên" required th:field="*{name}">
+                                            <div class="invalid-feedback">Vui lòng nhập nhà cung cấp.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="DiaChi-input">Địa chỉ</label>
+                                            <input type="text" class="form-control" id="DiaChi-input"
+                                                   placeholder="Địa chỉ" required th:field="*{DiaChi}">
+                                            <div class="invalid-feedback">Vui lòng nhập nhà cung cấp.</div>
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                </div>
+                                <!-- end row -->
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="MoTa-input">Email</label>
+                                            <input type="text" class="form-control" id="MoTa-input" placeholder="Mô tả"
+                                                   required th:field="*{MoTa}">
+                                            <div class="invalid-feedback">Vui lòng nhập nhà cung cấp.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="SDT-input">Số điện thoại</label>
+                                            <input type="text" class="form-control" id="SDT-input" placeholder="Số điện thoại"
+                                                   required th:field="*{SDT}">
+                                            <div class="invalid-feedback">Vui lòng nhập nhà cung cấp.</div>
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                </div>
+                                <!-- end row -->
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="Email-input">Email</label>
+                                            <input type="text" class="form-control" id="Email-input" placeholder="abc@gmail.com"
+                                                   required th:field="*{Email}">
+                                            <div class="invalid-feedback">Vui lòng nhập nhà cung cấp.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="ThongTinKhac-input">Thông tin khác</label>
+                                            <input type="text" class="form-control" id="ThongTinKhac-input" placeholder="Thông tin khác"
+                                                   required th:field="*{ThongTinKhac}">
+                                            <div class="invalid-feedback">Vui lòng nhập nhà cung cấp.</div>
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                </div>
+                                <!-- end row -->
+                            </div>
+                        </div>
+                        <!-- end card -->
+                        <div class="text-end mb-3">
+                            <a th:href="@{/admin/nhacungcap}" class="btn btn-danger w-sm">Đóng</a>
+                            <button type="submit" class="btn btn-success w-sm">Thêm</button>
+                        </div>
+                    </div>
+                    <!-- end col -->
+            </div>
+            <!-- end row -->
+            </form>
+        </div>
+        <!-- End Page-content -->
+    </div>
+    <!-- end main content-->
+</div>
+<!-- END layout-wrapper -->
+</div>
+<div th:replace="admin/fragments/chat::chat"></div>
+<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+<div th:replace="admin/fragments/script::script"></div>
+</body>
+</html>
