@@ -1,2 +1,5 @@
 
 /*# sourceMappingURL=custom.min.css.map */
+#my-qr-reader video {
+    transform: scaleX(-100%);
+}
