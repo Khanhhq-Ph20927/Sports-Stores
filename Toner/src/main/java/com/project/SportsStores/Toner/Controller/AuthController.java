@@ -2,7 +2,6 @@ package com.project.SportsStores.Toner.Controller;
 
 import com.project.SportsStores.Toner.Model.CustomModel.AuthRequest;
 import com.project.SportsStores.Toner.Model.CustomModel.AuthResponse;
-import com.project.SportsStores.Toner.Model.KhachHang;
 import com.project.SportsStores.Toner.Model.NhanVien;
 import com.project.SportsStores.Toner.Repository.KhachHangRepository;
 import com.project.SportsStores.Toner.Repository.NhanVienRepository;

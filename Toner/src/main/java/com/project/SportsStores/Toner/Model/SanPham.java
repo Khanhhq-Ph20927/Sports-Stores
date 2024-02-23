@@ -1,13 +1,10 @@
 package com.project.SportsStores.Toner.Model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name="SanPham")
@@ -62,7 +59,4 @@ public class SanPham {
     @JoinColumn(name="IdThuongHieu")
     private ThuongHieu th;
 
-    @OneToMany(mappedBy = "sp", fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<AnhSanPham> anhSanPhams = new ArrayList<>();
 }

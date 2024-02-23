@@ -1,11 +1,10 @@
 package com.project.SportsStores.Toner.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name="AnhSanPham")
+@Table(name="SanPhamChiTiet")
 @Data
 @Getter
 @Setter
@@ -22,6 +21,5 @@ public class AnhSanPham {
 
     @ManyToOne
     @JoinColumn(name="IdSanPham")
-    @JsonBackReference
     private SanPham sp;
 }

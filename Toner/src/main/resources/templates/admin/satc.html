@@ -194,23 +194,21 @@
                                                     <div class="row g-lg-2 g-4">
                                                         <div class="col-lg-3">
                                                             <div class="search-box">
-                                                                <input type="text" class="form-control search"
-                                                                       placeholder="Search for users...">
+                                                                <input id="search" type="text" class="form-control search"
+                                                                       placeholder="Tìm kiếm sản phẩm">
                                                                 <i class="ri-search-line search-icon"></i>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-auto col-sm-9">
-                                                            <select class="form-control" data-choices
-                                                                    data-choices-search-false
-                                                                    name="choices-single-default" id="idStatus2">
-                                                                <option value="all">All</option>
-                                                                <option value="Today">Today</option>
-                                                                <option value="Yesterday">Yesterday</option>
-                                                                <option value="Last 7 Days">Last 7 Days</option>
-                                                                <option value="Last 30 Days">Last 30 Days</option>
-                                                                <option value="This Month" selected>This Month</option>
-                                                                <option value="Last Month">Last Month</option>
+                                                        <div class="col-lg-3">
+                                                            <select id="sort" class="form-control">
+                                                                <option value="sp.donGia,asc">Giá tăng dần</option>
+                                                                <option value="sp.donGia,desc">Giá giảm dần</option>
+                                                                <option value="sp.tenSP,asc">Tên sản phẩm a-z</option>
+                                                                <option value="sp.tenSP,asc">Tên sản phẩm z-a</option>
                                                             </select>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <button onclick="loadSpChiTiet(0)" class="btn btn-primary">Tìm kiếm</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -222,71 +220,28 @@
                                                                id="customerTable2">
                                                             <thead class="table-light">
                                                             <tr>
-                                                                <th class="sort desc" data-sort="user_name">User Name
-                                                                </th>
-                                                                <th class="sort" data-sort="email_id">Email</th>
-                                                                <th class="sort" data-sort="date">Create Date</th>
-                                                                <th class="sort" data-sort="status">Account Status</th>
+                                                                <th>ID SPCT</th>
+                                                                <th>Tên sản phẩm</th>
+                                                                <th>Màu sắc</th>
+                                                                <th>Kích thước</th>
+                                                                <th>Số lượng</th>
+                                                                <th>Đơn giá</th>
                                                             </tr>
                                                             </thead>
-                                                            <tbody class="list form-check-all">
-                                                            <tr>
-                                                                </td>
-                                                                <td class="user_name">
-                                                                    <div class="d-flex align-items-center gap-2">
-                                                                        <div class="flex-shrink-0">
-                                                                            <img src="../assets/images/users/avatar-2.jpg"
-                                                                                 alt=""
-                                                                                 class="avatar-xs rounded-circle user-profile-img">
-                                                                        </div>
-                                                                        <span class="user-name">Alfred Hurst</span>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="email_id">alfredH@toner.com</td>
-                                                                <td class="date">18 Dec, 2018</td>
-                                                                <td class="status"><span
-                                                                        class="badge bg-danger-subtle text-danger ">Inactive</span>
-                                                                </td>
-                                                            </tr>
+                                                            <tbody class="list form-check-all" id="listspct">
+
                                                             </tbody>
                                                         </table>
-                                                        <div class="noresult" style="display: none">
-                                                            <div class="text-center">
-                                                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json"
-                                                                           trigger="loop"
-                                                                           colors="primary:#121331,secondary:#08a88a"
-                                                                           style="width:75px;height:75px"></lord-icon>
-                                                                <h5 class="mt-2">Sorry! No Result Found</h5>
-                                                                <p class="text-muted mb-0">We've searched more than 150+
-                                                                    Orders We did not find any orders for you
-                                                                    search.</p>
-                                                            </div>
-                                                        </div>
                                                     </div>
 
 
-                                                    <div class="d-flex justify-content-center">
-                                                        <div class="pagination-wrap hstack gap-2">
-                                                            <a class="page-item pagination-prev">
-                                                                <i class="mdi mdi-chevron-double-left align-middle ms-1"></i>
-                                                            </a>
-                                                            </a>
-                                                            <a class="page-item pagination-prev">
-                                                                <i class="mdi mdi-chevron-left align-middle ms-1"></i>
-                                                            </a>
-                                                            </a>
-                                                            <ul class="pagination listjs-pagination mb-0">
-                                                                <li class="active"><a class="page" data-i="1"
-                                                                                      data-page="10">1</a></li>
-                                                            </ul>
-                                                            <a class="page-item pagination-next">
-                                                                <i class="mdi mdi-chevron-right align-middle ms-1"></i></a>
-                                                            </a>
-                                                            <a class="page-item pagination-next">
-                                                                <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></a>
-                                                            </a>
-                                                        </div>
-                                                    </div>
+                                                    <nav aria-label="Page navigation example">
+                                                        <ul class="pagination" id="pageable">
+                                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                        </ul>
+                                                    </nav>
                                                 </div>
                                             </div>
                                         </div>
@@ -480,5 +435,54 @@
 <div th:replace="admin/fragments/chat::chat"></div>
 <div th:replace="admin/fragments/themeSettings::themeSettings"></div>
 <div th:replace="admin/fragments/script::script"></div>
+
+<script>
+    window.onload = function (){
+        loadSpChiTiet(0);
+    }
+    var size = 15;
+    async function loadSpChiTiet(page) {
+        var sort = document.getElementById("sort").value;
+        var search = document.getElementById("search").value;
+        var url = 'http://localhost:8080/admin/sell-off/san-pham-chi-tiet?page=' + page + '&size=' + size+'&sort='+sort;
+        if (search != "") {
+            url += '&search=' + search
+        }
+        const response = await fetch(url, {
+            method: 'GET'
+        });
+        var result = await response.json();
+        console.log(result)
+        var list = result.content;
+        var totalPage = result.totalPages;
+        var main = '';
+        for (i = 0; i < list.length; i++) {
+            main += `<tr>
+                    <td>${list[i].id}</td>
+                    <td>${list[i].sp.tenSP}</td>
+                    <td>${list[i].ms.ten}</td>
+                    <td>${list[i].size}</td>
+                    <td>${list[i].soLuong}</td>
+                    <td>${formatmoney(list[i].sp.donGia)}</td>
+                </tr>`
+        }
+        document.getElementById("listspct").innerHTML = main
+        var mainpage = ''
+        for (i = 1; i <= totalPage; i++) {
+            mainpage += `<li onclick="loadSpChiTiet(${(Number(i) - 1)})" class="page-item"><a class="page-link" href="#listsp">${i}</a></li>`
+        }
+        document.getElementById("pageable").innerHTML = mainpage
+    }
+
+
+    function formatmoney(money) {
+        const VND = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+        return VND.format(money);
+    }
+
+</script>
 </body>
 </html>

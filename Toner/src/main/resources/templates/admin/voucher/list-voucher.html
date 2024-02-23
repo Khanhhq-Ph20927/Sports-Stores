@@ -131,7 +131,7 @@
         var sort = document.getElementById("sort").value;
         var start = document.getElementById("start").value;
         var end = document.getElementById("end").value;
-        var url = 'http://localhost:8080/api/voucher/admin/findAll-page?page=' + page + '&size=' + size+'&sort='+sort;
+        var url = 'http://localhost:8080/admin/voucher/findAll-page?page=' + page + '&size=' + size+'&sort='+sort;
         if (start != null && start != "" && end != null && end != "" && start != 'null' && end != 'null') {
             url += '&start=' + start + '&end=' + end
         }
@@ -174,30 +174,6 @@
         return VND.format(money);
     }
 
-    async function deleteVoucher(id) {
-        var con = confirm("Xác nhận xóa voucher này?")
-        if (con == false) {
-            return;
-        }
-        var url = 'http://localhost:8080/api/voucher/admin/delete?id=' + id;
-        const response = await fetch(url, {
-            method: 'DELETE'
-        });
-        if (response.status < 300) {
-            swal({
-                    title: "Thông báo",
-                    text: "xóa thành công!",
-                    type: "success"
-                },
-                function() {
-                    loadVoucher(0);
-                });
-        }
-        if (response.status == exceptionCode) {
-            var result = await response.json()
-            alert(result.defaultMessage)
-        }
-    }
 </script>
 
 <div th:replace="admin/fragments/chat::chat"></div>

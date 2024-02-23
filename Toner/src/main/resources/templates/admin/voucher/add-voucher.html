@@ -74,7 +74,7 @@
         const filePath = document.getElementById('ipanh')
         const formData = new FormData()
         formData.append("file", filePath.files[0])
-        var urlUpload = 'http://localhost:8080/api/public/upload-file';
+        var urlUpload = 'http://localhost:8080/admin/upload-file';
         const res = await fetch(urlUpload, {
             method: 'POST',
             body: formData
