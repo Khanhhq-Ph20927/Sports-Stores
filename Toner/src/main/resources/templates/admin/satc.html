@@ -200,15 +200,15 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-3">
-                                                            <select id="sort" class="form-control">
+                                                            <select id="sort" class="form-control" onchange="loadSpChiTiet(0)">
                                                                 <option value="sp.donGia,asc">Giá tăng dần</option>
                                                                 <option value="sp.donGia,desc">Giá giảm dần</option>
                                                                 <option value="sp.tenSP,asc">Tên sản phẩm a-z</option>
-                                                                <option value="sp.tenSP,asc">Tên sản phẩm z-a</option>
+                                                                <option value="sp.tenSP,desc">Tên sản phẩm z-a</option>
                                                             </select>
                                                         </div>
                                                         <div class="col-lg-3">
-                                                            <button onclick="loadSpChiTiet(0)" class="btn btn-primary">Tìm kiếm</button>
+                                                            <button onclick="loadSpChiTiet(0)" type="button" class="btn btn-primary">Tìm kiếm</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -235,13 +235,20 @@
                                                     </div>
 
 
-                                                    <nav aria-label="Page navigation example">
-                                                        <ul class="pagination" id="pageable">
-                                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                        </ul>
-                                                    </nav>
+
+                                                    <div class="d-flex justify-content-center">
+                                                        <div class="pagination-wrap hstack gap-2">
+                                                            <a class="page-item pagination-prev" id="prectsp">
+                                                                <i class="mdi mdi-chevron-double-left align-middle ms-1"></i>
+                                                            </a>
+                                                            <ul class="pagination listjs-pagination mb-0" id="pagespct">
+                                                                <li class="active"><a class="page" data-i="1" data-page="10">1</a></li>
+                                                            </ul>
+                                                            <a class="page-item pagination-next" id="nextctsp">
+                                                                <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></a>
+                                                            </a>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -455,6 +462,9 @@
         console.log(result)
         var list = result.content;
         var totalPage = result.totalPages;
+        if(page == totalPage){
+            return;
+        }
         var main = '';
         for (i = 0; i < list.length; i++) {
             main += `<tr>
@@ -469,9 +479,24 @@
         document.getElementById("listspct").innerHTML = main
         var mainpage = ''
         for (i = 1; i <= totalPage; i++) {
-            mainpage += `<li onclick="loadSpChiTiet(${(Number(i) - 1)})" class="page-item"><a class="page-link" href="#listsp">${i}</a></li>`
+            // mainpage += `<li onclick="loadSpChiTiet(${(Number(i) - 1)})" class="page-item"><a class="page-link" href="#listsp">${i}</a></li>`
+
+            mainpage += `<li onclick="loadSpChiTiet(${(Number(i) - 1)})" class="pageationli"><a class="page">${i}</a></li>`
         }
-        document.getElementById("pageable").innerHTML = mainpage
+        document.getElementById("pagespct").innerHTML = mainpage
+
+        var listli = document.getElementsByClassName('pageationli');
+        for(j=0; j< listli.length; j++){
+            listli[j].classList.remove('active');
+        }
+        listli[page].classList.add('active')
+
+        document.getElementById("prectsp").onclick = function (){
+            loadSpChiTiet(page - 1)
+        }
+        document.getElementById("nextctsp").onclick = function (){
+            loadSpChiTiet(page + 1)
+        }
     }
 
 

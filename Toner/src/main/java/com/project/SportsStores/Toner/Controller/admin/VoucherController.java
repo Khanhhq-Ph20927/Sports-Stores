@@ -1,8 +1,8 @@
 package com.project.SportsStores.Toner.Controller.admin;
 
 import com.project.SportsStores.Toner.Model.KhuyenMai;
+import com.project.SportsStores.Toner.Repository.VoucherRepository;
 import com.project.SportsStores.Toner.Service.VoucherService;
-import com.project.SportsStores.Toner.validate.VoucherValidate;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -26,7 +25,8 @@ public class VoucherController {
     private VoucherService voucherService;
 
     @Autowired
-    VoucherValidate voucherValidate;
+    private VoucherRepository voucherRepository;
+
 
     @RequestMapping("/admin/voucher")
     public String voucher() {
@@ -51,10 +51,25 @@ public class VoucherController {
     }
 
     @RequestMapping(value = "/admin/add-voucher", method = RequestMethod.POST)
-    public String addvoucherAction(@Valid @ModelAttribute("voucher") KhuyenMai voucher, BindingResult bindingResult) {
-        System.out.println(voucher);
-        voucherValidate.validate(voucher, bindingResult);
-        if (bindingResult.hasErrors()) {
+    public String addvoucherAction(@Valid @ModelAttribute("voucher") KhuyenMai voucher, Model model) {
+        boolean isValid = false;
+        if(voucher.getNgayKetThuc().before(voucher.getNgayBatDau())){
+            isValid = true;
+            model.addAttribute("errorNgayKetThuc", "Ngày kết thúc không hợp lệ");
+        }
+        if(voucher.getId() != null){
+            if (voucherRepository.findByNameAndId(voucher.getTenKhuyenMai(), voucher.getId()).isPresent()) {
+                isValid = true;
+                model.addAttribute("errorName", "Tên voucher này đã tồn tại");
+            }
+        }
+        else{
+            if (voucherRepository.findByName(voucher.getTenKhuyenMai()).isPresent()) {
+                isValid = true;
+                model.addAttribute("errorName", "Tên voucher này đã tồn tại");
+            }
+        }
+        if(isValid){
             return "admin/voucher/add-voucher";
         }
         voucher.setNgayTao(LocalDateTime.now());
