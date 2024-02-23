@@ -72,7 +72,6 @@ public class NhanVienRestController {
         if (isExist) {
             NhanVien nv = service.findById(Long.parseLong(id)).get();
             nv.setTrangThai(Integer.parseInt(status));
-            service.save(nv);
             return new ResponseEntity<>("success", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("fail", HttpStatus.OK);

@@ -468,7 +468,7 @@
 
     function detail(Id) {
         console.log(Id);
-        fetch('/api/admin/staff/detail/' + Id, {
+        fetch('/admin/staff/detail/' + Id, {
             method: 'GET'
         }).then(response => {
             if (!response.ok) {
@@ -537,8 +537,8 @@
         var main = '';
         for (i = 0; i < list.length; i++) {
             var trangThaiBadge = (list[i].trangThai == 0) ?
-                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',0)"/></div>' :
-                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',1)"/></div>';
+                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',1)"/></div>' :
+                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',0)"/></div>';
             main += `<tr >
                             <td scope="row">${list[i].maNV}</td>
                             <td scope="row">${list[i].hoTen}</td>
@@ -625,8 +625,8 @@
         var main = '';
         for (i = 0; i < list.length; i++) {
             var trangThaiBadge = (list[i].trangThai == 0) ?
-                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',0)"/></div>' :
-                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',1)"/></div>';
+                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',1)"/></div>' :
+                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',0)"/></div>';
             main += `<tr >
                             <td scope="row">${list[i].maNV}</td>
                             <td scope="row">${list[i].hoTen}</td>
@@ -677,7 +677,7 @@
                 }).catch(error => console.log('Error:', error));
             } else {
                 // If the user has not confirmed, then check the status of the checkbox and return it to its original state.
-                if (status === 1) {
+                if (status === 0) {
                     document.getElementById("input-status-" + id).checked = false;
                 } else {
                     document.getElementById("input-status-" + id).checked = true;
