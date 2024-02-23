@@ -9,13 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api/admin/sell-off")
+@RequestMapping("/admin")
 public class BanHangTaiQuayController {
     @Autowired
     private DonHangTQServiceImpl dhsv;
@@ -23,13 +22,13 @@ public class BanHangTaiQuayController {
     @Autowired
     private NhanVienRepository nvrp;
 
-    @RequestMapping(value = "/list",method = RequestMethod.GET)
+    @RequestMapping(value = "/sell-off", method = RequestMethod.GET)
     public String satc() {
         return "admin/satc";
     }
 
 
-    @RequestMapping(value = "/save" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/save_invoice", method = RequestMethod.GET)
     private String add(@ModelAttribute("donhang") DonHang dh,
                        Model model) {
         List<DonHang> list = dhsv.getAllByStatus();
@@ -39,18 +38,19 @@ public class BanHangTaiQuayController {
                 dh.setMaDonHang("DH" + (list.size() + 1));
             }
         }
-        dh.setNv(nvrp.getById(Long.valueOf(1)));
+        // fix cứng id nên cần kiểm tra data trước khi chạy
+        dh.setNv(nvrp.getById(Long.valueOf(4)));
         dh.setNgayTao(LocalDateTime.now());
         dh.setTrangThai(0);
-            if (list.size() >= 20) {
-                model.addAttribute("message", true);
-                return "redirect:/api/admin/sell-off/list";
-            } else {
-                dhsv.save(dh);
-                return "redirect:/api/admin/sell-off/list";
-            }
+        if (list.size() >= 20) {
+            return "redirect:/admin/sell-off";
+        } else {
+            model.addAttribute("message", true);
+            dhsv.save(dh);
+            return "redirect:/admin/sell-off";
         }
     }
+}
 
 
 
