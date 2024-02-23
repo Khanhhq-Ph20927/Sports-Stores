@@ -27,9 +27,9 @@ public class NhanVienRestController {
 
     //Page
 //            model.addAttribute("number", number);
-//        model.addAttribute("totalPages", service.page(pageable).getTotalPages());
-//        model.addAttribute("totalElements", service.page(pageable).getTotalElements());
-//        model.addAttribute("list", service.page(pageable).getContent());
+//        model.addAttribute("totalPages", Service.page(pageable).getTotalPages());
+//        model.addAttribute("totalElements", Service.page(pageable).getTotalElements());
+//        model.addAttribute("list", Service.page(pageable).getContent());
     @GetMapping("/page/{number}/{keyword}/{status}/{position}")
     ///{sort}
     public ResponseEntity<?> getPageAndSearchAndFilter(Model model, @PathVariable("number") int number
@@ -39,7 +39,7 @@ public class NhanVienRestController {
 //            , @PathVariable("sort") String sort
     ) {
         Pageable pageable = PageRequest.of(number, 5, Sort.by("ngayTao").descending());
-//        service.page(pageable);
+//        Service.page(pageable);
         Page<NhanVien> page = service.page(pageable);
         if (Integer.parseInt(status) == -1 && Long.parseLong(position) == 0 && !keyword.equals("null")) {
             page = service.SearchPage(pageable, keyword);

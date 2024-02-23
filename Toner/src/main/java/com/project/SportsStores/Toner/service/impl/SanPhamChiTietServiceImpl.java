@@ -44,4 +44,16 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
     public List<SanPhamChiTiet> getListByIdSp(String id) {
         return rp.getListSpctByIdSp(id);
     }
+
+    @Override
+    public Page<SanPhamChiTiet> sanPhamChiTietBanTaiQuay(String search, Pageable pageable) {
+        Page<SanPhamChiTiet> page = null;
+        if(search == null){
+            page = rp.findAll(pageable);
+        }
+        else{
+            page = rp.search("%"+search+"%",pageable);
+        }
+        return page;
+    }
 }

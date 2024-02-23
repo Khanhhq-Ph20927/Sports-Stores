@@ -1,6 +1,5 @@
 package com.project.SportsStores.Toner.Service;
 
-import com.project.SportsStores.Toner.Model.SanPham;
 import com.project.SportsStores.Toner.Model.SanPhamChiTiet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,4 +17,6 @@ public interface SanPhamChiTietService {
     void update(SanPhamChiTiet spct);
 
     List<SanPhamChiTiet> getListByIdSp(String id);
+
+    Page<SanPhamChiTiet> sanPhamChiTietBanTaiQuay(String search,Pageable pageable);
 }

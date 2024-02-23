@@ -40,4 +40,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet,L
 
     @Query("select spct from SanPhamChiTiet spct where spct.sp.id = :id")
     List<SanPhamChiTiet> getListSpctByIdSp(@Param("id") String id);
+
+    @Query("select s from SanPhamChiTiet s where s.sp.tenSP like ?1 or s.sp.maSP like ?1 or s.ms.ten like ?1 or s.size like ?1")
+    public Page<SanPhamChiTiet> search(String search, Pageable pageable);
 }

@@ -1,5 +1,14 @@
 package com.project.SportsStores.Toner.Controller.admin;
 
+import com.project.SportsStores.Toner.Model.KhuyenMai;
+import com.project.SportsStores.Toner.Model.SanPhamChiTiet;
+import com.project.SportsStores.Toner.Service.SanPhamChiTietService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import com.project.SportsStores.Toner.Model.DonHang;
 import com.project.SportsStores.Toner.Repository.NhanVienRepository;
 import com.project.SportsStores.Toner.Service.Impl.DonHangTQServiceImpl;
@@ -12,21 +21,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.sql.Date;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/sell-off")
 public class BanHangTaiQuayController {
+
     @Autowired
     private DonHangTQServiceImpl dhsv;
 
     @Autowired
     private NhanVienRepository nvrp;
 
-    @RequestMapping(value = "/sell-off", method = RequestMethod.GET)
+    @Autowired
+    private SanPhamChiTietService sanPhamChiTietService;
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public String satc() {
         return "admin/satc";
     }
-
 
     @RequestMapping(value = "/save_invoice", method = RequestMethod.GET)
     private String add(@ModelAttribute("donhang") DonHang dh,
@@ -50,7 +63,11 @@ public class BanHangTaiQuayController {
             return "redirect:/admin/sell-off";
         }
     }
+
+    @GetMapping("/san-pham-chi-tiet")
+    public ResponseEntity<?> findAll(@RequestParam(value = "search", required = false) String search,
+                                     Pageable pageable){
+        Page<SanPhamChiTiet> result = sanPhamChiTietService.sanPhamChiTietBanTaiQuay(search, pageable);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }
-
-
-

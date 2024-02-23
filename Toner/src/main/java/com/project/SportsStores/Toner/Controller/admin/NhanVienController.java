@@ -4,8 +4,6 @@ import com.project.SportsStores.Toner.Model.NhanVien;
 import com.project.SportsStores.Toner.Service.ChucVuService;
 import com.project.SportsStores.Toner.Service.NhanVienService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,9 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
 
 @Controller
 @RequestMapping("/admin/staff")

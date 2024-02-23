@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+      data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<head th:replace="admin/fragments/head::head"></head>
+<body>
+
+<div id="layout-wrapper">
+    <div th:replace="admin/fragments/header::header"></div>
+    <div th:replace="admin/fragments/sidebar::sidebar"></div>
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <!-- end page title -->
+
+
+                <div class="row" id="orderList">
+                    <div class="col-lg-12">
+                        <form th:action="@{/admin/add-voucher}" th:method="post" th:object="${voucher}" class="row">
+                            <div class="col-sm-5">
+                                <input th:field="*{id}" type="hidden" class="form-control">
+
+                                <label class="lb-form">Tên voucher</label>
+                                <input th:field="*{tenKhuyenMai}" type="text" class="form-control">
+                                <p class="text-danger" th:if="${errorName}" th:text="${errorName}" />
+
+                                <label class="lb-form">Giá trị giảm</label>
+                                <div class="row">
+                                    <div class="col-sm-9">
+                                        <input th:field="*{giaTriGiam}" type="number" class="form-control">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <select th:field="*{loaiKM}" class="form-control">
+                                            <option value="true">%</option>
+                                            <option value="false">VND</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <label class="lb-form">Ảnh</label>
+                                <input type="file" onchange="loadAnh()" id="ipanh" class="form-control">
+                                <input th:field="*{banner}" id="linkanh" type="hidden" class="form-control">
+                                <img id="imgpreview" th:src="${image}">
+                            </div>
+                            <div class="col-sm-5">
+                                <label class="lb-form">Ngày bắt đầu</label>
+                                <input required th:field="*{ngayBatDau}" type="date" class="form-control">
+                                <label class="lb-form">Ngày kết thúc</label>
+                                <input required th:field="*{ngayKetThuc}" type="date" class="form-control">
+                                <p class="text-danger" th:if="${errorNgayKetThuc}" th:text="${errorNgayKetThuc}" />
+                                <br>
+                                <label class="lb-form">Trạng thái</label>
+                                <input th:field="*{trangThai}" class="form-control"><br><br>
+                                <button id="btnthem" class="btn btn-success form-control action-btn">Thêm/
+                                    Cập nhật voucher
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function loadAnh(){
+        const [file] = ipanh.files
+        if (file) {
+            imgpreview.src = URL.createObjectURL(file)
+        }
+        document.getElementById("btnthem").disabled = true
+        const filePath = document.getElementById('ipanh')
+        const formData = new FormData()
+        formData.append("file", filePath.files[0])
+        var urlUpload = 'http://localhost:8080/admin/upload-file';
+        const res = await fetch(urlUpload, {
+            method: 'POST',
+            body: formData
+        });
+        if (res.status < 300) {
+            document.getElementById("linkanh").value = await res.text();
+            document.getElementById("btnthem").disabled = false
+        }
+        document.getElementById("btnthem").disabled = false
+    }
+</script>
+
+<div th:replace="admin/fragments/chat::chat"></div>
+<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+<div th:replace="admin/fragments/script::script"></div>
+</body>
+</html>

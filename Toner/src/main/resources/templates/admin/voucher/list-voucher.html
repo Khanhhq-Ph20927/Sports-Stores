@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+      data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<head th:replace="admin/fragments/head::head"></head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer"
+/>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/js/toastr.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<body>
+
+<div id="layout-wrapper">
+    <div th:replace="admin/fragments/header::header"></div>
+    <div th:replace="admin/fragments/sidebar::sidebar"></div>
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">List Voucher</h4>
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Voucher</a></li>
+                                    <li class="breadcrumb-item active">List View</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+
+                <div class="row" id="orderList">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-xxl-2 col-sm-6">
+                                        <label>Sắp xếp</label>
+                                        <select onchange="loadVoucher(0)" id="sort" class="form-control">
+                                            <option value="id,asc">Cũ nhất</option>
+                                            <option value="id,desc">Mới nhất</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-xxl-2 col-sm-6">
+                                        <label>From date</label>
+                                        <input id="start" type="date" class="form-control">
+                                    </div>
+                                    <div class="col-xxl-2 col-sm-6">
+                                        <label>To date</label>
+                                        <input id="end" type="date" class="form-control">
+                                    </div>
+                                    <div class="col-xxl-2 col-sm-12">
+                                        <label>&ThinSpace;</label>
+                                        <button type="button" class="btn btn-primary w-100" onclick="loadVoucher(0);">
+                                            <i class="bi bi-filter me-1"></i> Filter
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive table-card mb-1">
+                                    <table class="table table-striped tablefix">
+                                        <thead class="thead-tablefix">
+                                        <tr>
+                                            <th>id</th>
+                                            <th>Ảnh</th>
+                                            <th>Tên voucher</th>
+                                            <th>Giá trị giảm giá</th>
+                                            <th>Ngày bắt đầu</th>
+                                            <th>Ngày kết thúc</th>
+                                            <th>Trạng thái</th>
+                                            <th class="sticky-col">Hành động</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="listvoucher">
+<!--                                        <tr>-->
+<!--                                            <td>#2342</td>-->
+<!--                                            <td></td>-->
+<!--                                            <td></td>-->
+<!--                                            <td></td>-->
+<!--                                            <td></td>-->
+<!--                                            <td></td>-->
+<!--                                            <td></td>-->
+<!--                                            <td></td>-->
+<!--                                            <td class="sticky-col">-->
+<!--                                                <i class="fa fa-lock iconaction"></i>-->
+<!--                                                <i class="fa fa-edit iconaction"></i><br>-->
+<!--                                                <i class="fa fa-edit iconaction"></i><br>-->
+<!--                                            </td>-->
+<!--                                        </tr>-->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination" id="pageable">
+                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    </ul>
+                                </nav>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    window.onload = function (){
+        loadVoucher(0);
+    }
+    var size = 15;
+    async function loadVoucher(page) {
+        var sort = document.getElementById("sort").value;
+        var start = document.getElementById("start").value;
+        var end = document.getElementById("end").value;
+        var url = 'http://localhost:8080/admin/voucher/findAll-page?page=' + page + '&size=' + size+'&sort='+sort;
+        if (start != null && start != "" && end != null && end != "" && start != 'null' && end != 'null') {
+            url += '&start=' + start + '&end=' + end
+        }
+        const response = await fetch(url, {
+            method: 'GET'
+        });
+        var result = await response.json();
+        console.log(result)
+        var list = result.content;
+        var totalPage = result.totalPages;
+        var main = '';
+        for (i = 0; i < list.length; i++) {
+            main += `<tr>
+                    <td>${list[i].id}</td>
+                    <td><img src="${list[i].banner}" style="width: 100px"></td>
+                    <td>${list[i].tenKhuyenMai}</td>
+                    <td>${list[i].loaiKM == 0?formatmoney(list[i].giaTriGiam):list[i].giaTriGiam+'%'}</td>
+                    <td>${list[i].ngayBatDau}</td>
+                    <td>${list[i].ngayKetThuc}</td>
+                    <td>${list[i].trangThai}</td>
+                    <td class="sticky-col">
+                        <a href="add-voucher?id=${list[i].id}"><i class="fa fa-edit iconaction"></i></a>
+                    </td>
+                </tr>`
+        }
+        document.getElementById("listvoucher").innerHTML = main
+        var mainpage = ''
+        for (i = 1; i <= totalPage; i++) {
+            mainpage += `<li onclick="loadVoucher(${(Number(i) - 1)},'${start}','${end}')" class="page-item"><a class="page-link" href="#listsp">${i}</a></li>`
+        }
+        document.getElementById("pageable").innerHTML = mainpage
+    }
+
+
+    function formatmoney(money) {
+        const VND = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+        return VND.format(money);
+    }
+
+</script>
+
+<div th:replace="admin/fragments/chat::chat"></div>
+<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+<div th:replace="admin/fragments/script::script"></div>
+</body>
+</html>
