@@ -31,14 +31,21 @@ public class NhanVienRestController {
 //        model.addAttribute("totalElements", service.page(pageable).getTotalElements());
 //        model.addAttribute("list", service.page(pageable).getContent());
     @GetMapping("/page/{number}/{keyword}/{status}/{position}")
-    ///{sort}
+    ///{sort}/{terms}
     public ResponseEntity<?> getPageAndSearchAndFilter(Model model, @PathVariable("number") int number
             , @PathVariable("keyword") String keyword
             , @PathVariable("status") String status
             , @PathVariable("position") String position
 //            , @PathVariable("sort") String sort
+//            , @PathVariable("terms") String terms
     ) {
+//        Pageable pageable = PageRequest.of(number, 5, Sort.by(sort.equals("null") ? "ngayTao" : sort).descending());
         Pageable pageable = PageRequest.of(number, 5, Sort.by("ngayTao").descending());
+//        if (terms.equals("asc")) {
+//            pageable = PageRequest.of(number, 5, Sort.by(sort.equals("null") ? "ngayTao" : sort).ascending());
+//        } else {
+//            pageable = PageRequest.of(number, 5, Sort.by(sort.equals("null") ? "ngayTao" : sort).descending());
+//        }
 //        service.page(pageable);
         Page<NhanVien> page = service.page(pageable);
         if (Integer.parseInt(status) == -1 && Long.parseLong(position) == 0 && !keyword.equals("null")) {
@@ -72,6 +79,7 @@ public class NhanVienRestController {
         if (isExist) {
             NhanVien nv = service.findById(Long.parseLong(id)).get();
             nv.setTrangThai(Integer.parseInt(status));
+            service.save(nv);
             return new ResponseEntity<>("success", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("fail", HttpStatus.OK);
