@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RequestMapping
-public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet,Long> {
+public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, Long> {
     @Override
     <S extends SanPhamChiTiet> S saveAndFlush(S entity);
 

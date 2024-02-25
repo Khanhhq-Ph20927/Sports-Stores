@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="DonHang")
+@Table(name = "DonHang")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -21,42 +21,40 @@ public class DonHang {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="MaDonHang",unique = true)
+    @Column(name = "MaDonHang", unique = true)
     private String maDonHang;
 
-    @Column(name="TrangThai")
+    @Column(name = "TrangThai")
     private int trangThai;
 
-    @Column(name="PhiVanChuyen")
+    @Column(name = "PhiVanChuyen")
     private BigDecimal phiVanChuyen;
 
-    @Column(name="TongTien")
+    @Column(name = "TongTien")
     private BigDecimal tongTien;
 
-    @Column(name="TienPhaiTra")
+    @Column(name = "TienPhaiTra")
     private BigDecimal tienPhaiTra;
 
-    @Column(name="NgayTao")
+    @Column(name = "NgayTao")
     private LocalDateTime ngayTao;
 
-    @Column(name="GhiChu")
+    @Column(name = "GhiChu")
     private String ghiChu;
 
     @ManyToOne
-    @JoinColumn(name="IdKhachHang")
+    @JoinColumn(name = "IdKhachHang")
     private KhachHang kh;
 
     @ManyToOne
-    @JoinColumn(name="IdNhanVien")
+    @JoinColumn(name = "IdNhanVien")
     private NhanVien nv;
 
     @ManyToOne
-    @JoinColumn(name="IdPhuongThucThanhToan")
+    @JoinColumn(name = "IdPhuongThucThanhToan")
     private PhuongThucThanhToan pttt;
 
     @ManyToOne
-    @JoinColumn(name="IdThongTinVanChuyen")
+    @JoinColumn(name = "IdThongTinVanChuyen")
     private ThongTinVanChuyen ttvc;
-
-
 }

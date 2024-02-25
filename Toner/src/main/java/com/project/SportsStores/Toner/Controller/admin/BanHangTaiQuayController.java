@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.sql.Date;
+
 
 @Controller
 @RequestMapping("/admin/sell-off")
@@ -42,8 +42,8 @@ public class BanHangTaiQuayController {
     }
 
     @RequestMapping(value = "/save_invoice", method = RequestMethod.GET)
-    private String add(@ModelAttribute("donhang") DonHang dh,
-                       Model model) {
+    private ResponseEntity<?> add() {
+        DonHang dh = new DonHang();
         List<DonHang> list = dhsv.getAllByStatus();
         for (DonHang donHang : list) {
             dh.setMaDonHang("DH" + (list.size() + 1));
@@ -56,17 +56,16 @@ public class BanHangTaiQuayController {
         dh.setNgayTao(LocalDateTime.now());
         dh.setTrangThai(0);
         if (list.size() >= 20) {
-            return "redirect:/admin/sell-off";
+            return new ResponseEntity<>("fail", HttpStatus.OK);
         } else {
-            model.addAttribute("message", true);
             dhsv.save(dh);
-            return "redirect:/admin/sell-off";
+            return new ResponseEntity<>("success", HttpStatus.OK);
         }
     }
 
     @GetMapping("/san-pham-chi-tiet")
     public ResponseEntity<?> findAll(@RequestParam(value = "search", required = false) String search,
-                                     Pageable pageable){
+                                     Pageable pageable) {
         Page<SanPhamChiTiet> result = sanPhamChiTietService.sanPhamChiTietBanTaiQuay(search, pageable);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

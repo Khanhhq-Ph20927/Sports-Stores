@@ -16,4 +16,13 @@ public class GioHangServiceImpl implements GioHangService {
     public void save(GioHang gioHang) {
         rp.save(gioHang);
     }
+
+    @Override
+    public GioHang getById(String id) {
+        if (rp.findById(Long.parseLong(id)).isPresent()) {
+            return rp.findById(Long.parseLong(id)).get();
+        } else {
+            return null;
+        }
+    }
 }

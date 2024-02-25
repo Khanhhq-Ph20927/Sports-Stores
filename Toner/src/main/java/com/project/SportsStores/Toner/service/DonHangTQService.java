@@ -8,10 +8,13 @@ import java.util.List;
 
 public interface DonHangTQService {
     List<DonHang> getALL();
+
     boolean save(DonHang donHang);
 
+    boolean delete(Long id);
 
     List<DonHang> getAllByStatus();
+
     Page<DonHang> pageOfDonHang(Pageable pageable);
 
     Page<DonHang> seacrhSellOff(String keyword, Pageable pageable);

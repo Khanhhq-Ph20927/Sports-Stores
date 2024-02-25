@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DonHangServicerImpl implements DonHangService {
+public class DonHangServiceImpl implements DonHangService {
 
     @Autowired
     DonHangRepository donHangRepositoty;
@@ -30,7 +30,7 @@ public class DonHangServicerImpl implements DonHangService {
 
     @Override
     public Optional<DonHang> findById(Long id) {
-        return Optional.empty();
+        return donHangRepositoty.findById(id);
     }
 
     @Override

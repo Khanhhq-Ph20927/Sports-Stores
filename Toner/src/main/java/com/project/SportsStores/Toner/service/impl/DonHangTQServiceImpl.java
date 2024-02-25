@@ -28,17 +28,23 @@ public class DonHangTQServiceImpl implements DonHangTQService {
     }
 
     @Override
+    public boolean delete(Long id) {
+        dhrp.deleteById(id);
+        return true;
+    }
+
+    @Override
     public List<DonHang> getAllByStatus() {
         return dhrp.getByStatus();
     }
 
     @Override
     public Page<DonHang> pageOfDonHang(Pageable pageable) {
-        return dhrp.findAll(pageable);
+        return dhrp.getAllByStatusEquals0(pageable);
     }
 
     @Override
     public Page<DonHang> seacrhSellOff(String keyword, Pageable pageable) {
-        return dhrp.searchDonHang(keyword,pageable);
+        return dhrp.searchDonHang(keyword, pageable);
     }
 }

@@ -32,15 +32,15 @@ public class DonHangChiTiet {
     private BigDecimal giaThoiDiemMua;
 
     @Column(name="TongTien")
-    private BigDecimal TongTien;
+    private BigDecimal tongTien;
 
     @ManyToOne
     @JoinColumn(name="IdDonHang")
     private DonHang dh;
 
     @ManyToOne
-    @JoinColumn(name="IdSanPham")
-    private SanPham sp;
+    @JoinColumn(name="IdSanPhamChiTiet")
+    private SanPhamChiTiet spct;
 
     @ManyToOne
     @JoinColumn(name="IdKhuyenMai")

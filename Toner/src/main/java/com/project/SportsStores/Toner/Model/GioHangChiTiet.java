@@ -20,8 +20,8 @@ public class GioHangChiTiet {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="IdSanPham")
-    private SanPham sp;
+    @JoinColumn(name="IdSanPhamChiTiet")
+    private SanPhamChiTiet spct;
 
     @ManyToOne
     @JoinColumn(name="IdGioHang")
