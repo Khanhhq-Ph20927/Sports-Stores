@@ -30,23 +30,18 @@ public class NhanVienRestController {
 //        model.addAttribute("totalPages", service.page(pageable).getTotalPages());
 //        model.addAttribute("totalElements", service.page(pageable).getTotalElements());
 //        model.addAttribute("list", service.page(pageable).getContent());
-    @GetMapping("/page/{number}/{keyword}/{status}/{position}")
-    ///{sort}/{terms}
+    @GetMapping("/page/{number}/{keyword}/{status}/{position}/{sortField}/{sortDirection}")
+    //
     public ResponseEntity<?> getPageAndSearchAndFilter(Model model, @PathVariable("number") int number
             , @PathVariable("keyword") String keyword
             , @PathVariable("status") String status
             , @PathVariable("position") String position
-//            , @PathVariable("sort") String sort
-//            , @PathVariable("terms") String terms
+            , @PathVariable("sortField") String sortField
+            , @PathVariable("sortDirection") String sortDirection
     ) {
-//        Pageable pageable = PageRequest.of(number, 5, Sort.by(sort.equals("null") ? "ngayTao" : sort).descending());
-        Pageable pageable = PageRequest.of(number, 5, Sort.by("ngayTao").descending());
-//        if (terms.equals("asc")) {
-//            pageable = PageRequest.of(number, 5, Sort.by(sort.equals("null") ? "ngayTao" : sort).ascending());
-//        } else {
-//            pageable = PageRequest.of(number, 5, Sort.by(sort.equals("null") ? "ngayTao" : sort).descending());
-//        }
-//        service.page(pageable);
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.DESC.name()) ? Sort.by(sortField.equalsIgnoreCase("null") ? "ngayTao" : sortField).descending()
+                : Sort.by(sortField.equalsIgnoreCase("null") ? "ngayTao" : sortField).ascending();
+        Pageable pageable = PageRequest.of(number, 5, sort);
         Page<NhanVien> page = service.page(pageable);
         if (Integer.parseInt(status) == -1 && Long.parseLong(position) == 0 && !keyword.equals("null")) {
             page = service.SearchPage(pageable, keyword);
