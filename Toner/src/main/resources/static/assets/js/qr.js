@@ -11,15 +11,28 @@ function domReady(fn) {
 }
 
 domReady(function () {
-
     // If found you qr code
     function onScanSuccess(decodeText, decodeResult) {
         alert("You Qr is : " + decodeText, decodeResult);
+
+        $.ajax({
+            url: '/api/admin/sell-off/product-detail/search/' + decodeText,
+            method: 'GET',
+            success: function (response) {
+                console.log(response);
+                var id = Number(decodeText);
+                chooseProductDetail(id);
+                loadSpChiTiet(response);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
     }
 
     let htmlscanner = new Html5QrcodeScanner(
         "my-qr-reader",
-        { fps: 10, qrbos: 250 }
+        {fps: 10, qrbos: 250}
     );
     htmlscanner.render(onScanSuccess);
 });

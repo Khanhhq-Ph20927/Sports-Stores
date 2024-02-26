@@ -386,7 +386,7 @@
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <td colspan="6" class="text-center"><strong>Thời Gian:</strong></td>
+                                            <td colspan="6" class="text-end"><strong>Thời Gian:</strong></td>
                                             <td class="text-center" id="date-time"></td>
                                         </tr>
                                         <tr>
@@ -630,6 +630,7 @@
 
     function chooseProductDetail(id) {
         var currentCheckbox = document.getElementById('checkboxProductDetail' + id);
+        console.log(selectedProductDetailId);
         console.log(currentCheckbox);
 
         // Kiểm tra xem ID đã được chọn có trong danh sách hay không?
@@ -802,6 +803,72 @@
         }
     }
 
+    // async function loadSpChiTietInQrCode(page, id) {
+    //
+    //     // Lấy Id từ qr code
+    //     selectedProductDetailId.push(id);
+    //     console.log(selectedProductDetailId);
+    //
+    //     var sort = document.getElementById("sort").value;
+    //     var search = document.getElementById("search").value;
+    //     var url = '/admin/sell-off/san-pham-chi-tiet?page=' + page + '&size=' + size + '&sort=' + sort;
+    //     pageProduct = page;
+    //     if (search !== "") {
+    //         url += '&search=' + search
+    //     }
+    //     const response = await fetch(url, {
+    //         method: 'GET'
+    //     });
+    //     var result = await response.json();
+    //     console.log(result)
+    //     var list = result.content;
+    //     var totalPage = result.totalPages;
+    //     if (page === totalPage) {
+    //         return;
+    //     }
+    //     var main = '';
+    //     for (i = 0; i < list.length; i++) {
+    //         var idCheckboxProductDetail = "checkboxProductDetail" + list[i].id;
+    //         var checked = selectedProductDetailId.includes(list[i].id) ? 'checked' : '';
+    //         main += `<tr>
+    //                 <td>${list[i].id}</td>
+    //                 <td>${list[i].sp.tenSP}</td>
+    //                 <td>${list[i].ms.ten}</td>
+    //                 <td>${list[i].size}</td>
+    //                 <td>${list[i].soLuong}</td>
+    //                 <td>${formatmoney(list[i].sp.donGia)}</td>
+    //                 <td>
+    //                     <div class="form-check">
+    //                             <input class="form-check-input" type="checkbox" id="${idCheckboxProductDetail}"
+    //                                     aria-label="..." onclick="chooseProductDetail(${list[i].id})" ${checked}/>
+    //                     </div>
+    //                 </td>
+    //             </tr>`
+    //     }
+    //     document.getElementById("listspct").innerHTML = main;
+    //     await restoreCheckedState();
+    //     var mainpage = ''
+    //     for (i = 1; i <= totalPage; i++) {
+    //         // mainpage += `<li onclick="loadSpChiTiet(${(Number(i) - 1)})" class="page-item"><a class="page-link" href="#listsp">${i}</a></li>`
+    //
+    //         mainpage += `<li onclick="loadSpChiTiet(${(Number(i) - 1)})" class="pageationli"><a class="page">${i}</a></li>`
+    //     }
+    //     document.getElementById("pagespct").innerHTML = mainpage
+    //
+    //     var listli = document.getElementsByClassName('pageationli');
+    //     for (j = 0; j < listli.length; j++) {
+    //         listli[j].classList.remove('active');
+    //     }
+    //     listli[page].classList.add('active')
+    //
+    //     document.getElementById("prectsp").onclick = function () {
+    //         loadSpChiTiet(page - 1)
+    //     }
+    //     document.getElementById("nextctsp").onclick = function () {
+    //         loadSpChiTiet(page + 1)
+    //     }
+    // }
+
     async function loadTableCart(pageNumber) {
         var url = "/api/admin/sell-off/cart/" + pageNumber;
         const response = await fetch(url, {
@@ -861,6 +928,7 @@
         `;
         document.getElementById("pagination_cart").innerHTML = currentPage;
     }
+
 
     function deleteCard(id) {
         swal.fire({

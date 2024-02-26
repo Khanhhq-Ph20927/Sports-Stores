@@ -19,4 +19,6 @@ public interface SanPhamChiTietService {
     List<SanPhamChiTiet> getListByIdSp(String id);
 
     Page<SanPhamChiTiet> sanPhamChiTietBanTaiQuay(String search,Pageable pageable);
+
+    Page<SanPhamChiTiet> pagination(Pageable pageable);
 }

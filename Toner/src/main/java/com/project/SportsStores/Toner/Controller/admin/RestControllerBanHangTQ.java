@@ -169,4 +169,35 @@ public class RestControllerBanHangTQ {
         donHangService.save(dh);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
+
+    @GetMapping("/product-detail/{id}")
+    public ResponseEntity<?> getProductDetailById(@PathVariable("id") String id) {
+        return new ResponseEntity<>(spsv.getById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/product-detail/search/{id}")
+    public ResponseEntity<?> searchProductDetail(@PathVariable("id") String id) {
+        Pageable pageable = PageRequest.of(0, 5,Sort.by("ngayTao").descending());
+        Page<SanPhamChiTiet> page = spsv.pagination(pageable);
+        while (true) {
+            // Duyệt qua từng sản phẩm trong trang hiện tại
+            for (SanPhamChiTiet product : page.getContent()) {
+                if (product.getId().equals(Long.parseLong(id))) {
+                    // Sản phẩm được tìm thấy trong trang hiện tại
+                    int pageNumber = page.getNumber(); // Số trang
+                    System.out.println("Product found on page: " + pageNumber);
+                    return new ResponseEntity<>(pageNumber, HttpStatus.OK);
+                }
+            }
+
+            // Kiểm tra xem còn trang nào nữa không
+            if (page.hasNext()) {
+                page = spsv.pagination(page.nextPageable());
+            } else {
+                // Đã duyệt qua tất cả các trang mà không tìm thấy sản phẩm
+                System.out.println("Product not found!");
+                return new ResponseEntity<>(null, HttpStatus.OK);
+            }
+        }
+    }
 }
