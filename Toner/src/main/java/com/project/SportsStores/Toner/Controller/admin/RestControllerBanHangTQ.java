@@ -78,7 +78,7 @@ public class RestControllerBanHangTQ {
     }
 
     @PostMapping("/cart/save")
-    public ResponseEntity<?> saveCard(@RequestBody GioHangChiTietDTO ghct) {
+    public ResponseEntity<?> saveCart(@RequestBody GioHangChiTietDTO ghct) {
         System.out.println(ghct.toString());
         GioHangChiTiet gioHangChiTiet = new GioHangChiTiet();
         gioHangChiTiet.setGh(ghsv.getById(ghct.getIdGioHang()));
@@ -90,7 +90,7 @@ public class RestControllerBanHangTQ {
     }
 
     @GetMapping("/cart/delete/{id}")
-    public ResponseEntity<?> saveCard(@PathVariable("id") String id) {
+    public ResponseEntity<?> deleteCart(@PathVariable("id") String id) {
         ghctsv.delete(id);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }

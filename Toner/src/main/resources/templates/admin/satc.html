@@ -322,6 +322,9 @@
                                     </div>
                                     <div>
                                         <label for="customer-name-input" class="form-label">Khách hàng</label>
+                                        <input type="text" id="customer-phone-input" class="form-control"
+                                               placeholder="">
+                                        <br>
                                         <input type="text" id="customer-name-input" class="form-control" placeholder="">
                                         <div>
                                             <label for="voucher-input" class="form-label">Mã voucher</label>
@@ -385,6 +388,8 @@
                                         <tr>
                                             <td colspan="6" class="text-center"><strong>Thời Gian:</strong></td>
                                             <td class="text-center" id="date-time"></td>
+                                        </tr>
+                                        <tr>
                                             <td colspan="6" class="text-end"><strong>Tổng tiền:</strong></td>
                                             <td class="text-start" id="total-amount"></td>
                                         </tr>
@@ -855,6 +860,33 @@
             </li>
         `;
         document.getElementById("pagination_cart").innerHTML = currentPage;
+    }
+
+    function deleteCard(id) {
+        swal.fire({
+            title: "Bạn Có Muốn Xoá!",
+            imageUrl: '/assets/images/cheems-meme-2.jpg',
+            imageWidth: 300, // Độ rộng của ảnh
+            imageHeight: 280, // Độ cao của ảnh
+            confirmButtonText: 'Em muốn ạ!',
+            showCancelButton: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/api/admin/sell-off/cart/delete/' + id,
+                    method: 'GET',
+                    success: function (response) {
+                        console.log(response);
+                        if (response === "success") {
+                            loadTableCart(pageCart);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        })
     }
 
     function addQuantity(id) {
