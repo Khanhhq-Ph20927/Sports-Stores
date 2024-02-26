@@ -13,7 +13,7 @@ function domReady(fn) {
 domReady(function () {
     // If found you qr code
     function onScanSuccess(decodeText, decodeResult) {
-        alert("You Qr is : " + decodeText, decodeResult);
+        alert("Product has id : " + decodeText, decodeResult);
 
         $.ajax({
             url: '/api/admin/sell-off/product-detail/search/' + decodeText,
