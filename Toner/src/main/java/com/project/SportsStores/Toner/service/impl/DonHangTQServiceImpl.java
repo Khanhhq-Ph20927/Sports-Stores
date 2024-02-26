@@ -47,4 +47,9 @@ public class DonHangTQServiceImpl implements DonHangTQService {
     public Page<DonHang> seacrhSellOff(String keyword, Pageable pageable) {
         return dhrp.searchDonHang(keyword, pageable);
     }
+
+    @Override
+    public List<DonHang> getSizeBySatus0() {
+        return dhrp.getSizeByStatus0();
+    }
 }

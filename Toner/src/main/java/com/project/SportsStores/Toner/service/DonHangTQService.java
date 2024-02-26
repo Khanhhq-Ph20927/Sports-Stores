@@ -18,4 +18,6 @@ public interface DonHangTQService {
     Page<DonHang> pageOfDonHang(Pageable pageable);
 
     Page<DonHang> seacrhSellOff(String keyword, Pageable pageable);
+
+    List<DonHang> getSizeBySatus0();
 }

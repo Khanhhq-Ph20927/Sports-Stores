@@ -313,33 +313,32 @@
                                 <!-- end card body -->
                                 <div class="card-body">
                                     <div class="">
-                                        <label for="nhanvien-input" class="form-label">Nhân viên</label>
-                                        <input type="text" id="nhanvien-input" class="form-control" placeholder="">
+                                        <label for="staff-name-input" class="form-label">Nhân viên</label>
+                                        <input type="text" id="staff-name-input" class="form-control" placeholder="">
                                     </div>
                                     <div>
-                                        <label for="thoigian-input" class="form-label">Thời gian</label>
-                                        <input type="text" id="thoigian-input" class="form-control" placeholder="">
+                                        <label for="datetime-input" class="form-label">Thời gian</label>
+                                        <input type="text" id="datetime-input" class="form-control" placeholder="">
                                     </div>
                                     <div>
-                                        <label for="khachhang-input" class="form-label">Khách hàng</label>
-                                        <input type="text" id="khachhang-input" class="form-control" placeholder="">
-                                        <br>
-                                        <input type="text" id="" class="form-control" placeholder=""></div>
-                                    <div>
-                                        <label for="voucher-input" class="form-label">Mã voucher</label>
-                                        <input type="text" id="voucher-input" class="form-control" placeholder="">
-                                    </div>
+                                        <label for="customer-name-input" class="form-label">Khách hàng</label>
+                                        <input type="text" id="customer-name-input" class="form-control" placeholder="">
+                                        <div>
+                                            <label for="voucher-input" class="form-label">Mã voucher</label>
+                                            <input type="text" id="voucher-input" class="form-control" placeholder="">
+                                        </div>
 
-                                    <div>
-                                        <label for="tongtien-input" class="form-label">Tổng tiền</label>
-                                        <input type="text" id="tongtien-input" class="form-control" placeholder="">
+                                        <div>
+                                            <label for="total-amount-input" class="form-label">Tổng tiền</label>
+                                            <input type="text" id="total-amount-input" class="form-control"
+                                                   placeholder="">
+                                        </div>
                                     </div>
                                 </div>
+                                <!-- end card -->
                             </div>
-                            <!-- end card -->
                         </div>
                     </div>
-
                     <!-- end col -->
                 </form>
             </div>
@@ -384,6 +383,8 @@
                                         </tbody>
                                         <tfoot>
                                         <tr>
+                                            <td colspan="6" class="text-center"><strong>Thời Gian:</strong></td>
+                                            <td class="text-center" id="date-time"></td>
                                             <td colspan="6" class="text-end"><strong>Tổng tiền:</strong></td>
                                             <td class="text-start" id="total-amount"></td>
                                         </tr>
@@ -727,7 +728,7 @@
     }
 
     function restoreCheckedState() {
-        selectedProductDetailId.forEach(function(id) {
+        selectedProductDetailId.forEach(function (id) {
             var currentCheckbox = document.getElementById('checkboxProductDetail' + id);
             if (currentCheckbox) {
                 currentCheckbox.checked = true;
@@ -983,7 +984,7 @@
     }
 
     async function exportInvoice() {
-        if(selectedInvoiceId !== null && selectedProductDetailId.length > 0 ) {
+        if (selectedInvoiceId !== null && selectedProductDetailId.length > 0) {
             try {
                 await saveInvoice(selectedInvoiceId);
                 var urlChangeStatus = '/api/admin/sell-off/invoice/change-status/' + selectedInvoiceId;
@@ -1003,6 +1004,7 @@
                 document.getElementById("label-modal").innerHTML = "Hoá Đơn " + list[0].dh.maDonHang;
                 $('#myModal').modal('show');
                 var main = '';
+                const formattedCreateAt = moment(list[0].ngayTao).format('DD/MM/YY HH:mm:ss');
                 for (i = 0; i < list.length; i++) {
                     var currentTotal = list[i].tongTien;
                     totalAmount += currentTotal;
@@ -1018,6 +1020,7 @@
                 }
                 document.getElementById("list_product_modal").innerHTML = main;
                 document.getElementById("total-amount").innerText = formatmoney(totalAmount);
+                document.getElementById("date-time").innerText = formattedCreateAt;
                 loadPage(0);
                 loadSpChiTiet(0);
                 loadTableCart(0);
@@ -1025,9 +1028,25 @@
             } catch (error) {
                 console.error('Error:', error);
             }
+        } else if (selectedInvoiceId === null && selectedProductDetailId.length > 0) {
+            swal.fire({
+                title: "Hoá Đơn Chưa Được Chọn!",
+                imageUrl: '/assets/images/cheems-meme-2.jpg',
+                imageWidth: 300,
+                imageHeight: 280,
+                confirmButtonText: 'Dạ Em Biết Rồi Ạ!'
+            });
+        } else if (selectedInvoiceId !== null && selectedProductDetailId.length === 0) {
+            swal.fire({
+                title: "Sản Phẩm Chưa Được Chọn!",
+                imageUrl: '/assets/images/cheems-meme-2.jpg',
+                imageWidth: 300,
+                imageHeight: 280,
+                confirmButtonText: 'Dạ Em Biết Rồi Ạ!'
+            });
         } else {
             swal.fire({
-                title: "Hoá Đơn,Sản Phẩm Chưa Được Chọn!",
+                title: "Sản Phẩm Và Hoá Đơn Chưa Được Chọn!",
                 imageUrl: '/assets/images/cheems-meme-2.jpg',
                 imageWidth: 300,
                 imageHeight: 280,

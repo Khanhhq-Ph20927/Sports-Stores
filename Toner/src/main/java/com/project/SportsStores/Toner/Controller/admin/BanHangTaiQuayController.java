@@ -46,16 +46,18 @@ public class BanHangTaiQuayController {
         DonHang dh = new DonHang();
         List<DonHang> list = dhsv.getAllByStatus();
         for (DonHang donHang : list) {
-            dh.setMaDonHang("DH" + (list.size() + 1));
+            // lấy index của phần tử cuối cùng trong list
+            int index = Integer.parseInt(list.get(list.size() - 1).getMaDonHang().substring(2));
+            dh.setMaDonHang("DH" + (index + 1));
             if (dh.getMaDonHang().equalsIgnoreCase(donHang.getMaDonHang())) {
-                dh.setMaDonHang("DH" + (list.size() + 1));
+                dh.setMaDonHang("DH" + (index + 1));
             }
         }
         // fix cứng id nên cần kiểm tra data trước khi chạy
         dh.setNv(nvrp.getById(Long.valueOf(4)));
         dh.setNgayTao(LocalDateTime.now());
         dh.setTrangThai(0);
-        if (list.size() >= 20) {
+        if (dhsv.getSizeBySatus0().size() >= 20) {
             return new ResponseEntity<>("fail", HttpStatus.OK);
         } else {
             dhsv.save(dh);

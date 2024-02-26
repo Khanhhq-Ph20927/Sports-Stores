@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/api/admin/product")
@@ -49,6 +52,14 @@ public class ControllerSanPham {
     private String saveProduct(@ModelAttribute("product") SanPham sp,
                                RedirectAttributes redirectAttributes,
                                Model model) {
+        // Regular expression
+        String regexPrice = "^(?=.*[1-9])\\d+$";
+
+        Pattern pattern = Pattern.compile(regexPrice);
+        Matcher matcher = pattern.matcher(String.valueOf(sp.getDonGia()));
+
+        System.out.println(sp.getDonGia());
+
         for (SanPham sanPham : sv.getAll()
         ) {
             sp.setMaSP("SP" + sv.getAll().size());
@@ -60,29 +71,49 @@ public class ControllerSanPham {
         sp.setNgayTao(LocalDateTime.now());
         if (sp.getDanhMuc() == -1) {
             isValid = false;
-            model.addAttribute("errorCollections", "Please Choose Collections");
+            model.addAttribute("errorCollections", "Please Choose Collections!");
         }
         if (sp.getTenSP().isEmpty()) {
             isValid = false;
-            model.addAttribute("errorName", "Please Choose Name");
+            model.addAttribute("errorName", "Please Choose Name!");
         }
         if (sp.getThieu() == null) {
             isValid = false;
-            model.addAttribute("errorBrand", "Please Choose Brand");
+            model.addAttribute("errorBrand", "Please Choose Brand!");
         }
         if (sp.getNcc() == null) {
             isValid = false;
-            model.addAttribute("errorProvider", "Please Choose Provider");
+            model.addAttribute("errorProvider", "Please Choose Provider!");
         }
         if (sp.getDonGia() == null) {
             isValid = false;
-            model.addAttribute("errorPrice", "Please Choose Price");
+            model.addAttribute("errorPrice", "Please Choose Price!");
+        }
+        if (sp.getDonGia() == null) {
+            isValid = false;
+            model.addAttribute("errorPrice", "Please Choose Price!");
+        }
+        if (matcher.matches()) {
+            System.out.println(sp.getDonGia().compareTo(new BigDecimal("70000")));
+            if (sp.getDonGia().compareTo(new BigDecimal("70000")) < 0) {
+                isValid = false;
+                model.addAttribute("errorPrice", "The price is invalid or less than 70,000 VND!");
+            }
+        } else {
+            isValid = false;
+            model.addAttribute("errorPrice", "Invalid price format!");
         }
         if (isValid) {
             sv.save(sp);
             redirectAttributes.addFlashAttribute("message", true);
             return "redirect:/api/admin/product/create_product";
         } else {
+            model.addAttribute("tenSP", sp.getTenSP());
+            model.addAttribute("thieu", sp.getThieu().getId());
+            model.addAttribute("ncc", sp.getNcc().getId());
+            model.addAttribute("danhMuc", sp.getDanhMuc());
+            model.addAttribute("trangThai", sp.getTrangThai());
+            model.addAttribute("donGia", sp.getDonGia());
             return "admin/products/product-create";
         }
     }

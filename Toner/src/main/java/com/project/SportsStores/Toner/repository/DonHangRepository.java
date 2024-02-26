@@ -26,8 +26,11 @@ public interface DonHangRepository  extends JpaRepository<DonHang,Long> {
     @Override
     Optional<DonHang> findById(Long aLong);
 
-    @Query("SELECT dh FROM DonHang dh WHERE dh.trangThai = 0")
+    @Query("SELECT dh FROM DonHang dh")
     List<DonHang> getByStatus();
+
+    @Query("SELECT dh FROM DonHang dh WHERE dh.trangThai = 0")
+    List<DonHang> getSizeByStatus0();
 
     @Query("SELECT dh FROM DonHang dh WHERE dh.trangThai = 0")
     Page<DonHang> getAllByStatusEquals0(Pageable pageable);
