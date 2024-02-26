@@ -563,7 +563,12 @@
       </div>
 `;
         document.getElementById("pagination").innerHTML = currentPage;
-        if (number === 0) {
+        if (number === 0 && number === totalPage - 1) {
+            document.getElementById('pagination-start').style.display = "none";
+            document.getElementById('pagination-prev').style.display = "none";
+            document.getElementById('pagination-next').style.display = "none";
+            document.getElementById('pagination-end').style.display = "none";
+        } else if (number === 0) {
             document.getElementById('pagination-start').style.display = "none";
             document.getElementById('pagination-prev').style.display = "none";
             document.getElementById('pagination-next').style.display = "block";
@@ -667,7 +672,12 @@
       </div>
         `;
         document.getElementById("pagination").innerHTML = currentPage;
-        if (number === 0) {
+        if (number === 0 && number === totalPage - 1) {
+            document.getElementById('pagination-start').style.display = "none";
+            document.getElementById('pagination-prev').style.display = "none";
+            document.getElementById('pagination-next').style.display = "none";
+            document.getElementById('pagination-end').style.display = "none";
+        } else if (number === 0) {
             document.getElementById('pagination-start').style.display = "none";
             document.getElementById('pagination-prev').style.display = "none";
             document.getElementById('pagination-next').style.display = "block";
