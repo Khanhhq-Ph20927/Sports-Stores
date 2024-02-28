@@ -1,8 +1,4 @@
 /*# sourceMappingURL=custom.min.css.map */
-#my-qr-reader video {
-    transform: scaleX(-100%);
-}
-
 .colored-toast .swal2-icon {
     float: left;
     margin-right: 10px;
