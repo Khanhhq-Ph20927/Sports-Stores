@@ -260,8 +260,447 @@
                 </div>
             </div>
             <!--end modal-->
+            <div class="modal" id="myModalTable" tabindex="-1">
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Đóng
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="showConfirmPopup()">
+                        Lưu
+                    </button>
+                </div>
+            </div>
+            <!-- end col -->
         </div>
+        <!-- end row -->
     </div>
+</div>
+<div class="modal" id="myModalView" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thêm Sản Phẩm Chi Tiết</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="save_product_detail" action="" class="my-form" method="post">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm">
+                                        <div class="avatar-title rounded-circle bg-light text-primary fs-20">
+                                            <i class="bi bi-list-ul"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-1">General Information</h5>
+                                    <p class="text-muted mb-0">Fill all information below.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row ">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <h5 class="fs-15 mb-3">Tên Sản Phẩm</h5>
+                                        <input type="text" class="form-control" id="product-name-input"
+                                               placeholder="Enter product name" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <div class="col-xl-6">
+                                            <div class="color-picker">
+                                                <label class="form-label">Màu Sắc</label>
+                                                <ul class="clothe-colors list-unstyled hstack gap-2 mb-0 flex-wrap">
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Xanh Lục Bảo">
+                                                        <input type="checkbox" value="5" id="color-1"
+                                                               name="mauSac">
+                                                        <label class="avatar-xs btn btn-success p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-1"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Xám">
+                                                        <input type="checkbox" value="4" id="color-2"
+                                                               name="mauSac">
+                                                        <label class="avatar-xs btn btn-info p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-2"
+                                                               style="background-color: rgb(169,169,169); border: none;"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Vàng">
+                                                        <input type="checkbox" value="8" id="color-3"
+                                                               name="mauSac">
+                                                        <label class="avatar-xs btn btn-warning p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-3"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top" data-bs-original-title="Đỏ">
+                                                        <input type="checkbox" value="3" id="color-4"
+                                                               name="mauSac">
+                                                        <label class="avatar-xs btn btn-danger p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-4"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Xanh Da Trời">
+                                                        <input type="checkbox" value="7" id="color-5"
+                                                               name="mauSac">
+                                                        <label class="avatar-xs btn btn-primary p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-5"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Tím Xanh">
+                                                        <input type="checkbox" value="6"
+                                                               id="color-6" name="mauSac">
+                                                        <label class="avatar-xs btn btn-secondary p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-6"
+                                                               data-bs-original-title="Tím Xanh"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Đen">
+                                                        <input type="checkbox" value="1" id="color-7"
+                                                               name="mauSac">
+                                                        <label class="avatar-xs btn btn-dark p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-7"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Trắng">
+                                                        <input type="checkbox" value="2" id="color-8"
+                                                               name="mauSac">
+                                                        <label class="avatar-xs btn btn-light p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-8"></label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end row -->
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <h5 class="fs-15 mb-3">Số Lượng</h5>
+                                        <input type="text" class="form-control"
+                                               id="product-count-input"
+                                               placeholder="Enter count" aria-label="Count"
+                                               aria-describedby="product-count-addon"
+                                               required th:name="soLuong">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <div class="col-xl-6">
+                                            <div class="mt-4">
+                                                <h5 class="fs-15 mb-3">Size :</h5>
+                                                <div class="d-flex flex-wrap gap-2 size-picker">
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="checkbox" class="btn-check"
+                                                               id="productsize-radio1" value="s"
+                                                               name="size">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-radio1">S</label>
+                                                    </div>
+
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="checkbox" class="btn-check"
+                                                               id="productsize-radio2" value="m"
+                                                               name="size">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-radio2">M</label>
+                                                    </div>
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="checkbox" class="btn-check"
+                                                               id="productsize-radio3" value="l"
+                                                               name="size">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-radio3">L</label>
+                                                    </div>
+
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="checkbox" class="btn-check"
+                                                               id="productsize-radio4" value="xl"
+                                                               name="size">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-radio4">XL</label>
+                                                    </div>
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="checkbox" class="btn-check"
+                                                               id="productsize-radio5" value="xxl"
+                                                               name="size">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-radio5">XXL</label>
+                                                    </div>
+
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="checkbox" class="btn-check"
+                                                               id="productsize-radio6" value="2xl"
+                                                               name="size">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-radio6">2XL</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end row-->
+
+                            <!-- end col -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Đóng
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="showConfirmPopup()">
+                                Lưu
+                            </button>
+                        </div>
+                        <!-- end row -->
+                    </div>
+                </form>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+<div class="modal" id="myModalEdit" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Sản Phẩm Chi Tiết</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit_product_detail" action="" class="my-form" method="post">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm">
+                                        <div class="avatar-title rounded-circle bg-light text-primary fs-20">
+                                            <i class="bi bi-list-ul"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-1">General Information</h5>
+                                    <p class="text-muted mb-0">Fill all information below.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row ">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <h5 class="fs-15 mb-3">Tên Sản Phẩm</h5>
+                                        <input type="text" class="form-control" id="product-name-input-edit"
+                                               placeholder="Enter product name" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <div class="col-xl-6">
+                                            <div class="color-picker">
+                                                <label class="form-label">Màu Sắc</label>
+                                                <ul class="clothe-colors list-unstyled hstack gap-2 mb-0 flex-wrap">
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Xanh Lục Bảo">
+                                                        <input type="radio" value="5" id="color-5-update"
+                                                               name="ms">
+                                                        <label class="avatar-xs btn btn-success p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-5-update"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Xám">
+                                                        <input type="radio" value="4" id="color-4-update"
+                                                               name="ms">
+                                                        <label class="avatar-xs btn btn-info p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-4-update"
+                                                               style="background-color: rgb(169,169,169); border: none;"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Vàng">
+                                                        <input type="radio" value="8" id="color-8-update"
+                                                               name="ms">
+                                                        <label class="avatar-xs btn btn-warning p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-8-update"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top" data-bs-original-title="Đỏ">
+                                                        <input type="radio" value="3" id="color-3-update"
+                                                               name="ms">
+                                                        <label class="avatar-xs btn btn-danger p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-3-update"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Xanh Da Trời">
+                                                        <input type="radio" value="7" id="color-7-update"
+                                                               name="ms">
+                                                        <label class="avatar-xs btn btn-primary p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-7-update"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Tím Xanh">
+                                                        <input type="radio" value="6"
+                                                               id="color-6-update" name="ms">
+                                                        <label class="avatar-xs btn btn-secondary p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-6-update"
+                                                               data-bs-original-title="Tím Xanh"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Đen">
+                                                        <input type="radio" value="1" id="color-1-update"
+                                                               name="ms">
+                                                        <label class="avatar-xs btn btn-dark p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-1-update"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Trắng">
+                                                        <input type="radio" value="2" id="color-2-update"
+                                                               name="ms">
+                                                        <label class="avatar-xs btn btn-light p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-2-update"></label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end row -->
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <h5 class="fs-15 mb-3">Số Lượng</h5>
+                                        <input type="text" class="form-control"
+                                               id="productdetail-count-input-edit"
+                                               placeholder="Enter Count" aria-label="Count"
+                                               aria-describedby="product-count-addon"
+                                               required th:name="soLuong">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <div class="col-xl-6">
+                                            <div class="mt-4">
+                                                <h5 class="fs-15 mb-3">Size :</h5>
+                                                <div class="d-flex flex-wrap gap-2 size-picker">
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="radio" class="btn-check"
+                                                               id="productsize-radio-update-s" value="s"
+                                                               name="size-update">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-radio-update-s">S</label>
+                                                    </div>
+
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="radio" class="btn-check"
+                                                               id="productsize-radio-update-m" value="m"
+                                                               name="size-update">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-radio-update-m">M</label>
+                                                    </div>
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="radio" class="btn-check"
+                                                               id="productsize-radio-update-l" value="l"
+                                                               name="size-update">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-radio-update-l">L</label>
+                                                    </div>
+
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="radio" class="btn-check"
+                                                               id="productsize-radio-update-xl" value="xl"
+                                                               name="size-update">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-radio-update-xl">XL</label>
+                                                    </div>
+
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="radio" class="btn-check"
+                                                               id="productsize-radio-update-xxl" value="xxl"
+                                                               name="size-update">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-radio-update-xxl">XXL</label>
+                                                    </div>
+
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="radio" class="btn-check"
+                                                               id="productsize-update-2xl" value="2xl"
+                                                               name="size-update">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-update-2xl">2XL</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end row-->
+
+                            <!-- end col -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Đóng
+                            </button>
+                            <button type="button" class="btn btn-primary"
+                                    onclick="showConfirmPopupUpdate()">
+                                Lưu
+                            </button>
+                        </div>
+                        <!-- end row -->
+                    </div>
+                </form>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+<!-- end modal -->
+</div>
+</div>
 </div>
 <!-- End Page-content -->
 </div>
@@ -356,6 +795,7 @@
                                 <div class="hstack gap-3 flex-warp">
                                 <div onclick="detailProduct(${list[i].id})"
                                      class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
+                                <div onclick="viewProductDetail()"><i class="ri-eye-2-line"></i></div>
                                  </div>
                             </td>
                      </tr>`
@@ -381,6 +821,10 @@
             </li>
         `;
         document.getElementById("pagination").innerHTML = currentPage;
+    }
+
+    async function viewProductDetail() {
+
     }
 
     function formatMoney(money) {
