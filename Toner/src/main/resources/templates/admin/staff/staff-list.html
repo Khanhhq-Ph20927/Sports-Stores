@@ -248,7 +248,6 @@
                                         <select class="form-control" required id="staff-status-filter"
                                                 onchange="search()">
                                             <option value="-1">Trạng thái</option>
-                                            <!--                                            <option th:value="-1">Tất cả</option>-->
                                             <option value="0">Đang làm</option>
                                             <option value="1">Đã nghỉ</option>
                                         </select>
@@ -257,13 +256,12 @@
                                         <select class="form-control" required id="staff-position-filter"
                                                 onchange="search()">
                                             <option value="0">Chức vụ</option>
-                                            <!--                                            <option th:value="0">Tất cả</option>-->
                                             <option th:each="position:${chucVu}" th:value="${position.id}"
                                                     th:text="${position.tenChucVu}"></option>
                                         </select>
                                     </div>
                                     <div class="col-lg-auto col-sm-3 ms-auto">
-                                        <a class="btn btn-primary w-100 add-btn" th:href="@{/api/admin/staff/add}">
+                                        <a class="btn btn-primary w-100 add-btn" th:href="@{/admin/staff/add}">
                                             Thêm nhân viên
                                         </a>
                                     </div>
@@ -275,7 +273,7 @@
                                 <div class="table-responsive table-card mb-1">
                                     <table class="table align-middle table-nowrap" id="customerTable">
                                         <thead class="table-light">
-                                        <tr id="sortField">
+                                        <tr>
                                             <!--                                            <th scope="col" style="width: 50px;">-->
                                             <!--                                                <div class="form-check">-->
                                             <!--                                                    <input class="form-check-input" type="checkbox" id="checkAll"-->
@@ -478,7 +476,7 @@
             document.getElementById('staff-birthday-input').value = data.ngaySinh;
             document.getElementById('staff-status-input').value = data.trangThai;
             document.getElementById('staff-position-input').value = data.cv.id;
-            document.getElementById('update-form').action = '/api/admin/staff/update/' + Id;
+            document.getElementById('update-form').action = '/admin/staff/update/' + Id;
             if (data.cv.id === 1) {
                 document.getElementById('staff-position-input').checked = true;
             } else if (data.trangThai === 2) {
