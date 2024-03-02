@@ -63,6 +63,13 @@ public class VoucherController {
                 model.addAttribute("errorName", "Tên voucher này đã tồn tại");
             }
         }
+        if (voucher.getGiaTriGiam() < 0) {
+            isValid = true;
+            model.addAttribute("errorGiaTriGiam", "Giá trị giảm không được nhỏ hơn 0");
+        } if (voucher.getGiaTriGiam() >= 50 && voucher.isLoaiKM() == true) {
+            isValid = true;
+            model.addAttribute("errorGiaTriGiam", "Giá trị giảm phải nhỏ hơn 50%");
+        }
         else{
             if (voucherRepository.findByName(voucher.getTenKhuyenMai()).isPresent()) {
                 isValid = true;
@@ -89,5 +96,11 @@ public class VoucherController {
                                      Pageable pageable){
         Page<KhuyenMai> result = voucherService.findAll(start,end, pageable);
         return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
+    @GetMapping("/public/voucher/find-by-id")
+    public ResponseEntity<?> findById(@RequestParam("id") Long id){
+        Optional<KhuyenMai> khuyenMai = voucherRepository.findById(id);
+        return new ResponseEntity<>(khuyenMai.get(),HttpStatus.OK);
     }
 }

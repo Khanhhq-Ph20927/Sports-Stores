@@ -21,7 +21,12 @@ public class SanPhamChiTietServiceImp implements SanPhamChiTietService {
             page = sanPhamChiTietRepository.findAll(pageable);
         }
         else{
-            page = sanPhamChiTietRepository.search("%"+search+"%",pageable);
+            if(search.length() == 1){
+                page = sanPhamChiTietRepository.findBySize(search,pageable);
+            }
+            else{
+                page = sanPhamChiTietRepository.search("%"+search+"%",pageable);
+            }
         }
         return page;
     }
