@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Controller
@@ -82,19 +83,18 @@ public class ControllerKhachHang {
         diaChi.setQh(quan);
         diaChi.setXp(xa);
         diaChi.setDiaChiCuThe(diaChiCT);
-
-        if (khachHang.getHoTen().isEmpty()) {
+        if (khachHang.getHoTen().isBlank()) {
               isValid = true;
               model.addAttribute("errorName", "Please Choose Name");
           }
-          if (khachHang.getSdt().isEmpty()) {
+          if (khachHang.getSdt().isBlank()) {
               isValid = true;
               model.addAttribute("errorPhone", "Please Choose Phone Number");
           } else if (!khachHang.getSdt().matches("(84|0[3|5|7|8|9])+([0-9]{8})\\b")) {
               isValid = true;
               model.addAttribute("errorPhone", "Please Regex Phone Number");
           }
-          if (khachHang.getEmail().isEmpty()) {
+          if (khachHang.getEmail().isBlank()) {
               isValid = true;
               model.addAttribute("errorEmail", "Please Choose Email");
           } else if (!khachHang.getEmail().matches(".+@.+\\.+.+")) {
@@ -103,21 +103,24 @@ public class ControllerKhachHang {
           }
           if (khachHang.getNgaySinh() == null) {
               isValid = true;
-              model.addAttribute("errorBirthday", "Please Choose  Phone Number");
+              model.addAttribute("errorBirthday", "Please Choose  Date ");
+          }else if (!khachHang.getNgaySinh().toLocalDate().isBefore(LocalDate.now()) ) {
+            isValid = true;
+            model.addAttribute("errorBirthday", "Please Choose  Date ");
           }
           if(diaChi.getDiaChiCuThe().isBlank()){
               isValid=true;
               model.addAttribute("errorAddress","Please Choose  Address");
           }
-          if(diaChi.getTtp() == null){
+          if(diaChi.getTtp().isBlank()){
               isValid = true;
               model.addAttribute("errorProvince", "Chưa chọn Tỉnh !");
           }
-        if(diaChi.getQh() == null){
+        if(diaChi.getQh().isBlank()){
             isValid = true;
             model.addAttribute("errorDistrict", "Chưa chọn Quận Huyện !");
         }
-        if(diaChi.getTtp() == null){
+        if(diaChi.getXp().isBlank()){
             isValid = true;
             model.addAttribute("errorWard", "Chưa chọn Xã Phường !");
         }
