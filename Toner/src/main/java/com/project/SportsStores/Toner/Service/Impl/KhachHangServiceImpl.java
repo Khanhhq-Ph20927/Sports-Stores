@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +21,16 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Override
     public void update(KhachHang khachHang) {
         rp.save(khachHang);
+    }
+
+    @Override
+    public void save(KhachHang kh) {
+        rp.save(kh);
+    }
+
+    @Override
+    public List<KhachHang> getALL() {
+        return rp.findAll();
     }
 
     @Override

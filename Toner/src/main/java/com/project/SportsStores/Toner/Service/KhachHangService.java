@@ -6,12 +6,17 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 public interface KhachHangService {
 
 
     void update(KhachHang khachHang);
+
+    void  save(KhachHang kh);
+
+    List<KhachHang> getALL();
 
     KhachHang getByID(Long id);
 

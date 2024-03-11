@@ -1,12 +1,15 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+    data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+
 <head th:replace="admin/fragments/head::head"></head>
+
 <body>
 
     <!-- Begin page -->
     <div id="layout-wrapper">
         <div th:replace="admin/fragments/header::header"></div>
-    <!-- ========== App Menu ========== -->
+        <!-- ========== App Menu ========== -->
         <div th:replace="admin/fragments/sidebar::sidebar"></div>
         <!-- Left Sidebar End -->
         <!-- ============================================================== -->
@@ -16,7 +19,6 @@
 
             <div class="page-content">
                 <div class="container-fluid">
-
                     <!-- start page title -->
                     <div class="row">
                         <div class="col-12">
@@ -35,342 +37,379 @@
                     </div>
                     <!-- end page title -->
 
-                    <div class="row justify-content-center">
-                        <div class="col-xxl-9">
+                    <form id="create-form" autocomplete="off" class="needs-validation" novalidate method="post"
+                        th:action="@{/admin/invoice/save}" th:object="${khachHang}">
+                        <div class="row">
                             <div class="card">
-                                <form class="needs-validation" novalidate id="invoice_form">
-                                    <div class="card-body border-bottom border-bottom-dashed p-4">
-                                        <div class="row">
-                                            <div class="col-lg-4">
-                                                <div class="profile-user mx-auto  mb-3">
-                                                    <input id="profile-img-file-input" type="file" class="profile-img-file-input" >
-                                                    <label for="profile-img-file-input" class="d-block" tabindex="0">
-                                                        <span class="overflow-hidden border border-dashed d-flex align-items-center justify-content-center rounded" style="height: 60px; width: 256px;">
-                                                            <img src="../assets/images/logo-dark.png" class="card-logo card-logo-dark user-profile-image img-fluid" alt="logo dark">
-                                                            <img src="../assets/images/logo-light.png" class="card-logo card-logo-light user-profile-image img-fluid" alt="logo light">
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                                <div>
-                                                    <div>
-                                                        <label for="companyAddress" class="form-label">Address</label>
-                                                    </div>
-                                                    <div class="mb-2">
-                                                        <textarea class="form-control" id="companyAddress" rows="3" placeholder="Company Address" required></textarea>
-                                                        <div class="invalid-feedback">
-                                                            Please enter a address
-                                                        </div>
-                                                    </div>
-                                                    <div class="mb-2 mb-lg-0">
-                                                        <input type="text" class="form-control" id="companyaddpostalcode" minlength="5" maxlength="6" placeholder="Enter Postal Code" required >
-                                                        <div class="invalid-feedback">
-                                                            The US zip code must contain 5 digits, Ex. 45678
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-4 ms-auto">
-                                                <div class="mb-2">
-                                                    <input type="text" class="form-control" id="registrationNumber" maxlength="12" placeholder="Legal Registration No" required >
-                                                    <div class="invalid-feedback">
-                                                        Please enter a registration no, Ex., 012345678912
-                                                    </div>
-                                                </div>
-                                                <div class="mb-2">
-                                                    <input type="email" class="form-control" id="companyEmail" placeholder="Email Address" required >
-                                                    <div class="invalid-feedback">
-                                                        Please enter a valid email, Ex., example@gamil.com
-                                                    </div>
-                                                </div>
-                                                <div class="mb-2">
-                                                    <input type="text" class="form-control" id="companyWebsite" placeholder="Website" required >
-                                                    <div class="invalid-feedback">
-                                                        Please enter a website, Ex., www.example.com
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <input type="text" class="form-control" data-plugin="cleave-phone" id="compnayContactno" placeholder="Contact No" required >
-                                                    <div class="invalid-feedback">
-                                                        Please enter a contact number
-                                                    </div>
+                                <div class="card-header">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <div class="avatar-sm">
+                                                <div class="avatar-title rounded-circle bg-light text-primary fs-20">
+                                                    <i class="bi bi-person-fill-add"></i>
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--end row-->
+                                        <div class="flex-grow-1">
+                                            <p class="text-muted mb-0">Điền đầy đủ thông tin bên dưới.</p>
+                                        </div>
                                     </div>
-                                    <div class="card-body p-4">
-                                        <div class="row g-3">
-                                            <div class="col-lg-3 col-sm-6">
-                                                <label for="invoicenoInput" class="form-label">Invoice No</label>
-                                                <input type="text" class="form-control" id="invoicenoInput" placeholder="Invoice No" value="#VL25000355" readonly="readonly" >
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-3 col-sm-6">
-                                                <div>
-                                                    <label for="date-field" class="form-label">Date</label>
-                                                    <input type="text" class="form-control" id="date-field" data-provider="flatpickr" data-time="true" placeholder="Select Date-time">
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-sm-12">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="invoice-name-input">Họ tên</label>
+                                                <input type="text" class="form-control" id="invoice-name-input"
+                                                    placeholder="Họ tên" required th:field="*{hoTen}"
+                                                    onkeyup="validName()">
+                                                <div class="text-danger" th:if="${errorName}" th:text="${errorName}">
+                                                    Please enter a invoice.
                                                 </div>
                                             </div>
-                                            <!--end col-->
-                                            <div class="col-lg-3 col-sm-6">
-                                                <label for="choices-payment-status" class="form-label">Payment Status</label>
-                                                <select class="form-control" data-choices data-choices-search-false id="choices-payment-status" required>
-                                                    <option value="">Select Payment Status</option>
-                                                    <option value="Paid">Paid</option>
-                                                    <option value="Unpaid">Unpaid</option>
-                                                    <option value="Refund">Refund</option>
+                                        </div>
+                                        <div class="col-lg-6 col-sm-12">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="invoice-phone-input">Số điện
+                                                    thoại</label>
+                                                <input type="text" class="form-control" id="invoice-phone-input"
+                                                    placeholder="Số điện thoại" required th:field="*{sdt}"
+                                                    onkeyup="validPhone()">
+                                                <div class="text-danger" th:if="${errorPhone}" th:text="${errorPhone}">
+                                                    Please enter a invoice.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end col -->
+                                    </div>
+                                    <!-- end row -->
+                                    <div class="row">
+                                        <div class="col-lg-6 col-sm-12">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="invoice-email-input">Email</label>
+                                                <input type="text" class="form-control" id="invoice-email-input"
+                                                    placeholder="Email" required th:field="*{email}"
+                                                    onkeyup="validEmail()">
+                                                <div class="text-danger" th:if="${errorEmail}" th:text="${errorEmail}">
+                                                    Please enter a invoice.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-sm-12">
+                                            <div class="mb-3">
+                                                <label for="invoice-birthday-input" class="form-label">Ngày sinh</label>
+                                                <input type="date" id="invoice-birthday-input" class="form-control"
+                                                    data-provider="flatpickr" required data-date-format="d M, Y"
+                                                    th:field="*{ngaySinh}" onkeyup="validBirthday()" />
+                                                <div class="text-danger" th:if="${errorBirthday}"
+                                                    th:text="${errorBirthday}">
+                                                    Please enter a invoice.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end col -->
+                                    </div>
+                                    <!-- end row -->
+                                    <div class="row">
+                                        <div class="col-lg-6 col-sm-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Giới Tính</label>
+                                                <div class="form-check mb-3">
+                                                    <input type="radio" th:field="*{gioiTinh}" id="nam" value="true" />
+                                                    <label for="nam">Nam</label>
+                                                    <input type="radio" th:field="*{gioiTinh}" id="nu" value="false" />
+                                                    <label for="nu">Nữ</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-sm-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Tỉnh</label>
+                                                <select class="form-control" name="tinh" id="province"
+                                                    onchange="getDistricts()" onkeyup="validProvince()">
+                                                    <option value=""data-id="">Chọn</option>
                                                 </select>
+                                                <div class="text-danger" th:if="${errorProvince}"
+                                                     th:text="${errorProvince}">
                                             </div>
-                                            <!--end col-->
-                                            <div class="col-lg-3 col-sm-6">
-                                                <div>
-                                                    <label for="totalamountInput" class="form-label">Total Amount</label>
-                                                    <input type="text" class="form-control" id="totalamountInput" placeholder="$0.00" readonly >
-                                                </div>
-                                            </div>
-                                            <!--end col-->
                                         </div>
-                                        <!--end row-->
                                     </div>
-                                    <div class="card-body p-4 border-top border-top-dashed">
-                                        <div class="row">
-                                            <div class="col-lg-4 col-sm-6">
-                                                <div>
-                                                    <label for="billingName" class="text-muted text-uppercase fw-semibold form-label">Billing Address</label>
-                                                </div>
-                                                <div class="mb-2">
-                                                    <input type="text" class="form-control" id="billingName" placeholder="Full Name" required >
-                                                    <div class="invalid-feedback">
-                                                        Please enter a full name
-                                                    </div>
-                                                </div>
-                                                <div class="mb-2">
-                                                    <textarea class="form-control" id="billingAddress" rows="3" placeholder="Address" required></textarea>
-                                                    <div class="invalid-feedback">
-                                                        Please enter a address
-                                                    </div>
-                                                </div>
-                                                <div class="mb-2">
-                                                    <input type="text" class="form-control" data-plugin="cleave-phone" id="billingPhoneno" placeholder="(123)456-7890" required >
-                                                    <div class="invalid-feedback">
-                                                        Please enter a phone number
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <input type="text" class="form-control" id="billingTaxno" placeholder="Tax Number" required >
-                                                    <div class="invalid-feedback">
-                                                        Please enter a tax number
-                                                    </div>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" id="same" name="same" onchange="billingFunction()" >
-                                                    <label class="form-check-label" for="same">
-                                                        Will your Billing and Shipping address same?
+                                    <div class="row">
+                                        <div class="col-lg-6 col-sm-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Quận/Huyện</label>
+                                                <select class="form-control" name="quan" id="district"
+                                                    onchange="getWards()" onkeyup="validDistrict()">
+                                                    <option value="" data-id="">Chọn quận/huyện</option>
+                                                </select>
+                                                <div class="text-danger" th:if="${errorDistrict}"
+                                                     th:text="${errorDistrict}">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-sm-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Xã/Phường</label>
+                                                <select class="form-control" name="xa" id="ward" onkeyup="validWard()">
+                                                    <option value="" data-id="">Chọn Xã/Phường</option>
+                                                </select>
+                                                <div class="text-danger" th:if="${errorWard}"
+                                                     th:text="${errorWard}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-sm-12">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="invoice-diachi-input">Địa Chỉ cụ thể
                                                     </label>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-sm-6 ms-auto">
-                                                <div class="row">
-                                                    <div class="col-lg-8">
-                                                        <div>
-                                                            <label for="shippingName" class="form-label text-muted text-uppercase fw-semibold">Shipping Address</label>
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <input type="text" class="form-control" id="shippingName" placeholder="Full Name" required >
-                                                            <div class="invalid-feedback">
-                                                                Please enter a full name
-                                                            </div>
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <textarea class="form-control" id="shippingAddress" rows="3" placeholder="Address" required></textarea>
-                                                            <div class="invalid-feedback">
-                                                                Please enter a address
-                                                            </div>
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <input type="text" class="form-control" data-plugin="cleave-phone" id="shippingPhoneno" placeholder="(123)456-7890" required >
-                                                            <div class="invalid-feedback">
-                                                                Please enter a phone number
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <input type="text" class="form-control" id="shippingTaxno" placeholder="Tax Number" required >
-                                                            <div class="invalid-feedback">
-                                                                Please enter a tax number
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                        </div>
-                                        <!--end row-->
-                                    </div>
-                                    <div class="card-body p-4">
-                                        <div class="table-responsive">
-                                            <table class="invoice-table table table-borderless table-nowrap mb-0">
-                                                <thead class="align-middle">
-                                                    <tr class="table-active">
-                                                        <th scope="col" style="width: 50px;">#</th>
-                                                        <th scope="col">
-                                                            Product Details
-                                                        </th>
-                                                        <th scope="col" style="width: 120px;">
-                                                            <div class="d-flex currency-select input-light align-items-center">
-                                                                Rate
-                                                                <select class="form-selectborder-0 bg-light" data-choices data-choices-search-false id="choices-payment-currency" onchange="otherPayment()">
-                                                                    <option value="$">($)</option>
-                                                                    <option value="£">(£)</option>
-                                                                    <option value="₹">(₹)</option>
-                                                                    <option value="€">(€)</option>
-                                                                </select>
-                                                            </div>
-                                                        </th>
-                                                        <th scope="col" style="width: 120px;">Quantity</th>
-                                                        <th scope="col" class="text-end" style="width: 180px;">Amount</th>
-                                                        <th scope="col" class="text-end" style="width: 105px;"></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="newlink">
-                                                    <tr id="1" class="product">
-                                                        <th scope="row" class="product-id">1</th>
-                                                        <td class="text-start">
-                                                            <div class="mb-2">
-                                                                <input type="text" class="form-control" id="productName-1" placeholder="Product Name" required >
-                                                                <div class="invalid-feedback">
-                                                                    Please enter a product name
-                                                                </div>
-                                                            </div>
-                                                            <textarea class="form-control" id="productDetails-1" rows="2" placeholder="Product Details"></textarea>
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" class="form-control product-price" id="productRate-1" step="0.01" placeholder="0.00" required >
-                                                            <div class="invalid-feedback">
-                                                                Please enter a rate
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="input-step">
-                                                                <button type="button" class='minus'>–</button>
-                                                                <input type="number" class="product-quantity" id="product-qty-1" value="0" readonly>
-                                                                <button type="button" class='plus'>+</button>
-                                                            </div>
-                                                        </td>
-                                                        <td class="text-end">
-                                                            <div>
-                                                                <input type="text" class="form-control product-line-price" id="productPrice-1" placeholder="$0.00" readonly >
-                                                            </div>
-                                                        </td>
-                                                        <td class="product-removal">
-                                                            <a href="javascript:void(0)" class="btn btn-danger">Delete</a>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                                <tbody>
-                                                    <tr id="newForm" style="display: none;"><td class="d-none" colspan="5"><p>Add New Form</p></td></tr>
-                                                    <tr>
-                                                        <td colspan="5">
-                                                            <a href="javascript:new_link()" id="add-item" class="btn btn-soft-secondary fw-medium"><i class="ri-add-fill me-1 align-bottom"></i> Add Item</a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="border-top border-top-dashed mt-2">
-                                                        <td colspan="3"></td>
-                                                        <td colspan="2" class="p-0">
-                                                            <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <th scope="row">Sub Total</th>
-                                                                        <td style="width:150px;">
-                                                                            <input type="text" class="form-control" id="cart-subtotal" placeholder="$0.00" readonly >
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th scope="row">Estimated Tax (12.5%)</th>
-                                                                        <td>
-                                                                            <input type="text" class="form-control" id="cart-tax" placeholder="$0.00" readonly >
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th scope="row">Discount <small class="text-muted">(VELZON15)</small></th>
-                                                                        <td>
-                                                                            <input type="text" class="form-control" id="cart-discount" placeholder="$0.00" readonly >
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th scope="row">Shipping Charge</th>
-                                                                        <td>
-                                                                            <input type="text" class="form-control" id="cart-shipping" placeholder="$0.00" readonly >
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr class="border-top border-top-dashed">
-                                                                        <th scope="row">Total Amount</th>
-                                                                        <td>
-                                                                            <input type="text" class="form-control" id="cart-total" placeholder="$0.00" readonly >
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                            <!--end table-->
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            <!--end table-->
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col-lg-4">
-                                                <div class="mb-2">
-                                                    <label for="choices-payment-type" class="form-label text-muted text-uppercase fw-semibold">Payment Details</label>
-                                                    <select class="form-control" data-choices data-choices-search-false data-choices-removeItem id="choices-payment-type">
-                                                        <option value="">Payment Method</option>
-                                                        <option value="Mastercard">Mastercard</option>
-                                                        <option value="Credit Card">Credit Card</option>
-                                                        <option value="Visa">Visa</option>
-                                                        <option value="Paypal">Paypal</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-2">
-                                                    <input class="form-control" type="text" id="cardholderName" placeholder="Card Holder Name">
-                                                </div>
-                                                <div class="mb-2">
-                                                    <input class="form-control" type="text" id="cardNumber" placeholder="xxxx xxxx xxxx xxxx">
-                                                </div>
-                                                <div>
-                                                    <input class="form-control " type="text" id="amountTotalPay" placeholder="$0.00" readonly >
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                        </div>
-                                        <!--end row-->
-                                        <div class="mt-4">
-                                            <label for="exampleFormControlTextarea1" class="form-label text-muted text-uppercase fw-semibold">NOTES</label>
-                                            <textarea class="form-control alert alert-warning" id="exampleFormControlTextarea1" placeholder="Notes" rows="2" required>All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or credit card or direct payment online. If account is not paid within 7 days the credits details supplied as confirmation of work undertaken will be charged the agreed quoted fee noted above.</textarea>
-                                        </div>
-                                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                            <button type="submit" class="btn btn-success"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
-                                            <a href="" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download Invoice</a>
-                                            <a href="" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <!--end col-->
-                    </div>
-                    <!--end row-->
+                                                <input type="text" class="form-control" name="diaChiCT" id="invoice-diachi-input"
+                                                       placeholder="địa chỉ cụ thể ..."  onkeyup="validAddress()"
+                                                       >
+                                                <div class="text-danger" th:if="${errorAddress}"
+                                                     th:text="${errorAddress}">
 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end col -->
+                            </div>
+                            <!-- end row -->
+                        </div>
                 </div>
-                <!-- container-fluid -->
+                <!-- end card -->
+                <div class="text-end mb-3">
+                    <a th:href="@{/admin/invoice}" class="btn btn-danger w-sm">Trở lại</a>
+                    <button type="button" class="btn btn-success w-sm" onclick="showConfirmPopup()">Thêm mới</button>
+                </div>
+                </form>
+                <!-- end col -->
             </div>
-            <!-- End Page-content -->
-             </div>
-        <!-- end main content-->
+            <!--end row-->
+
+        </div>
+        <!-- container-fluid -->
+    </div>
+    <!-- End Page-content -->
+    </div>
+    <!-- end main content-->
     </div>
     <!-- END layout-wrapper -->
-<div th:replace="admin/fragments/chat::chat"></div>
+    <div th:replace="admin/fragments/chat::chat"></div>
     <div th:replace="admin/fragments/themeSettings::themeSettings"></div>
     <div th:replace="admin/fragments/script::script"></div>
 </body>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.23.0/axios.min.js"></script>
+<script th:inline="javascript">
+    function showConfirmPopup() {
+        swal.fire({
+            title: "Do you want to save the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('create-form').submit();
+            }
+
+        });
+    }
+</script>
+<script th:inline="javascript">
+    function validName() {
+        var nameInput = document.getElementById('invoice-name-input');
+        var errorName = document.getElementById('errorName');
+
+        nameInput.addEventListener('input', function () {
+            if (nameInput.value.trim() !== '') {
+                errorName.style.display = 'none';
+            } else {
+                errorName.style.display = 'block';
+            }
+        });
+    }
+
+    function validPhone() {
+        var phoneInput = document.getElementById('invoice-phone-input');
+        var errorPhone = document.getElementById('errorPhone');
+
+        phoneInput.addEventListener('input', function () {
+            if (phoneInput.value.trim() !== '') {
+                errorPhone.style.display = 'none';
+            } else {
+                errorPhone.style.display = 'block';
+            }
+        });
+    }
+
+    function validEmail() {
+        var emailInput = document.getElementById('invoice-email-input');
+        var errorEmail = document.getElementById('errorEmail');
+
+        if (emailInput.value.trim() !== '') {
+            errorEmail.style.display = 'none';
+        } else {
+            errorEmail.style.display = 'block';
+        }
+
+    }
+
+    function validBirthday() {
+        var birthdayInput = document.getElementById('invoice-birthday-input');
+        var errorBirthday = document.getElementById('errorBirthday');
+
+        if (birthdayInput.value.trim() !== '') {
+            errorBirthday.style.display = 'none';
+        } else {
+            errorBirthday.style.display = 'block';
+        }
+    }
+    function validAddress() {
+        var addressInput = document.getElementById('invoice-address-input');
+        var errorAddress = document.getElementById('errorAddress');
+
+        if (addressInput.value.trim() !== '') {
+            errorAddress.style.display = 'none';
+        } else {
+            errorAddress.style.display = 'block';
+        }
+    }
+    function validProvince() {
+        var provinceInput = document.getElementById('invoice-address-input');
+        var errorProvince = document.getElementById('errorProvince');
+
+        if (provinceInput.value.trim() !== '') {
+            errorProvince.style.display = 'none';
+        } else {
+            errorProvince.style.display = 'block';
+        }
+    }
+    function validDistrict() {
+        var districtInput = document.getElementById('invoice-district-input');
+        var errorDistrict = document.getElementById('errorDistrict');
+
+        if (addressInput.value.trim() !== '') {
+            errorDistrict.style.display = 'none';
+        } else {
+            errorDistrict.style.display = 'block';
+        }
+    }
+    function validWard() {
+        var wardInput = document.getElementById('invoice-ward-input');
+        var errorWard = document.getElementById('errorWard');
+
+        if (wardInput.value.trim() !== '') {
+            errorWard.style.display = 'none';
+        } else {
+            errorWard.style.display = 'block';
+        }
+    }
+
+    const host = "https://online-gateway.ghn.vn/shiip/public-api/master-data/province";
+    const districtHost = "https://online-gateway.ghn.vn/shiip/public-api/master-data/district";
+    const wardHost = "https://online-gateway.ghn.vn/shiip/public-api/master-data/ward";
+    const token = "92b43f7d-dee6-11ee-a2c1-ca2feb4b63fa";
+
+    $(document).ready(function () {
+        const provinceDropdown = $("#province");
+
+        axios.get(host, {
+            headers: {
+                'Content-Type': 'application/json',
+                'token': token,
+            }
+        })
+            .then(response => {
+                const provinces = response.data.data;
+
+                provinces.forEach(province => {
+                    provinceDropdown.append(`<option value="${province.ProvinceName}" data-id="${province.ProvinceID}">${province.ProvinceName}</option>`);
+                });
+
+            })
+            .catch(error => {
+                console.error('Error fetching GHN Provinces:', error);
+            });
+    });
+
+
+    function getDistricts() {
+        const selectedProvince = $("#province option:selected");
+        const selectedProvinceId = selectedProvince.data("id");
+        const selectedProvinceName = selectedProvince.val();
+        const districtDropdown = $("#district");
+
+
+        districtDropdown.empty();
+        districtDropdown.append(`<option value="" data-id="">Chọn quận</option>`);
+
+
+        if (!selectedProvinceId) {
+            return;
+        }
+
+        axios.get(`${districtHost}?province_id=${selectedProvinceId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'token': token,
+            }
+        })
+            .then(response => {
+                const districts = response.data.data;
+
+                districts.forEach(district => {
+                    districtDropdown.append(`<option value="${district.DistrictName}" data-id="${district.DistrictID}">${district.DistrictName}</option>`);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching GHN Districts:', error);
+            });
+    }
+
+
+    function getWards() {
+        const selectedDistrict = $("#district option:selected");
+        const selectedDistrictId = selectedDistrict.data("id");
+        const selectedDistrictName = selectedDistrict.val();
+        const wardDropdown = $("#ward");
+
+
+        wardDropdown.empty();
+        wardDropdown.append(`<option value="" data-id="">Chọn phường/xã</option>`);
+
+
+        if (!selectedDistrictId) {
+            return;
+        }
+
+
+        axios.get(`${wardHost}?district_id=${selectedDistrictId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'token': token,
+            }
+        })
+            .then(response => {
+                const wards = response.data.data;
+
+                wards.forEach(ward => {
+                    wardDropdown.append(`<option value="${ward.WardName}" data-id="${ward.WardID}">${ward.WardName}</option>`);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching GHN Wards:', error);
+            });
+    }
+</script>
+<script th:if="${message == true}">
+    swal.fire("Saved!", "", "success");
+</script>
+<script th:if="${message == false}">
+    swal.fire("Changes have not been saved!", "", "error");
+</script>
+
 </html>

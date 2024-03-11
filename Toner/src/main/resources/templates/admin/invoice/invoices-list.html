@@ -391,8 +391,8 @@
                                             <button class="btn btn-danger btn-icon" id="remove-actions"
                                                     onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i>
                                             </button>
-<!--                                            <a href="invoices-create.html" class="btn btn-primary"><i-->
-<!--                                                    class="ri-add-line align-bottom me-1"></i> Create Invoice</a>-->
+                                            <a class="btn btn-primary w-100 add-btn" th:href="@{/admin/invoice/add}">
+                                                    Create Invoice</a>
                                         </div>
                                     </div>
                                 </div>
@@ -723,6 +723,7 @@
         else if (pageNumber !== undefined && keyword !== ''  && gender !=="-1" ) {
             url = "/api/admin/invoice/page/search/"+  pageNumber+ "/" + keyword+ "/" + gender;
             console.log(url);
+            console.log(5);
             console.log(5);
         }
 
