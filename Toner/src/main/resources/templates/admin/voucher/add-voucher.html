@@ -21,7 +21,7 @@
                                 <input th:field="*{id}" type="hidden" class="form-control">
 
                                 <label class="lb-form">Tên voucher</label>
-                                <input th:field="*{tenKhuyenMai}" type="text" class="form-control">
+                                <input th:field="*{tenKhuyenMai}" required type="text" class="form-control">
                                 <p class="text-danger" th:if="${errorName}" th:text="${errorName}" />
 
                                 <label class="lb-form">Giá trị giảm</label>

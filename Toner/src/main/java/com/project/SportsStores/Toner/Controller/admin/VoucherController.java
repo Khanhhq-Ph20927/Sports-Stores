@@ -63,6 +63,12 @@ public class VoucherController {
                 model.addAttribute("errorName", "Tên voucher này đã tồn tại");
             }
         }
+        else{
+            if (voucherRepository.findByName(voucher.getTenKhuyenMai()).isPresent()) {
+                isValid = true;
+                model.addAttribute("errorName", "Tên voucher này đã tồn tại");
+            }
+        }
         if (voucher.getGiaTriGiam() < 0) {
             isValid = true;
             model.addAttribute("errorGiaTriGiam", "Giá trị giảm không được nhỏ hơn 0");
@@ -70,12 +76,7 @@ public class VoucherController {
             isValid = true;
             model.addAttribute("errorGiaTriGiam", "Giá trị giảm phải nhỏ hơn 50%");
         }
-        else{
-            if (voucherRepository.findByName(voucher.getTenKhuyenMai()).isPresent()) {
-                isValid = true;
-                model.addAttribute("errorName", "Tên voucher này đã tồn tại");
-            }
-        }
+
         if(isValid){
             return "admin/voucher/add-voucher";
         }
