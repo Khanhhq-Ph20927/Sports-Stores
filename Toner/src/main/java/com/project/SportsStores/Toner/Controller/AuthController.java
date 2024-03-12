@@ -30,6 +30,12 @@ public class AuthController {
         return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
     }
 
+//    @GetMapping("/login")
+//    public String loginView(@RequestBody AuthRequest authenticationRequest) {
+//        return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
+//    }
+
+
     @GetMapping("/test")
     public List<NhanVien> test() {
         return nvrp.findAll();
