@@ -12,70 +12,67 @@
 <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/js/toastr.min.js"></script>
-    <body>
+<body>
 
-        <section class="auth-page-wrapper position-relative bg-light min-vh-100 d-flex align-items-center justify-content-between">
-            <div class="w-100">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-6">
-                            <div class="auth-card mx-lg-3">
-                                <div class="card border-0 mb-0">
-                                    <div class="card-header bg-primary border-0">
-                                        <div class="row">
-                                            <div class="col-lg-4 col-3">
-                                                <img src="../assets/images/auth/img-1.png" alt="" class="img-fluid">
-                                            </div>
-                                            <div class="col-lg-8 col-9">
-                                                <h1 class="text-white lh-base fw-lighter">Join Our Toner Store</h1>
-                                            </div>
-                                        </div>
+<section class="auth-page-wrapper position-relative bg-light min-vh-100 d-flex align-items-center justify-content-between">
+    <div class="w-100">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="auth-card mx-lg-3">
+                        <div class="card border-0 mb-0">
+                            <div class="card-header bg-primary border-0">
+                                <div class="row">
+                                    <div class="col-lg-4 col-3">
+                                        <img src="../assets/images/auth/img-1.png" alt="" class="img-fluid">
                                     </div>
-                                    <div class="card-body">
-                                        <p class="text-muted fs-15">Sign in to continue to Toner.</p>
-                                        <div class="p-2">
-                                            <form action="javascript:login()">
-                
-                                                <div class="mb-3">
-                                                    <label for="username" class="form-label">Username</label>
-                                                    <input type="text" class="form-control" id="username" placeholder="Enter username">
-                                                </div>
-                
-                                                <div class="mb-3">
-                                                    <div class="float-end">
-                                                        <a href="auth-pass-reset-basic" class="text-muted">Forgot password?</a>
-                                                    </div>
-                                                    <label class="form-label" for="password">Password</label>
-                                                    <div class="position-relative auth-pass-inputgroup mb-3">
-                                                        <input type="password" class="form-control pe-5 password-input" placeholder="Enter password" id="password">
-                                                    </div>
-                                                </div>
-                
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="remembercheck">
-                                                    <label class="form-check-label" for="remembercheck">Remember me</label>
-                                                </div>
-                
-                                                <div class="mt-4">
-                                                    <button class="btn btn-primary w-100" type="submit">Sign In</button>
-                                                </div>
-                
-                                            </form>
-                
-                                            <div class="text-center mt-5">
-                                                <p class="mb-0">Don't have an account ? <a href="auth-signup-basic" class="fw-semibold text-secondary text-decoration-underline"> SignUp</a> </p>
-                                            </div>
-                                        </div>
+                                    <div class="col-lg-8 col-9">
+                                        <h1 class="text-white lh-base fw-lighter">Join Our Toner Store</h1>
                                     </div>
                                 </div>
                             </div>
-                        </div><!--end col-->
-                    </div><!--end row-->
-                </div><!--end container-->
-            </div>
-        </section>
-        <div th:replace="auth/fragments/script::script"></div>
-    </body>
+                            <div class="card-body">
+                                <p class="text-muted fs-15">Sign in to continue to Toner.</p>
+                                <div class="p-2">
+                                    <form action="javascript:login()">
+
+                                        <div class="mb-3">
+                                            <label for="username" class="form-label">Username</label>
+                                            <input type="text" class="form-control" id="username" placeholder="Enter username">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <div class="float-end">
+                                                <a href="auth-pass-reset-basic" class="text-muted">Forgot password?</a>
+                                            </div>
+                                            <label class="form-label" for="password">Password</label>
+                                            <div class="position-relative auth-pass-inputgroup mb-3">
+                                                <input type="password" class="form-control pe-5 password-input" placeholder="Enter password" id="password">
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="mt-4">
+                                            <button class="btn btn-primary w-100" type="submit">Sign In</button>
+                                        </div>
+
+                                    </form>
+
+                                    <div class="text-center mt-5">
+                                        <p class="mb-0">Don't have an account ? <a href="auth-signup-basic" class="fw-semibold text-secondary text-decoration-underline"> SignUp</a> </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--end col-->
+            </div><!--end row-->
+        </div><!--end container-->
+    </div>
+</section>
+<div th:replace="auth/fragments/script::script"></div>
+</body>
 <script src="https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/cjs/index.min.js"></script>
 
 <script>
@@ -99,14 +96,7 @@
         if (response.status < 300) {
 
             localStorage.setItem("refreshToken", result.refreshToken);
-            var remembercheck = document.getElementById("remembercheck").checked
-            alert(remembercheck)
-            if(remembercheck){
-                localStorage.setItem("token", result.token);
-            }
-            else{
-                sessionStorage.setItem("token", result.token);
-            }
+            localStorage.setItem("token", result.token);
             toastr.success("Đăng nhập thành công")
             await new Promise(r => setTimeout(r, 1000));
             var role = jwtDecode(result.token).roles[0];

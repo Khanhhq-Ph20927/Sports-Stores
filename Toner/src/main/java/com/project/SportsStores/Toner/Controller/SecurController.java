@@ -43,13 +43,13 @@ public class SecurController {
             if(nhanVien.isEmpty()){
                 return new ResponseEntity<>("Không tìm thấy tài khoản", HttpStatus.EXPECTATION_FAILED);
             }
-            mailService.sendEmail(email, "Quên mật khẩu","Cảm ơn bạn đã tin tưởng và xử dụng dịch vụ của chúng tôi:<br>" +
-                    "Chúng tôi đã nhận được yêu cầu quên mật khẩu của bạn<br><br>" +
+            mailService.sendEmail(email, "Quên mật khẩu","<h2>TONER</h2>:<br>" +
+                    "Chúng tôi đã nhận được yêu cầu quên mật khẩu của bạn<br>Mật khẩu của bạn là:<br><br>" +
                     "<a style=\"background-color: #2f5fad; padding: 10px; color: #fff; font-size: 18px; font-weight: bold;\">"+nhanVien.get().getMatKhau()+"</a>",false, true);
         }
         else{
-            mailService.sendEmail(email, "Quên mật khẩu","Cảm ơn bạn đã tin tưởng và xử dụng dịch vụ của chúng tôi:<br>" +
-                    "Chúng tôi đã nhận được yêu cầu quên mật khẩu của bạn<br><br>" +
+            mailService.sendEmail(email, "Quên mật khẩu","<h2>TONER</h2>:<br>" +
+                    "Chúng tôi đã nhận được yêu cầu quên mật khẩu của bạn<br>Mật khẩu của bạn là:<br><br>" +
                     "<a style=\"background-color: #2f5fad; padding: 10px; color: #fff; font-size: 18px; font-weight: bold;\">"+khachHang.get().getMatKhau()+"</a>",false, true);
         }
         return new ResponseEntity<>("success", HttpStatus.OK);
@@ -71,7 +71,8 @@ public class SecurController {
         khachHang.setNgaySinh(new Date(System.currentTimeMillis()));
         khachHang.setLoaiKhachHang(0);
         khachHang.setGioiTinh(false);
-//        khachHang.setMaKH(String.valueOf(System.currentTimeMillis()));
+        Long maxId = khachHangRepository.findMaxId();
+        khachHang.setMaKH(String.valueOf("KH"+(maxId+1)));
         KhachHang result = khachHangRepository.save(khachHang);
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }

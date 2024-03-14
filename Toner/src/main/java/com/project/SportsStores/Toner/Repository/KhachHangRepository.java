@@ -51,4 +51,7 @@ public interface KhachHangRepository extends JpaRepository<KhachHang,Long> {
 
     @Query("Select kh from KhachHang kh where kh.sdt = ?1")
     Optional<KhachHang> findByPhone(String phone);
+
+    @Query(value = "select top 1 k.id from KhachHang k order by k.id desc", nativeQuery = true)
+    public Long findMaxId();
 }
