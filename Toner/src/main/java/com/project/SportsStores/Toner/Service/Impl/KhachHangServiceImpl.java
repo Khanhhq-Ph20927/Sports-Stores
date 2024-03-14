@@ -58,10 +58,6 @@ public class KhachHangServiceImpl implements KhachHangService {
         return rp.filterByGenderNoSearch(pageable,gender);
     }
 
-    @Override
-    public Page<KhachHang> fillterByDateNoSearch(Pageable pageable, LocalDateTime startDate, LocalDateTime endDate) {
-        return rp.findAllByNgayTaoBetween(pageable,startDate,endDate);
-    }
 
     @Override
     public Page<KhachHang> fillterByGenderAndSearch(Pageable pageable, String keyword, boolean gender) {

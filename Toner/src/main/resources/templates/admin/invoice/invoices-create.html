@@ -215,11 +215,11 @@
 <script th:inline="javascript">
     function showConfirmPopup() {
         swal.fire({
-            title: "Do you want to save the changes?",
+            title: "Bạn có muốn lưu  không?",
             showDenyButton: true,
             showCancelButton: true,
-            confirmButtonText: "Save",
-            denyButtonText: `Don't save`
+            confirmButtonText: "Có",
+            denyButtonText: `Không`
         }).then((result) => {
             if (result.isConfirmed) {
                 document.getElementById('create-form').submit();
@@ -304,7 +304,7 @@
         var districtInput = document.getElementById('invoice-district-input');
         var errorDistrict = document.getElementById('errorDistrict');
 
-        if (addressInput.value.trim() !== '') {
+        if (districtInput.value.trim() !== '') {
             errorDistrict.style.display = 'none';
         } else {
             errorDistrict.style.display = 'block';
@@ -355,10 +355,13 @@
         const selectedProvinceId = selectedProvince.data("id");
         const selectedProvinceName = selectedProvince.val();
         const districtDropdown = $("#district");
-
+        const wardDropdown = $("#ward");
 
         districtDropdown.empty();
         districtDropdown.append(`<option value="" data-id="">Chọn quận</option>`);
+
+        wardDropdown.empty();
+        wardDropdown.append(`<option value="" data-id="">Chọn phường/xã</option>`);
 
 
         if (!selectedProvinceId) {

@@ -28,8 +28,6 @@ public interface KhachHangService {
 
     Page<KhachHang> fillterByGenderNoSearch(Pageable pageable,boolean gender);
 
-    Page<KhachHang> fillterByDateNoSearch(Pageable pageable, LocalDateTime startDate, LocalDateTime endDate);
-
     Page<KhachHang> fillterByGenderAndSearch(Pageable pageable,String keyword,boolean gender);
 
 

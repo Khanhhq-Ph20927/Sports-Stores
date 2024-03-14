@@ -59,6 +59,4 @@ public interface KhachHangRepository extends JpaRepository<KhachHang,Long> {
     @Query("Select kh from KhachHang kh WHERE (:keyword is null or  kh.sdt LIKE %:keyword% or kh.maKH like  %:keyword% or kh.hoTen like  %:keyword%or kh.email LIKE %:keyword%) and kh.gioiTinh = :gender")
     Page<KhachHang> fillterByGenderAnSearch(Pageable pageable, @Param("keyword") String keyword, @Param("gender") boolean gender);
 
-
-    Page<KhachHang> findAllByNgayTaoBetween(Pageable pageable, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime  endDate);
 }
