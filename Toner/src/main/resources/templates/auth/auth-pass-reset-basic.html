@@ -71,6 +71,8 @@
         });
         if (response.status < 300) {
             toastr.success("Thành công, hãy kiểm tra email của bạn")
+            await new Promise(r => setTimeout(r, 1000));
+            window.location.href = '/auth-signin-basic'
         }
         if (response.status == 417) {
             toastr.warning("Không tìm thấy tài khoản");
