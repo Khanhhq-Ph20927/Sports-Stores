@@ -104,15 +104,31 @@
         });
         var result = await response.json();
         if (response.status < 300) {
-            toastr.success("Đăng ký thành công")
-            await new Promise(r => setTimeout(r, 1000));
-            window.location.href = '/auth-signin-basic'
+            swal({
+                    title: "Thông báo",
+                    text: "Đăng ký thành công",
+                    type: "success"
+                }, function(){
+                window.location.href = '/auth-signin-basic'
+            });
         }
         else if (response.status == 417) {
-            toastr.warning(result.defaultMessage);
+            swal({
+                title: "Thông báo",
+                text: result.defaultMessage,
+                type: "error"
+            }, function(){
+
+            });
         }
         else{
-            toastr.warning("Đăng ký thất bại");
+            swal({
+                title: "Thông báo",
+                text: "Đăng ký thất bại",
+                type: "error"
+            }, function(){
+
+            });
         }
     }
 </script>

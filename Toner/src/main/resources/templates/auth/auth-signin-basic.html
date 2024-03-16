@@ -97,8 +97,6 @@
 
             localStorage.setItem("refreshToken", result.refreshToken);
             localStorage.setItem("token", result.token);
-            toastr.success("Đăng nhập thành công")
-            await new Promise(r => setTimeout(r, 1000));
             var role = jwtDecode(result.token).roles[0];
             if(role == "CUSTOMER"){
                 window.location.href = '/'
@@ -109,7 +107,12 @@
 
         }
         if (response.status > 300) {
-            toastr.warning("Đăng nhập thất bại");
+            swal({
+                title: "Thông báo",
+                text: "Đăng nhập thất bại",
+                type: "error"
+            }, function(){
+            });
         }
     }
 </script>
