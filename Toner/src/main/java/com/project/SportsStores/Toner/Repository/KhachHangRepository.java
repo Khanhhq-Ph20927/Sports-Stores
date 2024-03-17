@@ -10,12 +10,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface KhachHangRepository extends JpaRepository<KhachHang,Long> {
-
     @Override
     <S extends KhachHang> S saveAndFlush(S entity);
 
@@ -45,4 +46,17 @@ public interface KhachHangRepository extends JpaRepository<KhachHang,Long> {
 
     @Query("Select kh from KhachHang kh where kh.email = :email")
     Optional<KhachHang> getByEmail(@Param("email")String email);
+
+    @Query("Select kh from KhachHang kh WHERE kh.sdt LIKE %:keyword% or kh.maKH like  %:keyword% or kh.hoTen like  %:keyword% " +
+            "or kh.email LIKE %:keyword% " )
+    Page<KhachHang> searchKhachHang(@Param("keyword") String keyword, Pageable pageable);
+
+
+    @Query("SELECT kh FROM KhachHang kh WHERE kh.gioiTinh = :gender")
+    Page<KhachHang> filterByGenderNoSearch(Pageable pageable,
+                                      @Param("gender") boolean gender);
+
+    @Query("Select kh from KhachHang kh WHERE (:keyword is null or  kh.sdt LIKE %:keyword% or kh.maKH like  %:keyword% or kh.hoTen like  %:keyword%or kh.email LIKE %:keyword%) and kh.gioiTinh = :gender")
+    Page<KhachHang> fillterByGenderAnSearch(Pageable pageable, @Param("keyword") String keyword, @Param("gender") boolean gender);
+
 }
