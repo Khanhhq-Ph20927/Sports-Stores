@@ -10,6 +10,8 @@ public interface SanPhamChiTietService {
 
     Page<SanPhamChiTiet> getSpct(Pageable pageable,String id);
 
+    List<SanPhamChiTiet> getAll();
+
     void save(SanPhamChiTiet spct);
 
     SanPhamChiTiet getById(String id);
@@ -18,7 +20,11 @@ public interface SanPhamChiTietService {
 
     List<SanPhamChiTiet> getListByIdSp(String id);
 
-    Page<SanPhamChiTiet> sanPhamChiTietBanTaiQuay(String search,Pageable pageable);
+    Page<SanPhamChiTiet> searchAndFilter(int page,String keyword,String color,String size);
 
     Page<SanPhamChiTiet> pagination(Pageable pageable);
+
+    List<SanPhamChiTiet> findListProductByColor(String id,String ms);
+
+    SanPhamChiTiet findIdProductByColorAndSize(String id,String ms,String size);
 }

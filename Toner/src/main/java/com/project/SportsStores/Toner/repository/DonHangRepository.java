@@ -35,6 +35,9 @@ public interface DonHangRepository  extends JpaRepository<DonHang,Long> {
     @Query("SELECT dh FROM DonHang dh WHERE dh.trangThai = 0")
     Page<DonHang> getAllByStatusEquals0(Pageable pageable);
 
+    @Query("SELECT dh FROM DonHang dh WHERE dh.trangThai = :status")
+    Page<DonHang> filterByStatus(@Param("status") int status,Pageable pageable);
+
     @Query("SELECT dh FROM DonHang dh WHERE dh.maDonHang LIKE %:keyword% or dh.nv.hoTen like  %:keyword%" )
     Page<DonHang> searchDonHang(@Param("keyword") String keyword, Pageable pageable);
 }

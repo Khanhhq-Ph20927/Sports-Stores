@@ -7,7 +7,7 @@ public class DonHangChiTietDTO {
 
     private String idDonHang;
 
-    private String idSanPham;
+    private String idSanPhamChiTiet;
 
     private String soLuong;
 }

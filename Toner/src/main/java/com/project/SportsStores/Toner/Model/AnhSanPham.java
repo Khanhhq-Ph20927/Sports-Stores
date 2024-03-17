@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name="SanPhamChiTiet")
+@Table(name="AnhSanPham")
 @Data
 @Getter
 @Setter
@@ -20,6 +20,6 @@ public class AnhSanPham {
     private String linkAnh;
 
     @ManyToOne
-    @JoinColumn(name="IdSanPham")
-    private SanPham sp;
+    @JoinColumn(name="IdSanPhamChiTiet")
+    private SanPhamChiTiet spct;
 }

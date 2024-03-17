@@ -1,0 +1,22 @@
+-Màn sản phẩm:
++show
++add to cart
++search
++search add to cart
+-Màn cart modal:
++show
++Total
++delete
++update quantity
+-Màn cart:
++show
++Total
++delete
++update quantity
++use voucher
+@ResquestBody List<DTO> listDTO id ms size
+
+{
+    "listColors": ["1", "2", "3"],
+    "listSizes": null
+}

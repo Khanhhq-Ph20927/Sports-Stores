@@ -18,4 +18,6 @@ public interface DonHangService {
     void save(DonHang dh);
 
     Page<DonHang> page(Pageable pageable);
+
+    Page<DonHang> filterByStatus(Pageable pageable,int status);
 }

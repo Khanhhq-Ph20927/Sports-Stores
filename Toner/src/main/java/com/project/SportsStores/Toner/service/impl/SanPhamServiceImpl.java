@@ -105,4 +105,51 @@ public class SanPhamServiceImpl implements SanPhamService {
     public Page<SanPham> filterByStatusAndCollectionNoSearch(Pageable pageable, String status, String collection) {
         return rp.filterProductByStatusAndCollection(pageable,status,collection);
     }
+
+    @Override
+    public Page<SanPham> pageClient(Pageable pageable) {
+        return rp.pageClient(pageable);
+
+    }
+
+    @Override
+    public Page<SanPham> price(Pageable pageable, String priceStart, String priceEnd) {
+        return rp.price(pageable, priceStart, priceEnd);
+    }
+
+    @Override
+    public Page<SanPham> priceAndFilterColor(Pageable pageable, String priceStart, String priceEnd, List<Integer> color) {
+        return rp.priceAndFilterColor(pageable, priceStart, priceEnd, color);
+    }
+
+    @Override
+    public Page<SanPham> priceAndFilterSize(Pageable pageable, String priceStart, String priceEnd, List<String> size) {
+        return rp.priceAndFilterSize(pageable, priceStart, priceEnd, size);
+    }
+
+    @Override
+    public Page<SanPham> priceAndFilterColorAndSize(Pageable pageable, String priceStart, String priceEnd, List<Integer> color, List<String> size) {
+        return rp.priceAndFilterColorAndSize(pageable, priceStart, priceEnd, color, size);
+    }
+
+    @Override
+    public Page<SanPham> filterColor(Pageable pageable, List<Integer> color) {
+        return rp.filterColor(pageable, color);
+    }
+
+    @Override
+    public Page<SanPham> filterSize(Pageable pageable, List<String> size) {
+        return rp.filterSize(pageable, size);
+    }
+
+    @Override
+    public Page<SanPham> filterColorAndSize(Pageable pageable, List<Integer> color, List<String> size) {
+
+        return rp.filterColorAndSize(pageable, color, size);
+    }
+
+    @Override
+    public Integer priceMax() {
+        return rp.priceMax();
+    }
 }

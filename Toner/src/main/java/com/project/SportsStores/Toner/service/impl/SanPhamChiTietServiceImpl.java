@@ -47,20 +47,47 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
     }
 
     @Override
-    public Page<SanPhamChiTiet> sanPhamChiTietBanTaiQuay(String search, Pageable pageable) {
-        Page<SanPhamChiTiet> page = null;
-        if (search == null) {
-            Sort sort = Sort.by(Sort.Direction.DESC, "ngayTao");
-            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-            page = rp.findAll(pageable);
+    public List<SanPhamChiTiet> getAll() {
+        return rp.findAll();
+    }
+
+    @Override
+    public Page<SanPhamChiTiet> searchAndFilter(int page, String keyword, String color, String size) {
+        Pageable pageable = PageRequest.of(page, 5, Sort.by("ngayTao").descending());
+        Page<SanPhamChiTiet> pagination;
+        if (keyword == null && color == null && size == null) {
+            System.out.println("findAll");
+            pagination = rp.findAll(pageable);
+        } else if (keyword == null && color != null && size == null) {
+            pagination = rp.FilterByColor(color, pageable);
+        } else if (keyword == null && color == null && size != null) {
+            pagination = rp.FilterBySize(size, pageable);
+        } else if (keyword == null && color != null && size != null) {
+            pagination = rp.FilterByAll(color, size, pageable);
+        } else if (keyword != null && color == null && size == null) {
+            pagination = rp.search("%" + keyword + "%", pageable);
+        } else if (keyword != null && color != null && size == null) {
+            pagination = rp.searchAndFilterByColor("%" + keyword + "%", color,pageable);
+        } else if (keyword != null && color == null && size != null) {
+            pagination = rp.searchAndFilterBySize("%" + keyword + "%", size,pageable);
         } else {
-            page = rp.search("%" + search + "%", pageable);
+            pagination = rp.searchAndFilterAll("%" + keyword + "%", color, size,pageable);
         }
-        return page;
+        return pagination;
     }
 
     @Override
     public Page<SanPhamChiTiet> pagination(Pageable pageable) {
         return rp.findAll(pageable);
+    }
+
+    @Override
+    public List<SanPhamChiTiet> findListProductByColor(String id, String ms) {
+        return rp.findListProductByColor(id,ms);
+    }
+
+    @Override
+    public SanPhamChiTiet findIdProductByColorAndSize(String id, String ms, String size) {
+        return rp.findIdProductByColorAndSize(id,ms,size);
     }
 }

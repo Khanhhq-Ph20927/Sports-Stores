@@ -37,4 +37,7 @@ public interface DonHangChiTietRepository extends JpaRepository<DonHangChiTiet, 
 
     @Query("select dhct from DonHangChiTiet dhct where dhct.dh.id = :id")
     List<DonHangChiTiet> getByIdDHList(@Param("id") String id);
+
+    @Query("select dhct from DonHangChiTiet dhct where dhct.dh.id = :id")
+    Page<DonHangChiTiet> getPaginationByIdDHList(@Param("id") String id, Pageable pageable);
 }

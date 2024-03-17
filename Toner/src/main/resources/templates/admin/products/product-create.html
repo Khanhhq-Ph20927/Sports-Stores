@@ -1,7 +1,10 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
       data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
-<head th:replace="admin/fragments/head::head"></head>
+<head th:replace="admin/fragments/head::head">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
 <body>
 <!-- Begin page -->
 <div id="layout-wrapper">
@@ -35,8 +38,7 @@
                 </div>
                 <!-- end page title -->
 
-                <form id="createproduct-form" autocomplete="off" class="needs-validation" novalidate
-                      th:action="@{/api/admin/product/save_product}" method="post" th:object="${product}">
+                <form id="createproduct-form" autocomplete="off" class="needs-validation">
                     <div class="row">
                         <div class="col-xl-12 col-lg-8">
                             <div class="card">
@@ -61,11 +63,10 @@
                                             <div class="mb-3">
                                                 <label class="form-label" for="product-name-input">Tên Sản Phẩm</label>
                                                 <input type="text" class="form-control" id="product-name-input"
-                                                       placeholder="Nhập Tên Sản Phẩm" th:name="tenSP"
-                                                       onkeyup="validName()" th:value="${tenSP}">
+                                                       placeholder="Nhập Tên Sản Phẩm"
+                                                       onkeyup="validName()">
                                                 <br>
                                                 <span id="errorName" class="text-danger fw-bold"
-                                                      th:if="${errorName}" th:text="${errorName}"
                                                 ></span>
                                             </div>
                                         </div>
@@ -73,15 +74,14 @@
                                             <div class="md-3">
                                                 <label class="form-label">Thương Hiệu</label>
                                                 <select class="form-select mb-3" aria-label=".form-select-lg example"
-                                                        id="product-brand-input" th:name="thieu"
-                                                        onchange="validBrand()" >
+                                                        id="product-brand-input"
+                                                        onchange="validBrand()">
                                                     <option selected value="-1">Open this select menu</option>
-                                                    <option value="1" th:selected="${thieu == 1}">Local Brand 1</option>
-                                                    <option value="2" th:selected="${thieu == 2}">Local Brand 2</option>
-                                                    <option value="3" th:selected="${thieu == 3}">Local Brand 3</option>
+                                                    <option value="1">Local Brand 1</option>
+                                                    <option value="2">Local Brand 2</option>
+                                                    <option value="3">Local Brand 3</option>
                                                 </select>
-                                                <span id="errorBrand" class="text-danger fw-bold" th:if="${errorBrand}"
-                                                      th:text="${errorBrand}"></span>
+                                                <span id="errorBrand" class="text-danger fw-bold"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -92,15 +92,13 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Danh Mục</label>
                                                 <select class="form-select mb-3" aria-label=".form-select-lg example"
-                                                        th:name="danhMuc" id="product-collections-input"
+                                                        id="product-collections-input"
                                                         onchange="validCollections()">
                                                     <option selected value="-1">Open this select menu</option>
-                                                    <option value="0" th:selected="${danhMuc == 0}">Quần</option>
-                                                    <option value="1" th:selected="${danhMuc == 1}">Áo</option>
+                                                    <option value="0">Quần</option>
+                                                    <option value="1">Áo</option>
                                                 </select>
-                                                <span id="errorCollections" class="text-danger fw-bold"
-                                                      th:if="${errorCollections}"
-                                                      th:text="${errorCollections}"></span>
+                                                <span id="errorCollections" class="text-danger fw-bold"></span>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
@@ -108,14 +106,13 @@
                                                 <label class="form-label">Trạng Thái</label>
                                                 <div class="form-check mb-3">
                                                     <input class="form-check-input" type="radio" id="radioStatus1"
-                                                           value="0" th:name="trangThai" checked
-                                                           th:checked="${danhMuc == null or danhMuc == 0}">
+                                                           value="0" name="trangThai" checked>
                                                     <label class="form-check-label" for="radioStatus1">
                                                         Chưa Mở Bán
                                                     </label>
                                                     <br>
                                                     <input class="form-check-input" type="radio" id="radioStatus2"
-                                                           value="1" th:name="trangThai" th:checked="${trangThai == 1}">
+                                                           value="1" name="trangThai">
                                                     <label class="form-check-label" for="radioStatus2">
                                                         Đang Mở Bán
                                                     </label>
@@ -130,16 +127,14 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Nhà Cung Cấp</label>
                                                 <select class="form-select mb-3" aria-label=".form-select-lg example"
-                                                        id="product-provider-input" th:name="ncc"
+                                                        id="product-provider-input"
                                                         onchange="validProvider()">
                                                     <option selected value="-1">Open this select menu</option>
-                                                    <option value="1" th:selected="${ncc == 1}">Nhà Cung Cấp A</option>
-                                                    <option value="2" th:selected="${ncc == 2}">Nhà Cung Cấp B</option>
-                                                    <option value="3" th:selected="${ncc == 3}">Nhà Cung Cấp C</option>
+                                                    <option value="1">Nhà Cung Cấp A</option>
+                                                    <option value="2">Nhà Cung Cấp B</option>
+                                                    <option value="3">Nhà Cung Cấp C</option>
                                                 </select>
-                                                <span id="errorProvider" class="text-danger fw-bold"
-                                                      th:if="${errorProvider}"
-                                                      th:text="${errorProvider}"></span>
+                                                <span id="errorProvider" class="text-danger fw-bold"></span>
                                             </div>
                                         </div>
                                         <div class="col-lg-3 col-sm-6">
@@ -149,11 +144,10 @@
                                                     <span class="input-group-text" id="product-price-addon">VND</span>
                                                     <input type="text" class="form-control" id="product-price-input"
                                                            placeholder="Nhập Giá" aria-label="Price"
-                                                           aria-describedby="product-price-addon" th:name="donGia"
-                                                           required onkeyup="validPrice()" th:value="${donGia}">
+                                                           aria-describedby="product-price-addon"
+                                                           required onkeyup="validPrice()"/>
                                                 </div>
-                                                <span id="errorPrice" class="text-danger fw-bold" th:if="${errorPrice}"
-                                                      th:text="${errorPrice}"></span>
+                                                <span id="errorPrice" class="text-danger fw-bold"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -180,19 +174,166 @@
 <div th:replace="admin/fragments/script::script"></div>
 </body>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script th:inline="javascript">
-    function showConfirmPopup() {
-        swal.fire({
-            title: "Do you want to save the changes?",
-            showDenyButton: true,
-            showCancelButton: true,
-            confirmButtonText: "Save",
-            denyButtonText: `Don't save`
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('createproduct-form').submit();
-            }
+
+    function formatMoney(money) {
+        const VND = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
         });
+        return VND.format(money);
+    }
+
+    const Toast = swal.mixin({
+        toast: true,
+        position: "top-end",
+        iconColor: "white",
+        customClass: {
+            popup: "colored-toast",
+        },
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+    });
+
+    function getDataFromForm() {
+
+        var tenSP = document.getElementById('product-name-input').value;
+        var thieu = document.getElementById('product-brand-input').value;
+        var danhMuc = document.getElementById('product-collections-input').value;
+        var trangThai = document.querySelector('input[name="trangThai"]:checked').value;
+        var ncc = document.getElementById('product-provider-input').value;
+        var donGia = document.getElementById('product-price-input').value;
+
+        var formData = {
+            tenSP: tenSP,
+            thieu: thieu,
+            danhMuc: danhMuc,
+            trangThai: trangThai,
+            ncc: ncc,
+            donGia: donGia
+        };
+
+        return formData;
+    }
+
+    function showConfirmPopup() {
+
+        var data = getDataFromForm();
+
+        var isValid = 0;
+
+        var regex = /^[A-Za-z]/;
+
+        console.log(data);
+
+        if (data.tenSP === '') {
+            document.getElementById('errorName').innerText = 'Vui lòng điền tên!';
+            isValid += 1;
+        }
+        if (data.thieu === '-1') {
+            document.getElementById('errorBrand').innerText = 'Vui lòng chọn thương hiệu!';
+            isValid += 1;
+        }
+        if (data.ncc === '-1') {
+            document.getElementById('errorProvider').innerText = 'Vui lòng chọn nhà cung cấp!';
+            isValid += 1;
+        }
+        if (data.danhMuc === '-1') {
+            document.getElementById('errorCollections').innerText = 'Vui lòng chọn danh mục!';
+            isValid += 1;
+        }
+        if (data.donGia === '') {
+            document.getElementById('errorPrice').innerText = 'Vui lòng điền đơn giá!';
+            isValid += 1;
+        }
+        console.log(isValid);
+        if (isValid === 0) {
+            swal.fire({
+                title: "Bạn Có Muốn Thêm?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Có",
+                denyButtonText: `Không`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/api/admin/product/save_product',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(data),
+                        success: function (response) {
+                            console.log(response);
+                            if (response === 'success') {
+                                swal.fire({
+                                    icon: 'success',
+                                    title: "Thêm Thành Công!",
+                                    confirmButtonText: "Ok",
+                                }).then((result) => {
+                                    if (result.isConfirmed)
+                                        window.location.href = '/admin/product/product_list';
+                                });
+                            } else {
+                                for (i = 0; i < response.length; i++) {
+                                    if (response[i].statusText === 'failure') {
+                                        if (response[i].message === 'errorFormatName') {
+                                            if (regex.test(data.tenSP)) {
+                                                (async () => {
+                                                    await Toast.fire({
+                                                        icon: "error",
+                                                        title: "Tên tối thiếu 10 kí tự,tối đa 50 kí tự!",
+                                                    });
+                                                })();
+                                            } else {
+                                                (async () => {
+                                                    await Toast.fire({
+                                                        icon: "error",
+                                                        title: "Tên phải bắt đầu bằng chữ!",
+                                                    });
+                                                    await Toast.fire({
+                                                        icon: "error",
+                                                        title: "Tên tối thiếu 10 kí tự,tối đa 50 kí tự!",
+                                                    });
+                                                })();
+                                            }
+                                        }
+                                        if (response[i].message === 'errorFormatPrice') {
+                                            (async () => {
+                                                await Toast.fire({
+                                                    icon: "error",
+                                                    title: "Định dạng đơn giá không đúng!",
+                                                });
+                                            })();
+                                        }
+                                        if (response[i].message === 'errorPriceLessThan') {
+                                            (async () => {
+                                                await Toast.fire({
+                                                    icon: "error",
+                                                    title: "Đơn giá không dưới 70.000VND!",
+                                                });
+                                            })();
+                                        }
+                                        if (response[i].message === 'errorPriceMoreThan') {
+                                            (async () => {
+                                                await Toast.fire({
+                                                    icon: "error",
+                                                    title: "Đơn giá không quá 5.000.000VND!",
+                                                });
+                                            })();
+                                        }
+                                    }
+                                }
+                                // end loop for
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                }
+            });
+        }
     }
 </script>
 <script th:inline="javascript">

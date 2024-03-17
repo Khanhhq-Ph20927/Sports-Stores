@@ -43,5 +43,10 @@ public class DonHangServiceImpl implements DonHangService {
         return donHangRepositoty.findAll(pageable);
     }
 
+    @Override
+    public Page<DonHang> filterByStatus(Pageable pageable, int status) {
+        return donHangRepositoty.filterByStatus(status,pageable);
+    }
+
 
 }

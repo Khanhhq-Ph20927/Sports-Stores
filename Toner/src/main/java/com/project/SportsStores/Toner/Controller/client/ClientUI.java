@@ -6,6 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("")
 public class ClientUI {
+    @RequestMapping("/theme")
+    public String testTheme() {
+        return "client/Test-theme";
+    }
+
     @RequestMapping("")
     public String home() {
         return "client/index";

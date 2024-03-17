@@ -94,6 +94,40 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Long> {
     Page<SanPham> searchAndFilterProductByAll(@Param("keyword") String keyword, Pageable pageable,
                                               @Param("priceStart") String priceStart, @Param("priceEnd") String priceEnd,
                                               @Param("status") String status, @Param("collection") String collection);
+    //Query created by khanhhq
+    @Query("SELECT DISTINCT sp FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1")
+    Page<SanPham> pageClient(Pageable pageable);
 
+    //price
+    @Query("SELECT DISTINCT sp FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1 WHERE (sp.donGia <= :priceEnd and sp.donGia >= :priceStart)")
+    Page<SanPham> price(Pageable pageable, @Param("priceStart") String priceStart, @Param("priceEnd") String priceEnd);
+
+    //price+color
+    @Query("SELECT DISTINCT sp FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1 WHERE (sp.donGia <= :priceEnd and sp.donGia >= :priceStart)AND(spct.ms.id in :color)")
+    Page<SanPham> priceAndFilterColor(Pageable pageable, @Param("priceStart") String priceStart, @Param("priceEnd") String priceEnd, @Param("color") List<Integer> color);
+
+    //price+size
+    @Query("SELECT DISTINCT sp FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1 WHERE (sp.donGia <= :priceEnd and sp.donGia >= :priceStart)AND(spct.size in :size)")
+    Page<SanPham> priceAndFilterSize(Pageable pageable, @Param("priceStart") String priceStart, @Param("priceEnd") String priceEnd, @Param("size") List<String> size);
+
+    //price+color+size
+    @Query("SELECT DISTINCT sp FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1 WHERE (sp.donGia <= :priceEnd and sp.donGia >= :priceStart)AND(spct.ms.id in :color)AND(spct.size in :size)")
+    Page<SanPham> priceAndFilterColorAndSize(Pageable pageable, @Param("priceStart") String priceStart, @Param("priceEnd") String priceEnd, @Param("color") List<Integer> color, @Param("size") List<String> size);
+
+    //color
+    @Query("SELECT DISTINCT sp FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1 WHERE spct.ms.id in :color")
+    Page<SanPham> filterColor(Pageable pageable, @Param("color") List<Integer> color);
+
+    //size
+    @Query("SELECT DISTINCT sp FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1 WHERE spct.size in :size")
+    Page<SanPham> filterSize(Pageable pageable, @Param("size") List<String> size);
+
+    //color+size
+    @Query("SELECT DISTINCT sp FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1 WHERE (spct.ms.id in :color) AND (spct.size in :size)")
+    Page<SanPham> filterColorAndSize(Pageable pageable, @Param("color") List<Integer> color, @Param("size") List<String> size);
+
+    //Price max
+    @Query("Select MAX(sp.donGia) FROM SanPham sp INNER JOIN SanPhamChiTiet spct ON sp.id = spct.sp.id and sp.trangThai=1")
+    Integer priceMax();
 
 }

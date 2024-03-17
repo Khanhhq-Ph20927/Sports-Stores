@@ -10,4 +10,6 @@ public class SanPhamChiTietDTO {
     private String ms;
 
     private String sl;
+
+    private String imgSrc;
 }

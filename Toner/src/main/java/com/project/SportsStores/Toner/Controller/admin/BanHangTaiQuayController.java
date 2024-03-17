@@ -9,18 +9,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import com.project.SportsStores.Toner.Model.DonHang;
 import com.project.SportsStores.Toner.Repository.NhanVienRepository;
 import com.project.SportsStores.Toner.Service.Impl.DonHangTQServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 
 @Controller
@@ -33,10 +31,12 @@ public class BanHangTaiQuayController {
     @Autowired
     private NhanVienRepository nvrp;
 
-    @Autowired
-    private SanPhamChiTietService sanPhamChiTietService;
-
     @RequestMapping(value = "", method = RequestMethod.GET)
+    public String sellOff() {
+        return "admin/sell-off";
+    }
+
+    @RequestMapping(value = "/ui-old", method = RequestMethod.GET)
     public String satc() {
         return "admin/satc";
     }
@@ -46,7 +46,24 @@ public class BanHangTaiQuayController {
         DonHang dh = new DonHang();
         List<DonHang> list = dhsv.getAllByStatus();
         for (DonHang donHang : list) {
-            // lấy index của phần tử cuối cùng trong list
+//            // Tạo một UUID ngẫu nhiên
+//            UUID uuid = UUID.randomUUID();
+//
+//            // Lấy giá trị của UUID dưới dạng số hexa không có dấu gạch nối
+//            String uuidString = uuid.toString().replace("-", "");
+//
+//            // Lấy 12 ký tự đầu tiên của chuỗi UUID
+//            String shortUUID = uuidString.substring(0, 12);
+//
+//            dh.setMaDonHang(shortUUID);
+//            if (dh.getMaDonHang().equalsIgnoreCase(donHang.getMaDonHang())) {
+//                UUID uuidAgain = UUID.randomUUID();
+//                String uuidStringAgain = uuidAgain.toString().replace("-", "");
+//                String shortUUIDAgain = uuidStringAgain.substring(0, 12);
+//                dh.setMaDonHang(shortUUIDAgain);
+//            }
+
+             //lấy index của phần tử cuối cùng trong list
             int index = Integer.parseInt(list.get(list.size() - 1).getMaDonHang().substring(2));
             dh.setMaDonHang("DH" + (index + 1));
             if (dh.getMaDonHang().equalsIgnoreCase(donHang.getMaDonHang())) {
@@ -63,12 +80,5 @@ public class BanHangTaiQuayController {
             dhsv.save(dh);
             return new ResponseEntity<>("success", HttpStatus.OK);
         }
-    }
-
-    @GetMapping("/san-pham-chi-tiet")
-    public ResponseEntity<?> findAll(@RequestParam(value = "search", required = false) String search,
-                                     Pageable pageable) {
-        Page<SanPhamChiTiet> result = sanPhamChiTietService.sanPhamChiTietBanTaiQuay(search, pageable);
-        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

@@ -1,4 +1,8 @@
 /*# sourceMappingURL=custom.min.css.map */
+.colored-toast{
+    box-shadow: none;
+}
+
 .colored-toast .swal2-icon {
     float: left;
     margin-right: 10px;
@@ -6,6 +10,7 @@
 
 .colored-toast .swal2-title {
     margin-top: 10px;
+    line-height: 40px;
     display: inline-block;
 }
 
@@ -40,3 +45,4 @@
 .colored-toast .swal2-html-container {
     color: white;
 }
+

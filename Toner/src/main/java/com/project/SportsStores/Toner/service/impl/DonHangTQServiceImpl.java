@@ -52,4 +52,9 @@ public class DonHangTQServiceImpl implements DonHangTQService {
     public List<DonHang> getSizeBySatus0() {
         return dhrp.getSizeByStatus0();
     }
+
+    @Override
+    public boolean existById(String id) {
+        return dhrp.existsById(Long.parseLong(id));
+    }
 }

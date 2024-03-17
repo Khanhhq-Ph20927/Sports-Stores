@@ -54,11 +54,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 error.put("error message",exception.getMessage());
                 response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(),error);
-                System.out.println("fail1");
             }
         } else {
             filterChain.doFilter(request,response);
-            System.out.println("fail2");
         }
     }
 }

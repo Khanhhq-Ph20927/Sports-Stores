@@ -42,6 +42,9 @@ public class DonHang {
     @Column(name = "GhiChu")
     private String ghiChu;
 
+    @Column(name = "tienKhachTra")
+    private BigDecimal tienKhachTra;
+
     @ManyToOne
     @JoinColumn(name = "IdKhachHang")
     private KhachHang kh;

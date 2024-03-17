@@ -21,6 +21,7 @@ public class UploadController {
     @PostMapping("/admin/upload-file")
     public String uploadFile(@RequestParam("file") MultipartFile file){
         try {
+            System.out.println("save success");
             return cloudinaryService.uploadFile(file);
         } catch (Exception e) {
             e.printStackTrace();

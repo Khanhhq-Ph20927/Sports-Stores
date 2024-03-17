@@ -20,4 +20,6 @@ public interface DonHangTQService {
     Page<DonHang> seacrhSellOff(String keyword, Pageable pageable);
 
     List<DonHang> getSizeBySatus0();
+
+    boolean existById(String id);
 }

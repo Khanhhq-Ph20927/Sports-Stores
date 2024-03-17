@@ -42,4 +42,30 @@ public interface SanPhamService {
     Page<SanPham> filterByCollectionAndPrice (String keyword,Pageable pageable,String collection,String priceStart,String priceEnd);
 
     Page<SanPham> filterByAll (String keyword,Pageable pageable,String status,String collection,String priceStart,String priceEnd);
+
+    //Create by khanhhq
+    Page<SanPham> pageClient(Pageable pageable);
+
+    //price
+    Page<SanPham> price(Pageable pageable, String priceStart,  String priceEnd);
+
+    //price+color
+    Page<SanPham> priceAndFilterColor(Pageable pageable, String priceStart,  String priceEnd,  List<Integer> color);
+
+    //price+size
+    Page<SanPham> priceAndFilterSize(Pageable pageable, String priceStart,  String priceEnd,  List<String> size);
+
+    //price+color+size
+    Page<SanPham> priceAndFilterColorAndSize(Pageable pageable, String priceStart,  String priceEnd,  List<Integer> color,  List<String> size);
+
+    //color
+    Page<SanPham> filterColor(Pageable pageable,  List<Integer> color);
+
+    //size
+    Page<SanPham> filterSize(Pageable pageable,  List<String> size);
+
+    //color+size
+    Page<SanPham> filterColorAndSize(Pageable pageable,  List<Integer> color,  List<String> size);
+
+    Integer priceMax();
 }

@@ -21,4 +21,5 @@ public interface GioHangChiTietService {
     List<GioHangChiTiet> getByIdGHList(String id);
 
     void deleteAll();
+
 }

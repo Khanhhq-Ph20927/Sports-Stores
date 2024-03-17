@@ -2,17 +2,15 @@ package com.project.SportsStores.Toner.Model.DTO;
 
 import lombok.*;
 
-import java.math.BigDecimal;
-
 @Data
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class SanPhamDTO {
-    private Long id;
+    private String id;
     private String tenSP;
-    private BigDecimal donGia;
+    private String donGia;
     private Integer danhMuc;
     private Integer trangThai;
     private Long ncc;
