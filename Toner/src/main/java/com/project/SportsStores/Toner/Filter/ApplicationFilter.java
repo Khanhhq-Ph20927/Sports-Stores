@@ -14,15 +14,18 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.Optional;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableTransactionManagement
 public class ApplicationFilter {
 
     private final NhanVienRepository nhanVienRepository;
     private final KhachHangRepository khachHangRepository;
+
 
     @Bean
     public UserDetailsService userDetailsService(){

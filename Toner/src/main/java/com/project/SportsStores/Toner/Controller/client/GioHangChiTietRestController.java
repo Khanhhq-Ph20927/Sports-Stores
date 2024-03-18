@@ -4,10 +4,10 @@ import com.project.SportsStores.Toner.Model.CustomModel.ResponseCustom;
 import com.project.SportsStores.Toner.Model.DTO.ChiTietSanPhamDTO;
 import com.project.SportsStores.Toner.Model.GioHang;
 import com.project.SportsStores.Toner.Model.GioHangChiTiet;
+import com.project.SportsStores.Toner.Model.KhachHang;
 import com.project.SportsStores.Toner.Model.SanPhamChiTiet;
-import com.project.SportsStores.Toner.Service.GioHangChiTietService;
-import com.project.SportsStores.Toner.Service.GioHangService;
-import com.project.SportsStores.Toner.Service.SanPhamChiTietService;
+import com.project.SportsStores.Toner.Service.*;
+import com.project.SportsStores.Toner.Service.Impl.GioHangServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,16 +15,24 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
-@RequestMapping({"/api/client/cart_detail", "/api/cart_detail"
-})
+@RequestMapping({"/api/client/cart_detail", "/api/cart_detail"})
 public class GioHangChiTietRestController {
+
     @Autowired
     GioHangChiTietService service;
+    @Autowired
+    DonHangService donHangservice;
+    @Autowired
+    DonHangChiTietService donHangChiTietservice;
+    @Autowired
+    KhachHangService khachHangService;
     @Autowired
     SanPhamChiTietService sanPhamChiTietService;
     @Autowired
@@ -35,27 +43,42 @@ public class GioHangChiTietRestController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     private ResponseEntity<?> paginationCart() {
         Pageable pageable = PageRequest.of(0, 4, Sort.by("ngaySua").descending());
-        GioHang gioHang = gioHangService.findByIdKH(Long.valueOf(3)).get();
+        GioHang gioHang = gioHangService.findByIdKH(Long.valueOf(3));
         Page<GioHangChiTiet> page = service.getByIdGH(String.valueOf(gioHang.getId()), pageable);
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/page/{pageNumber}", method = RequestMethod.GET)
-    private ResponseEntity<?> pagination(@PathVariable("pageNumber") int pageNumber) {
+    @RequestMapping(value = "/page/{pageNumber}/{id}", method = RequestMethod.GET)
+    private ResponseEntity<?> pagination(@PathVariable("pageNumber") int pageNumber, @PathVariable("id") String id) {
         Pageable pageable = PageRequest.of(pageNumber, 4, Sort.by("ngaySua").descending());
-        GioHang gioHang = gioHangService.findByIdKH(Long.valueOf(3)).get();
+        GioHang gioHang = gioHangService.findByIdKH(Long.valueOf(id));
         Page<GioHangChiTiet> page = service.getByIdGH(String.valueOf(gioHang.getId()), pageable);
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    private ResponseEntity<?> add(@RequestBody ChiTietSanPhamDTO dto) {
+    @RequestMapping(value = "/findAll/{id}", method = RequestMethod.GET)
+    private ResponseEntity<?> findAll(@PathVariable("id") String id) {
+        GioHang gioHang = gioHangService.findByIdKH(Long.valueOf(id));
+        List<GioHangChiTiet> list = service.getByIdGHList(String.valueOf(gioHang.getId()));
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/add/{id}", method = RequestMethod.POST)
+    private ResponseEntity<?> add(@RequestBody ChiTietSanPhamDTO dto, @PathVariable("id") String id) {
         SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.findIdProductByColorAndSize(dto.getIdSP(), dto.getMs(), dto.getSize());
-        GioHang gioHang = gioHangService.getById("2");
+        GioHang gioHang = gioHangService.findByIdKH(Long.parseLong(id));
+        if (gioHang == null) {
+            KhachHang kh = khachHangService.getByID(Long.parseLong(id));
+            gioHang.setKh(kh);
+            gioHangService.save(gioHang);
+            gioHang = gioHangService.findByIdKH(Long.parseLong(id));
+        }
+        System.out.println(gioHang.toString());
+
         boolean isCheck = false;
         GioHangChiTiet ghctTemp = null;
-        for (GioHangChiTiet ghct : gioHangChiTietService.getByIdGHList("2")) {
-            if (ghct.getSpct().getId().equals(sanPhamChiTiet.getId())) {
+        for (GioHangChiTiet ghct : gioHangChiTietService.getByIdGHList(String.valueOf(gioHang.getId()))) {
+            if (ghct.getSpct().getId() == sanPhamChiTiet.getId()) {
                 isCheck = true;
                 ghctTemp = ghct;
                 break;
@@ -84,6 +107,38 @@ public class GioHangChiTietRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/delete-a-lot/{userId}", method = RequestMethod.POST)
+    public ResponseEntity<?> deleteALot(@RequestBody List<String> list, @PathVariable("userId") String userId) {
+        try {
+            if (list.size() == 0) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            } else {
+                for (String id : list
+                ) {
+                    GioHang gh = gioHangService.findByIdKH(Long.parseLong(userId));
+                    String idGhct = null;
+                    if (gioHangChiTietService.getByIdGHList(userId).size() == 0) {
+                        System.out.println("ghct null");
+                    }
+                    for (GioHangChiTiet ghct : gioHangChiTietService.getByIdGHList(String.valueOf(gh.getId()))) {
+                        if (String.valueOf(ghct.getSpct().getId()).equalsIgnoreCase(id)) {
+                            idGhct = String.valueOf(ghct.getId());
+                            break;
+                        }
+                    }
+                    System.out.println("idGhct" + idGhct);
+                    if (idGhct != null) {
+                        service.delete(idGhct);
+                        System.out.println("is Delete");
+                    }
+                }
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete items", e);
+        }
+    }
+
     @RequestMapping(value = "/minus-quantity/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> minusQuantity(@PathVariable("id") String id) {
         GioHangChiTiet ghct = gioHangChiTietService.getById(id);
@@ -91,6 +146,7 @@ public class GioHangChiTietRestController {
         if (ghct.getSoLuong() <= 1) {
             response.setStatusText("success");
             response.setMessage("The product has been removed from the cart!");
+            gioHangChiTietService.delete(id);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             ghct.setSoLuong(ghct.getSoLuong() - 1);
@@ -155,9 +211,9 @@ public class GioHangChiTietRestController {
         }
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public ResponseEntity<?> deleteALl() {
-        service.deleteAll();
+    @RequestMapping(value = "/add-to-invoice/{idUser}", method = RequestMethod.POST)
+    public ResponseEntity<?> addToInvoice(@RequestBody List<String> listProduct, @PathVariable("id") String idUser) {
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

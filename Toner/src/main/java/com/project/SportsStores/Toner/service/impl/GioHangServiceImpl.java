@@ -5,10 +5,12 @@ import com.project.SportsStores.Toner.Repository.GioHangRepository;
 import com.project.SportsStores.Toner.Service.GioHangService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@Transactional
 public class GioHangServiceImpl implements GioHangService {
 
     @Autowired
@@ -29,7 +31,11 @@ public class GioHangServiceImpl implements GioHangService {
     }
 
     @Override
-    public Optional<GioHang> findByIdKH(Long id) {
-        return rp.findByIdKH(id);
+    public GioHang findByIdKH(Long id) {
+        if(rp.findByIdKH(id).isPresent()) {
+            return rp.findByIdKH(id).get();
+        } else {
+            return null;
+        }
     }
 }

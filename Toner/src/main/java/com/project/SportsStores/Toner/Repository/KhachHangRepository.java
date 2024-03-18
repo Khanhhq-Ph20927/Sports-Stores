@@ -59,4 +59,13 @@ public interface KhachHangRepository extends JpaRepository<KhachHang,Long> {
     @Query("Select kh from KhachHang kh WHERE (:keyword is null or  kh.sdt LIKE %:keyword% or kh.maKH like  %:keyword% or kh.hoTen like  %:keyword%or kh.email LIKE %:keyword%) and kh.gioiTinh = :gender")
     Page<KhachHang> fillterByGenderAnSearch(Pageable pageable, @Param("keyword") String keyword, @Param("gender") boolean gender);
 
+
+    @Query("Select kh from KhachHang kh where kh.email = ?1")
+    Optional<KhachHang> findByEmail(String email);
+
+    @Query("Select kh from KhachHang kh where kh.sdt = ?1")
+    Optional<KhachHang> findByPhone(String phone);
+
+    @Query(value = "select top 1 k.id from KhachHang k order by k.id desc", nativeQuery = true)
+    public Long findMaxId();
 }

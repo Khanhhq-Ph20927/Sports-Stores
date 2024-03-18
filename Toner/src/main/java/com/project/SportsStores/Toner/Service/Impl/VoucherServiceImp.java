@@ -43,6 +43,4 @@ public class VoucherServiceImp implements VoucherService {
         Optional<KhuyenMai> ex = voucherRepository.findById(id);
         return ex;
     }
-
-
 }

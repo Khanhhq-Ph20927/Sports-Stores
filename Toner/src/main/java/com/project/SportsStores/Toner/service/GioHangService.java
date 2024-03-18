@@ -2,7 +2,7 @@ package com.project.SportsStores.Toner.Service;
 
 import com.project.SportsStores.Toner.Model.GioHang;
 
-import java.util.Optional;
+
 
 public interface GioHangService {
 
@@ -10,5 +10,5 @@ public interface GioHangService {
 
     GioHang getById(String id);
 
-    Optional<GioHang> findByIdKH(Long id);
+    GioHang findByIdKH(Long id);
 }

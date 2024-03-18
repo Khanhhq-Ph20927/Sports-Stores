@@ -31,6 +31,6 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
     @Query("select ghct from GioHangChiTiet ghct where ghct.gh.id = :id")
     Page<GioHangChiTiet> getByIdGH(@Param("id") String id, Pageable pageable);
 
-    @Query("select ghct from GioHangChiTiet ghct where ghct.gh.id = :id")
+    @Query("select ghct from GioHangChiTiet ghct where ghct.gh.id = :id ORDER BY ghct.ngaySua DESC")
     List<GioHangChiTiet> getByIdGHList(@Param("id") String id);
 }

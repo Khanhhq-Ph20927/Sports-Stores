@@ -62,7 +62,7 @@
                                     <div class="col-xxl-2 col-sm-12">
                                         <label>&ThinSpace;</label>
                                         <button type="button" class="btn btn-primary w-100" onclick="loadVoucher(0);">
-                                            <i class="bi bi-filter me-1"></i> Filter
+                                            <i class="bi bi-filter me-1"></i> Tìm kiếm
                                         </button>
                                     </div>
                                 </div>
@@ -80,26 +80,25 @@
                                             <th>Giá trị giảm giá</th>
                                             <th>Ngày bắt đầu</th>
                                             <th>Ngày kết thúc</th>
-                                            <th>Trạng thái</th>
                                             <th class="sticky-col">Hành động</th>
                                         </tr>
                                         </thead>
                                         <tbody id="listvoucher">
-<!--                                        <tr>-->
-<!--                                            <td>#2342</td>-->
-<!--                                            <td></td>-->
-<!--                                            <td></td>-->
-<!--                                            <td></td>-->
-<!--                                            <td></td>-->
-<!--                                            <td></td>-->
-<!--                                            <td></td>-->
-<!--                                            <td></td>-->
-<!--                                            <td class="sticky-col">-->
-<!--                                                <i class="fa fa-lock iconaction"></i>-->
-<!--                                                <i class="fa fa-edit iconaction"></i><br>-->
-<!--                                                <i class="fa fa-edit iconaction"></i><br>-->
-<!--                                            </td>-->
-<!--                                        </tr>-->
+                                        <!--                                        <tr>-->
+                                        <!--                                            <td>#2342</td>-->
+                                        <!--                                            <td></td>-->
+                                        <!--                                            <td></td>-->
+                                        <!--                                            <td></td>-->
+                                        <!--                                            <td></td>-->
+                                        <!--                                            <td></td>-->
+                                        <!--                                            <td></td>-->
+                                        <!--                                            <td></td>-->
+                                        <!--                                            <td class="sticky-col">-->
+                                        <!--                                                <i class="fa fa-lock iconaction"></i>-->
+                                        <!--                                                <i class="fa fa-edit iconaction"></i><br>-->
+                                        <!--                                                <i class="fa fa-edit iconaction"></i><br>-->
+                                        <!--                                            </td>-->
+                                        <!--                                        </tr>-->
                                         </tbody>
                                     </table>
                                 </div>
@@ -121,12 +120,51 @@
     </div>
 </div>
 
-
+<div class="modal fade" id="chitiet" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Chi tiết khuyến mại</h5> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+            <div class="modal-body row">
+                <table class="table">
+                    <tr>
+                        <th>Tên khuyến mại</th>
+                        <td id="tenkm"></td>
+                    </tr>
+                    <tr>
+                        <th>Ngày bắt đầu</th>
+                        <td id="ngaybd"></td>
+                    </tr>
+                    <tr>
+                        <th>Ngày kết thúc</th>
+                        <td id="ngaykt"></td>
+                    </tr>
+                    <tr>
+                        <th>Loại giảm giá</th>
+                        <td id="loaigg"></td>
+                    </tr>
+                    <tr>
+                        <th>Giá trị giảm</th>
+                        <td id="giatg"></td>
+                    </tr>
+                    <tr>
+                        <th>Ngày tạo</th>
+                        <td id="ngayt"></td>
+                    </tr>
+                    <tr>
+                        <th>Ảnh</th>
+                        <td><img src="" id="anh" style="width: 150px"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     window.onload = function (){
         loadVoucher(0);
     }
-    var size = 15;
+    var size = 10;
     async function loadVoucher(page) {
         var sort = document.getElementById("sort").value;
         var start = document.getElementById("start").value;
@@ -151,9 +189,9 @@
                     <td>${list[i].loaiKM == 0?formatmoney(list[i].giaTriGiam):list[i].giaTriGiam+'%'}</td>
                     <td>${list[i].ngayBatDau}</td>
                     <td>${list[i].ngayKetThuc}</td>
-                    <td>${list[i].trangThai}</td>
                     <td class="sticky-col">
                         <a href="add-voucher?id=${list[i].id}"><i class="fa fa-edit iconaction"></i></a>
+                        <a onclick="loadChiTiet(${list[i].id})" href="#" data-bs-toggle="modal" data-bs-target="#chitiet"><i class="fa fa-eye iconaction"></i></a>
                     </td>
                 </tr>`
         }
@@ -163,6 +201,24 @@
             mainpage += `<li onclick="loadVoucher(${(Number(i) - 1)},'${start}','${end}')" class="page-item"><a class="page-link" href="#listsp">${i}</a></li>`
         }
         document.getElementById("pageable").innerHTML = mainpage
+    }
+
+    async function loadChiTiet(id) {
+        var url = 'http://localhost:8080/public/voucher/find-by-id?id=' + id ;
+
+        const response = await fetch(url, {
+            method: 'GET'
+        });
+        var result = await response.json();
+        console.log(result)
+        document.getElementById("tenkm").innerHTML = result.tenKhuyenMai
+        document.getElementById("ngaybd").innerHTML = result.ngayBatDau
+        document.getElementById("ngaykt").innerHTML = result.ngayKetThuc
+        document.getElementById("loaigg").innerHTML = result.loaiKM == true ? "Giảm giá theo %":"Giảm giá theo số tiền";
+        document.getElementById("giatg").innerHTML = result.loaiKM == true ? result.giaTriGiam +"%":formatmoney(result.giaTriGiam)
+        document.getElementById("ngayt").innerHTML = result.ngayTao
+        document.getElementById("anh").src = result.banner
+
     }
 
 
