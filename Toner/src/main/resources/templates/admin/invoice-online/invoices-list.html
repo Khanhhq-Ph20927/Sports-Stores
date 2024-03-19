@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+      data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<head th:replace="admin/fragments/head::head">
+</head>
+<body>
+<!-- Begin page -->
+<div id="layout-wrapper">
+    <div th:replace="admin/fragments/header::header"></div>
+    <!-- ========== App Menu ========== -->
+    <div th:replace="admin/fragments/sidebar::sidebar"></div>
+    <!-- Left Sidebar End -->
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">Hoá Đơn</h4>
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Hoá Đơn</a></li>
+                                    <li class="breadcrumb-item active">Danh Sách Hoá Đơn</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card" id="invoiceList">
+                            <div class="card-header border-0">
+                                <div class="d-flex align-items-center">
+                                    <h5 class="card-title mb-0 flex-grow-1">Danh Sách Hoá Đơn</h5>
+                                </div>
+                            </div>
+                            <div class="card-body bg-soft-light border border-dashed border-start-0 border-end-0">
+                                <form>
+                                    <div class="row g-3">
+                                        <div class="col-xxl-5 col-sm-12">
+                                            <div class="search-box">
+                                                <input type="text" class="form-control search bg-light border-light"
+                                                       placeholder="....">
+                                                <i class="ri-search-line search-icon"></i>
+                                            </div>
+                                        </div>
+                                        <!--end col-->
+                                        <div class="col-xxl-3 col-sm-4">
+                                            <input type="text" class="form-control bg-light border-light"
+                                                   id="datepicker-range" placeholder="Select date">
+                                        </div>
+                                        <!--end col-->
+                                        <div class="col-xxl-3 col-sm-4">
+                                            <div class="input-light">
+                                                <select class="form-control" data-choices data-choices-search-false
+                                                        name="choices-single-default" id="status-select" onclick="loadPage()">
+                                                    <option value="-1" selected>Tất Cả</option>
+                                                    <option value="0">Chờ</option>
+                                                    <option value="1">Hoàn Thành</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!--end col-->
+
+                                        <div class="col-xxl-1 col-sm-4">
+                                            <button type="button" class="btn btn-info w-100">
+                                                <i class="ri-equalizer-fill me-1 align-bottom"></i> Lọc
+                                            </button>
+                                        </div>
+                                        <!--end col-->
+                                    </div>
+                                    <!--end row-->
+                                </form>
+                            </div>
+                            <div class="card-body">
+                                <div>
+                                    <div class="table-responsive table-card">
+                                        <table class="table align-middle table-nowrap" id="invoiceTable">
+                                            <thead class="text-muted">
+                                            <tr>
+                                                <th>Mã Hoá Đơn</th>
+                                                <th>Khách Hàng</th>
+                                                <th>Nhân Viên</th>
+                                                <th>Ngày Tạo</th>
+                                                <th>Tổng Tiền</th>
+                                                <th>Trạng Thái</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody
+                                                    class="list form-check-all"
+                                                    id="listinvoice">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="d-flex justify-content-end mt-3">
+                                        <div class="pagination-wrap hstack gap-2 flex-wrap" id="pagination-element">
+                                            <button id="prebtn" class="page-item pagination-prev">
+                                                Quay Lại
+                                            </button>
+                                            <ul class="pagination listjs-pagination mb-0" id="pageable">
+                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            </ul>
+                                            <button id="nextbtn" class="page-item pagination-next">
+                                                Tiếp
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Modal -->
+                                <div class="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-body p-5 text-center">
+                                                <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
+                                                           colors="primary:#405189,secondary:#f06548"
+                                                           style="width:90px;height:90px"></lord-icon>
+                                                <div class="mt-4 text-center">
+                                                    <h4>You are about to delete a order ?</h4>
+                                                    <p class="text-muted fs-15 mb-4">Deleting your order will remove all
+                                                        of your information from our database.</p>
+                                                    <div class="hstack gap-2 justify-content-center remove">
+                                                        <button class="btn btn-link link-success fw-medium text-decoration-none"
+                                                                id="deleteRecord-close" data-bs-dismiss="modal"><i
+                                                                class="ri-close-line me-1 align-middle"></i> Close
+                                                        </button>
+                                                        <button class="btn btn-danger" id="delete-record">Yes, Delete
+                                                            It
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end modal -->
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--end col-->
+                </div>
+                <!--end row-->
+
+            </div><!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+    </div>
+    <!-- end main content-->
+</div>
+<!-- END layout-wrapper -->
+<div class="modal" id="modalCtDonHang" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Hoá Đơn Chi Tiết</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="margin-bottom: 20px;">
+                <table class="table">
+                    <thead class="table-header">
+                        <tr>
+                            <th>Mã sản phẩm</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Chi tiết</th>
+                            <th>Giá tiền</th>
+                            <th>Số lượng</th>
+                            <th>Giảm giá</th>
+                            <th>Tổng tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listinvoicect">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer justify-content-end" id="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Đóng
+                </button>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+<div th:replace="admin/fragments/chat::chat"></div>
+<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+<div th:replace="admin/fragments/script::script"></div>
+</body>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+    var indexCurrentPage;
+    var size = 1;
+
+    window.onload = function () {
+        loadInvoice(0);
+    }
+
+    async function loadInvoice(page) {
+        var nextbtn = document.getElementById("nextbtn")
+        var prebtn = document.getElementById("prebtn")
+        indexCurrentPage = page;
+        var url = 'http://localhost:8080/api/admin/invoice/don-hang-online?page=' + page + '&size=' + size;
+        const response = await fetch(url, {
+        });
+        var result = await response.json();
+        console.log(result)
+        var list = result.content;
+        var totalPage = result.totalPages;
+        if(result.first != true){
+            prebtn.onclick = function (){
+                loadInvoice(Number(indexCurrentPage) - 1);
+            }
+        }
+        if(result.last != true){
+            nextbtn.onclick = function (){
+                loadInvoice(Number(indexCurrentPage) + 1);
+            }
+        }
+        var main = '';
+        for (i = 0; i < list.length; i++) {
+            main += `<tr>
+                    <td>${list[i].maDonHang}</td>
+                    <td>${list[i].kh.maKH}</td>
+                    <td>${list[i].nv.maNV}</td>
+                    <td>${list[i].ngayTao}</td>
+                    <td>${formatmoney(list[i].tongTien)}</td>
+                    <td>${list[i].trangThai}</td>
+                    <td class="sticky-col">
+                        <button onclick="loadChiTietInvoice(${list[i].id})" data-bs-toggle="modal" data-bs-target="#modalCtDonHang" class="btn btn-primary">Chi tiết đơn hàng</button>
+                    </td>
+                </tr>`
+        }
+        document.getElementById("listinvoice").innerHTML = main
+        var mainpage = ''
+        for (i = 1; i <= totalPage; i++) {
+            mainpage += `<li onclick="loadInvoice(${(Number(i) - 1)})" class="page-item"><a class="page-link" href="#listsp">${i}</a></li>`
+        }
+        document.getElementById("pageable").innerHTML = mainpage
+    }
+
+
+    async function loadChiTietInvoice(id) {
+        var url = 'http://localhost:8080/api/admin/invoice/invoice-detail/' + id
+        const response = await fetch(url, {
+        });
+        var list = await response.json();
+        var main = '';
+        for (i = 0; i < list.length; i++) {
+            var giamgia = '';
+            if(list[i].km != null){
+                if(list[i].km.loaiKM == true){
+                    giamgia = list[i].km.giaTriGiam + '%';
+                }
+                else{
+                    giamgia = list[i].km.giaTriGiam + '.đ';
+                }
+            }
+            main += `<tr>
+                    <td>${list[i].spct.sp.maSP}</td>
+                    <td>${list[i].spct.sp.tenSP}</td>
+                    <td>Kích thước: ${list[i].spct.size}<br>Màu sắc: ${list[i].spct.ms.ten}</td>
+                    <td>${formatmoney(list[i].giaThoiDiemMua)}</td>
+                    <td>${list[i].soLuong}</td>
+                    <td>${giamgia}</td>
+                     <td>${formatmoney(list[i].tongTien)}</td>
+                </tr>`
+        }
+        document.getElementById("listinvoicect").innerHTML = main
+    }
+
+
+    function formatmoney(money) {
+        const VND = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+        return VND.format(money);
+    }
+</script>
+</html>

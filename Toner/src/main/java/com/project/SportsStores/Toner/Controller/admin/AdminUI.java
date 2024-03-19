@@ -47,6 +47,11 @@ public class AdminUI {
         return "admin/invoice/invoices-list";
     }
 
+    @RequestMapping("/invoices_list_online")
+    public String invoicesListOnline() {
+        return "admin/invoice-online/invoices-list";
+    }
+
     @RequestMapping("/orders_list-view")
     public String ordersList() {
         return "admin/orders/orders-list-view";

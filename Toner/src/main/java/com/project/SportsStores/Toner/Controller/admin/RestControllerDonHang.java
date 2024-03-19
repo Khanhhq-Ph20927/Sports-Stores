@@ -2,6 +2,7 @@ package com.project.SportsStores.Toner.Controller.admin;
 
 import com.project.SportsStores.Toner.Model.DonHang;
 import com.project.SportsStores.Toner.Model.DonHangChiTiet;
+import com.project.SportsStores.Toner.Repository.DonHangRepository;
 import com.project.SportsStores.Toner.Service.Impl.DonHangChiTietServiceImpl;
 import com.project.SportsStores.Toner.Service.Impl.DonHangServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class RestControllerDonHang {
     @Autowired
     DonHangChiTietServiceImpl serviceDetailInvoce;
 
+    @Autowired
+    DonHangRepository donHangRepository;
+
     @GetMapping("/index/{pageNumber}")
     private ResponseEntity<?> index(@PathVariable("pageNumber") int pageNumber,
                                     @RequestParam(value = "status", required = false) String status) {
@@ -35,6 +39,13 @@ public class RestControllerDonHang {
         } else {
             page = serviceInvoice.filterByStatus(pageable, Integer.parseInt(status));
         }
+        return new ResponseEntity<>(page, HttpStatus.OK);
+    }
+
+    @GetMapping("/don-hang-online")
+    private ResponseEntity<?> index(Pageable pageable) {
+        Page<DonHang> page;
+        page = donHangRepository.donHangOnline(pageable);
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 

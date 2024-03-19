@@ -40,4 +40,7 @@ public interface DonHangRepository  extends JpaRepository<DonHang,Long> {
 
     @Query("SELECT dh FROM DonHang dh WHERE dh.maDonHang LIKE %:keyword% or dh.nv.hoTen like  %:keyword%" )
     Page<DonHang> searchDonHang(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query("select d from DonHang d where d.kh is not null " )
+    Page<DonHang> donHangOnline(Pageable pageable);
 }
