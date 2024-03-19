@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -117,7 +118,7 @@ public class GioHangChiTietRestController {
                 ) {
                     GioHang gh = gioHangService.findByIdKH(Long.parseLong(userId));
                     String idGhct = null;
-                    if (gioHangChiTietService.getByIdGHList(userId).size() == 0) {
+                    if (gioHangChiTietService.getByIdGHList(String.valueOf(gh.getId())).size() == 0) {
                         System.out.println("ghct null");
                     }
                     for (GioHangChiTiet ghct : gioHangChiTietService.getByIdGHList(String.valueOf(gh.getId()))) {
@@ -211,10 +212,28 @@ public class GioHangChiTietRestController {
         }
     }
 
-    @RequestMapping(value = "/add-to-invoice/{idUser}", method = RequestMethod.POST)
+    @RequestMapping(value = "/add-to-invoice/{id}", method = RequestMethod.POST)
     public ResponseEntity<?> addToInvoice(@RequestBody List<String> listProduct, @PathVariable("id") String idUser) {
+        List<GioHangChiTiet> listGHCT = new ArrayList<>();
+        if (listProduct.size() == 0) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        } else {
+            for (String id : listProduct
+            ) {
+                GioHang gh = gioHangService.findByIdKH(Long.parseLong(idUser));
+                if (gioHangChiTietService.getByIdGHList(String.valueOf(gh.getId())).size() == 0) {
+                    System.out.println("ghct null");
+                }
+                for (GioHangChiTiet ghct : gioHangChiTietService.getByIdGHList(String.valueOf(gh.getId()))) {
+                    if (String.valueOf(ghct.getSpct().getId()).equalsIgnoreCase(id)) {
+                        listGHCT.add(ghct);
+                        break;
+                    }
+                }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(listGHCT,HttpStatus.OK);
     }
 
 

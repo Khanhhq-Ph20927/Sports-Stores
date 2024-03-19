@@ -23,12 +23,12 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">Create Invoice</h4>
+
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Invoices</a></li>
-                                    <li class="breadcrumb-item active">Create Invoice</li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Khách Hàng</a></li>
+                                    <li class="breadcrumb-item active">Thêm Khách Hàng</li>
                                 </ol>
                             </div>
 
@@ -38,7 +38,7 @@
                 <!-- end page title -->
 
                 <form id="create-form" autocomplete="off" class="needs-validation" novalidate method="post"
-                      th:action="@{/admin/invoice/save}" th:object="${khachHang}">
+                      th:action="@{/admin/customer/save}" th:object="${khachHang}">
                     <div class="row">
                         <div class="card">
                             <div class="card-header">
@@ -59,8 +59,8 @@
                                 <div class="row">
                                     <div class="col-lg-6 col-sm-12">
                                         <div class="mb-3">
-                                            <label class="form-label" for="invoice-name-input">Họ tên</label>
-                                            <input type="text" class="form-control" id="invoice-name-input"
+                                            <label class="form-label" for="customer-name-input">Họ tên</label>
+                                            <input type="text" class="form-control" id="customer-name-input"
                                                    placeholder="Họ tên" required th:field="*{hoTen}"
                                                    onkeyup="validName()">
                                             <div class="text-danger" th:if="${errorName}" th:text="${errorName}">
@@ -70,9 +70,9 @@
                                     </div>
                                     <div class="col-lg-6 col-sm-12">
                                         <div class="mb-3">
-                                            <label class="form-label" for="invoice-phone-input">Số điện
+                                            <label class="form-label" for="customer-phone-input">Số điện
                                                 thoại</label>
-                                            <input type="text" class="form-control" id="invoice-phone-input"
+                                            <input type="text" class="form-control" id="customer-phone-input"
                                                    placeholder="Số điện thoại" required th:field="*{sdt}"
                                                    onkeyup="validPhone()">
                                             <div class="text-danger" th:if="${errorPhone}" th:text="${errorPhone}">
@@ -86,8 +86,8 @@
                                 <div class="row">
                                     <div class="col-lg-6 col-sm-12">
                                         <div class="mb-3">
-                                            <label class="form-label" for="invoice-email-input">Email</label>
-                                            <input type="text" class="form-control" id="invoice-email-input"
+                                            <label class="form-label" for="customer-email-input">Email</label>
+                                            <input type="text" class="form-control" id="customer-email-input"
                                                    placeholder="Email" required th:field="*{email}"
                                                    onkeyup="validEmail()">
                                             <div class="text-danger" th:if="${errorEmail}" th:text="${errorEmail}">
@@ -97,8 +97,8 @@
                                     </div>
                                     <div class="col-lg-6 col-sm-12">
                                         <div class="mb-3">
-                                            <label for="invoice-birthday-input" class="form-label">Ngày sinh</label>
-                                            <input type="date" id="invoice-birthday-input" class="form-control"
+                                            <label for="customer-birthday-input" class="form-label">Ngày sinh</label>
+                                            <input type="date" id="customer-birthday-input" class="form-control"
                                                    data-provider="flatpickr" required data-date-format="d M, Y"
                                                    th:field="*{ngaySinh}" onkeyup="validBirthday()"/>
                                             <div class="text-danger" th:if="${errorBirthday}"
@@ -164,10 +164,10 @@
                                 <div class="row">
                                     <div class="col-lg-6 col-sm-12">
                                         <div class="mb-3">
-                                            <label class="form-label" for="invoice-diachi-input">Địa Chỉ
+                                            <label class="form-label" for="customer-diachi-input">Địa Chỉ
                                             </label>
                                             <input type="text" class="form-control" name="diaChiCT"
-                                                   id="invoice-diachi-input"
+                                                   id="customer-diachi-input"
                                                    placeholder="địa chỉ cụ thể ..." onkeyup="validAddress()"
                                             >
                                             <div class="text-danger" th:if="${errorAddress}"
@@ -184,7 +184,7 @@
                     </div>
                     <!-- end row -->
                     <div class="text-end mb-3">
-                        <a th:href="@{/admin/invoice}" class="btn btn-danger w-sm">Trở lại</a>
+                        <a th:href="@{/admin/customer}" class="btn btn-danger w-sm">Trở lại</a>
                         <button type="button" class="btn btn-success w-sm" onclick="showConfirmPopup()">Thêm mới
                         </button>
                     </div>
@@ -230,7 +230,7 @@
 </script>
 <script th:inline="javascript">
     function validName() {
-        var nameInput = document.getElementById('invoice-name-input');
+        var nameInput = document.getElementById('customer-name-input');
         var errorName = document.getElementById('errorName');
 
         nameInput.addEventListener('input', function () {
@@ -243,7 +243,7 @@
     }
 
     function validPhone() {
-        var phoneInput = document.getElementById('invoice-phone-input');
+        var phoneInput = document.getElementById('customer-phone-input');
         var errorPhone = document.getElementById('errorPhone');
 
         phoneInput.addEventListener('input', function () {
@@ -256,7 +256,7 @@
     }
 
     function validEmail() {
-        var emailInput = document.getElementById('invoice-email-input');
+        var emailInput = document.getElementById('customer-email-input');
         var errorEmail = document.getElementById('errorEmail');
 
         if (emailInput.value.trim() !== '') {
@@ -268,7 +268,7 @@
     }
 
     function validBirthday() {
-        var birthdayInput = document.getElementById('invoice-birthday-input');
+        var birthdayInput = document.getElementById('customer-birthday-input');
         var errorBirthday = document.getElementById('errorBirthday');
 
         if (birthdayInput.value.trim() !== '') {
@@ -279,7 +279,7 @@
     }
 
     function validAddress() {
-        var addressInput = document.getElementById('invoice-address-input');
+        var addressInput = document.getElementById('customer-address-input');
         var errorAddress = document.getElementById('errorAddress');
 
         if (addressInput.value.trim() !== '') {
@@ -290,7 +290,7 @@
     }
 
     function validProvince() {
-        var provinceInput = document.getElementById('invoice-address-input');
+        var provinceInput = document.getElementById('customer-address-input');
         var errorProvince = document.getElementById('errorProvince');
 
         if (provinceInput.value.trim() !== '') {
@@ -301,7 +301,7 @@
     }
 
     function validDistrict() {
-        var districtInput = document.getElementById('invoice-district-input');
+        var districtInput = document.getElementById('customer-district-input');
         var errorDistrict = document.getElementById('errorDistrict');
 
         if (districtInput.value.trim() !== '') {
@@ -312,7 +312,7 @@
     }
 
     function validWard() {
-        var wardInput = document.getElementById('invoice-ward-input');
+        var wardInput = document.getElementById('customer-ward-input');
         var errorWard = document.getElementById('errorWard');
 
         if (wardInput.value.trim() !== '') {

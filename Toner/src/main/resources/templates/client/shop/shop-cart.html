@@ -254,7 +254,7 @@
                     </div>
                     <div class="hstack gap-2 justify-content-end disabled">
                         <button type="button" class="btn btn-hover btn-danger">Tiếp Tục Mua Hàng</button>
-                        <button type="button" class="btn btn-hover btn-success" onclick="handleOrder()">Đặt Hàng<i
+                        <button type="button" class="btn btn-hover btn-success" onclick="handleOrder()">Mua Hàng<i
                                 class="ri-logout-box-r-line align-bottom ms-1"></i></button>
                     </div>
                 </div>
@@ -673,12 +673,12 @@
                 }
             })
             console.log("Cart : ")
-            selectedCart.forEach(function (item){
+            selectedCart.forEach(function (item) {
                 console.log(item);
             })
             handleInvoiceCalculation(sub_total_global, vat_global);
         } else {
-            if(selectedProductGroup.length>0) {
+            if (selectedProductGroup.length > 0) {
                 checkboxGroup.checked = false;
                 selectedProductGroup.splice(check, 1);
                 nodeList.forEach(function (item) {
@@ -742,7 +742,7 @@
             }
         })
         console.log("Cart choose product: ")
-        selectedCart.forEach(function (item){
+        selectedCart.forEach(function (item) {
             console.log(item);
         })
         handleInvoiceCalculation(sub_total, vat);
@@ -800,11 +800,11 @@
         handleInvoiceCalculation(sub_total_global, vat_global);
         console.log(selectedProduct);
         console.log("Cart choose all: ")
-        selectedCart.forEach(function (item){
+        selectedCart.forEach(function (item) {
             console.log(item);
         })
         console.log("Product group choose all: ")
-        selectedProductGroup.forEach(function (item){
+        selectedProductGroup.forEach(function (item) {
             console.log(item);
         })
         var button = `<button class="btn btn-hover btn-info" onclick="unchooseAll()">
@@ -898,7 +898,7 @@
                                     unchooseAll();
                                 }
                             })
-                        } else if (response.status === 403){
+                        } else if (response.status === 403) {
                             (async () => {
                                 await Toast.fire({
                                     icon: "warning",
@@ -937,8 +937,8 @@
                 denyButtonText: `Quay Về`
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var className = 'checkbox-child-'+productId;
-                    var arrProduct = document.querySelectorAll('.'+className+'[type=checkbox]');
+                    var className = 'checkbox-child-' + productId;
+                    var arrProduct = document.querySelectorAll('.' + className + '[type=checkbox]');
                     var url = '/api/client/cart_detail/delete-a-lot/' + userId;
                     const promise = fetch(url, {
                         method: 'POST',
@@ -959,7 +959,7 @@
                                     unchooseAll();
                                 }
                             })
-                        } else if (response.status === 403){
+                        } else if (response.status === 403) {
                             (async () => {
                                 await Toast.fire({
                                     icon: "warning",
@@ -1108,7 +1108,22 @@
                 });
             })();
         } else {
+            $.ajax({
+                url: '/api/client/cart_detail/add-to-invoice/' + userId,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(selectedProduct),
+                success: function (response) {
+                    console.log(response);
+                    sessionStorage.removeItem("listCart");
+                    sessionStorage.setItem("listCart", JSON.stringify(response));
+                    window.location.href = '/order';
 
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
         }
     }
 

@@ -1,7 +1,6 @@
 package com.project.SportsStores.Toner.Controller.admin;
 
 
-import com.project.SportsStores.Toner.Model.DonHang;
 import com.project.SportsStores.Toner.Model.KhachHang;
 import com.project.SportsStores.Toner.Service.Impl.KhachHangServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Controller
-@RequestMapping("/api/admin/invoice")
+@RequestMapping("/api/admin/customer")
 public class RestControllerKhachHang {
     @Autowired
     private KhachHangServiceImpl khsv;
@@ -61,11 +58,6 @@ public class RestControllerKhachHang {
             }
             page = khsv.fillterByGenderAndSearch(pageable, keyWord, gender1);
         }
-//         if(Integer.parseInt(gender)==-1 && !keyWord.equalsIgnoreCase("null") && !startDate.equals("null")&& !endDate.equals("null")){
-//             LocalDateTime startDates = LocalDateTime.parse(startDate,DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-//             LocalDateTime endDates = LocalDateTime.parse(endDate,DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-//             page= khsv.fillterByDateNoSearch(pageable,startDates ,endDates);
-//         }
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 }

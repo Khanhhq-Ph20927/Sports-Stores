@@ -97,7 +97,7 @@ public class ClientUI {
     public String address() {
         return "client/shop/address";
     }
-    @RequestMapping("/checkout")
+    @RequestMapping("/order")
     public String checkout() {
         return "client/shop/checkout";
     }

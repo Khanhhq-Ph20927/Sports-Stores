@@ -22,7 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Controller
-@RequestMapping("/admin/invoice")
+@RequestMapping("/admin/customer")
 public class ControllerKhachHang {
     @Autowired
     private KhachHangService khsv;
@@ -34,7 +34,7 @@ public class ControllerKhachHang {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String show() {
-        return "admin/invoice/invoices-list";
+        return "admin/customer/customer-list";
     }
 
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
@@ -46,13 +46,13 @@ public class ControllerKhachHang {
     private String update(@ModelAttribute("khachhang") KhachHang kh, @PathVariable("id") String id) {
         kh.setTrangThai(kh.getTrangThai());
         khsv.update(kh);
-        return "redirect:/admin/invoice";
+        return "redirect:/admin/customer";
     }
 
     @GetMapping("/add")
     public String add(Model model) {
         model.addAttribute("khachHang", new KhachHang());
-        return "admin/invoice/invoices-create";
+        return "admin/customer/customer-create";
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -135,10 +135,10 @@ public class ControllerKhachHang {
             khsv.save(khachHang);
             dcrp.save(diaChi);
             redirectAttributes.addFlashAttribute("message", true);
-            return "redirect:/admin/invoice";
+            return "redirect:/admin/customer";
         } else {
             model.addAttribute("message", false);
-            return "admin/invoice/invoices-create";
+            return "admin/customer/customer-create";
         }
     }
 }
