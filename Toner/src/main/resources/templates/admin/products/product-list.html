@@ -295,7 +295,8 @@
                                                 <label class="form-label">Màu Sắc</label>
                                                 <select class="form-select mb-3"
                                                         aria-label=".form-select-lg example"
-                                                        id="filter-color" onchange="viewProductDetail(idProduct,undefined)">
+                                                        id="filter-color"
+                                                        onchange="viewProductDetail(idProduct,undefined)">
                                                     <option value="0" selected>Tất Cả</option>
                                                     <option value="1">Đen</option>
                                                     <option value="2">Trắng</option>
@@ -311,7 +312,8 @@
                                                 <label class="form-label">Size</label>
                                                 <select class="form-select mb-3"
                                                         aria-label=".form-select-lg example"
-                                                        id="filter-size" onchange="viewProductDetail(idProduct,undefined)">
+                                                        id="filter-size"
+                                                        onchange="viewProductDetail(idProduct,undefined)">
                                                     <option value="0" selected>Tất Cả</option>
                                                     <option value="s">S</option>
                                                     <option value="m">M</option>
@@ -786,7 +788,7 @@
                                     <div class="input-group mb-3">
                                         <label class="input-group-text" for="inputFile" id="text-label"></label>
                                         <input type="file" class="form-control" id="inputFile"
-                                               name="file" style="display: none" >
+                                               name="file" style="display: none">
                                         <input id="linkPicture" type="hidden" class="form-control">
                                     </div>
                                 </div>
@@ -1436,7 +1438,7 @@
                      </button>
             </li>
             <li class="page-item">
-                    <button class="page-link" aria-label="Previous" onclick="loadPage(${number - 1 <= 0 ? totalPage - 1  : number - 1})"><span aria-hidden="true">&laquo;</span></button>
+                    <button class="page-link" aria-label="Previous" onclick="loadPage(${number - 1 <= 0 ? totalPage - 1 : number - 1})"><span aria-hidden="true">&laquo;</span></button>
             </li>
             <li class="page-item">
                     <button class="page-link" disabled>${number + 1}</button>
@@ -1479,46 +1481,36 @@
         }
     }
 
-    async function viewProductDetail(productId, pageNumber) {
-
+    async function viewProductDetail(Idproduct, pageNumber) {
         var color = document.getElementById("filter-color").value;
         var size = document.getElementById("filter-size").value;
 
+        var colorName = $('#filter-color :selected').text();
+
         var baseUrl;
 
-        if (pageNumber === undefined && color === "0" && size === "0") {
-            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0;
+        if (pageNumber === undefined) {
+            baseUrl = "/api/admin/product/product_detail/" + Idproduct + "/" + 0 + "?color=" + color + "&size=" + size;
         }
-        if (pageNumber !== undefined && color === "0" && size === "0") {
-            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber;
+        if (pageNumber !== undefined) {
+            baseUrl = "/api/admin/product/product_detail/" + Idproduct + '/' + pageNumber + "?color=" + color + "&size=" + size;
         }
-        // filter by color
-        if (pageNumber === undefined && color !== "0" && size === "0") {
-            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0 + "?color=" + color;
-        }
-        if (pageNumber !== undefined && color !== "0" && size === "0") {
-            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?color=" + color;
-        }
-        // filter by size
-        if (pageNumber === undefined && color === "0" && size !== "0") {
-            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0 + "?size=" + size;
-        }
-        if (pageNumber !== undefined && color === "0" && size !== "0") {
-            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?size=" + size;
-        }
-        // filter by all
-        if (pageNumber === undefined  && color !== "0" && size !== "0") {
-            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0 + "?color=" + color + "&?size=" + size;
-        }
-        if (pageNumber !== undefined  && color !== "0" && size !== "0") {
-            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?color=" + color + "&?size=" + size;
-        }
+
+        var url = "/api/admin/product/product_detail/" + Idproduct + "/" + 0 + "?color=" + 0 + "&size=" + 0;
+
+        const response_check = await fetch(url, {
+            method: 'GET'
+        });
+
+        const checkResult = await response_check.json();
+
+        let checkList = checkResult.content;
 
         const response = await fetch(baseUrl, {
             method: 'GET'
         });
 
-        idProduct = productId;
+        idProduct = Idproduct;
         pageProductDetail = pageNumber;
         var result = await response.json();
         var list = result.content;
@@ -1543,7 +1535,8 @@
                      </tr>`
             }
         } else {
-            main = `
+            if (checkList.length === 0) {
+                main = `
                 <tr>
                     <td></td>
                     <td>
@@ -1552,26 +1545,57 @@
                     <td></td>
                 </tr>
             `;
+            } else if (checkList.length > 0 && color === "0" && size !== "0") {
+                main = `
+                <tr>
+                    <td></td>
+                    <td>
+                        <div class="form-label">Sản Phẩm Này Chưa Có Size ${size} !</div>
+                    </td>
+                    <td></td>
+                </tr>
+            `;
+            } else if (checkList.length > 0 && color !== "0" && size === "0") {
+                main = `
+                <tr>
+                    <td></td>
+                    <td>
+                        <div class="form-label">Sản Phẩm Này Chưa Có Màu ${colorName} !</div>
+                    </td>
+                    <td></td>
+                </tr>
+            `;
+            } else {
+                main = `
+                <tr>
+                    <td></td>
+                    <td>
+                        <div class="form-label">Sản Phẩm Này Chưa Có Màu ${colorName} và Size ${size} !</div>
+                    </td>
+                    <td></td>
+                </tr>
+            `;
+            }
         }
         document.getElementById("list_Product_Detail").innerHTML = main;
         var currentPage = `
              <li class="page-item">
-                    <button class="page-link" onclick="viewProductDetail(${productId},${number === 0 ? totalPage - 1 : 0})" aria-label="First">First</button>
+                    <button class="page-link" onclick="viewProductDetail(${Idproduct},${number === 0 ? totalPage - 1 : 0})" aria-label="First">First</button>
             </li>
             <li class="page-item">
-                    <button class="page-link" aria-label="Previous" onclick="viewProductDetail(${productId},${number - 1 < 0 ? totalPage - 1 : number - 1})"><span aria-hidden="true">&laquo;</span></button>
+                    <button class="page-link" aria-label="Previous" onclick="viewProductDetail(${Idproduct},${number - 1 < 0 ? totalPage - 1 : number - 1})"><span aria-hidden="true">&laquo;</span></button>
             </li>
             <li class="page-item">
                     <button class="page-link">${number + 1}</button>
             </li>
             </li>
             <li class="page-item">
-                    <button class="page-link" aria-label="Next" onclick="viewProductDetail(${productId},${number + 1 === totalPage ? 0 : number + 1})">
+                    <button class="page-link" aria-label="Next" onclick="viewProductDetail(${Idproduct},${number + 1 === totalPage ? 0 : number + 1})">
                        <span aria-hidden="true">&raquo;</span>
                      </button>
             </li>
             <li class="page-item">
-                    <button class="page-link" onclick="viewProductDetail(${productId},${totalPage - 1 === number ? 0 : totalPage - 1})" aria-label="Last">Last</button>
+                    <button class="page-link" onclick="viewProductDetail(${Idproduct},${totalPage - 1 === number ? 0 : totalPage - 1})" aria-label="Last">Last</button>
             </li>
         `;
         document.getElementById("pagination2").innerHTML = currentPage;

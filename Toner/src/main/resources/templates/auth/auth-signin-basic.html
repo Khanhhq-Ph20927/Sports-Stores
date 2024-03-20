@@ -74,7 +74,6 @@
 <div th:replace="auth/fragments/script::script"></div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/cjs/index.min.js"></script>
-
 <script>
 
     async function login(){
@@ -100,7 +99,7 @@
             localStorage.setItem("token", result.token);
             var role = jwtDecode(result.token).roles[0];
             if(role === "CUSTOMER"){
-                window.location.href = '/';
+
                 const responseGetUser = await fetch('/api/v1/auth/getCustomer/'+username, {
                     method: 'POST',
                     headers: new Headers({
@@ -110,10 +109,13 @@
                 });
                 userItem = await responseGetUser.json();
                 console.log(userItem);
+                if(localStorage.getItem("userId")){
+                    localStorage.removeItem("userId");
+                }
                 localStorage.setItem("userId",userItem.id);
+                window.location.href = '/';
             }
             if(role === "ADMIN"){
-                window.location.href = '/admin/index';
                 const responseGetStaff = await fetch('/api/v1/auth/getStaff/'+username, {
                     method: 'POST',
                     headers: new Headers({
@@ -123,7 +125,11 @@
                 });
                 userItem = await responseGetStaff.json();
                 console.log(userItem);
+                if(localStorage.getItem("userId")){
+                    localStorage.removeItem("userId");
+                }
                 localStorage.setItem("userId",userItem.id);
+                window.location.href = '/admin/index';
             }
         }
         if (response.status > 300) {

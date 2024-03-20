@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,9 +66,10 @@ public class RestControllerSanPham {
 
     @RequestMapping(value = "/product_detail/{id}/{pageNumber}", method = RequestMethod.GET)
     private ResponseEntity<?> getProductDetail(@PathVariable("id") String id,
-                                               @PathVariable("pageNumber") String pageNumber) {
-        Pageable pageable = PageRequest.of(Integer.parseInt(pageNumber), 3, Sort.by("ngayTao").descending());
-        Page<SanPhamChiTiet> page = sv2.getSpct(pageable, id);
+                                               @PathVariable("pageNumber") int pageNumber,
+                                               @RequestParam(value = "color", required = false) String color,
+                                               @RequestParam(value = "size", required = false) String size) {
+        Page<SanPhamChiTiet> page = sv2.Filter(pageNumber,color,size, id);
         return ResponseEntity.ok().body(page);
     }
 
@@ -214,7 +216,7 @@ public class RestControllerSanPham {
             integerList.add(index);
         }
         Optional<Integer> maxNumber = integerList.stream().max(Integer::compareTo);
-        maxNumber.ifPresent(integer -> sp.setMaSP("SP" + integer + 1));
+        maxNumber.ifPresent(integer -> sp.setMaSP("SP" + (integer + 1)));
         boolean isValid = true;
         sp.setNgayTao(LocalDateTime.now());
         if (dto.getDanhMuc() == -1) {

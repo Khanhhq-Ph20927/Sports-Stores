@@ -22,6 +22,8 @@ public interface SanPhamChiTietService {
 
     Page<SanPhamChiTiet> searchAndFilter(int page,String keyword,String color,String size);
 
+    Page<SanPhamChiTiet> Filter(int page,String color,String size,String id);
+
     Page<SanPhamChiTiet> pagination(Pageable pageable);
 
     List<SanPhamChiTiet> findListProductByColor(String id,String ms);

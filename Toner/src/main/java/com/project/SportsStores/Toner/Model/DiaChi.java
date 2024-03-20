@@ -34,6 +34,9 @@ public class DiaChi {
     @Column(name = "NgayTao")
     private LocalDateTime ngayTao;
 
+    @Column(name = "sdt")
+    private String sdt;
+
     @ManyToOne
     @JoinColumn(name="IdKhachHang")
     private KhachHang kh;

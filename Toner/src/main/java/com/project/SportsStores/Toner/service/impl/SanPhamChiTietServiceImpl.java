@@ -77,6 +77,26 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
     }
 
     @Override
+    public Page<SanPhamChiTiet> Filter(int page, String color, String size,String id) {
+        Pageable pageable = PageRequest.of(page, 3, Sort.by("ngayTao").descending());
+        Page<SanPhamChiTiet> pagination;
+        if (color.equals("0") && size.equals("0")) {
+            System.out.println("findAll");
+            pagination = rp.getSpctByIdSp(id,pageable);
+        } else if (!color.equals("0") && size.equals("0")) {
+            pagination = rp.FilterByColorAndProduct(color, id,pageable);
+        } else if (color.equals("0") && !size.equals("0")) {
+            pagination = rp.FilterBySizeAndProduct(size,id, pageable);
+        } else if (!color.equals("0") && !size.equals("0")) {
+            pagination = rp.FilterByAllAndProduct(color,size,id, pageable);
+        } else {
+            System.out.println("findAll");
+            pagination = rp.getSpctByIdSp(id,pageable);
+        }
+        return pagination;
+    }
+
+    @Override
     public Page<SanPhamChiTiet> pagination(Pageable pageable) {
         return rp.findAll(pageable);
     }

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/admin/trademark")
 public class RestControllerThuongHieu {
@@ -27,6 +29,11 @@ public class RestControllerThuongHieu {
         Pageable pageable = PageRequest.of(pageNumber, 5, Sort.by("id").descending());
         Page<ThuongHieu> page = thsv.pageOfTH(pageable);
         return new ResponseEntity<>(page, HttpStatus.OK);
+    }
+    @RequestMapping(value = "/find-all", method = RequestMethod.GET)
+    private ResponseEntity<?> findAll() {
+        List<ThuongHieu> list = thsv.getAll();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
     @RequestMapping(value = "/page/search/{pageNumber}/{keyWord}", method = RequestMethod.GET)
     private ResponseEntity<?> getPageAndSearchAndFilter(

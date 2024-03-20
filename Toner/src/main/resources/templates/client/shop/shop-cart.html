@@ -473,8 +473,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 <script>
-
-    var userId = localStorage.getItem("userId");
+    var userId;
     var selectedProduct = [];
     var selectedCart = [];
     var selectedProductGroup = [];
@@ -494,6 +493,8 @@
 
     window.onload = function () {
         selectedProduct = [];
+        userId = localStorage.getItem("userId");
+        console.log(userId);
         loadPage();
     }
 
@@ -607,7 +608,7 @@
                                 <div class="row align-items-center gy-3">
                                     <div class="col-sm">
                                         <div class="d-flex flex-wrap my-n1">
-                                            <div>
+                                            <div hidden>
                                                 <button class="btn btn-hover d-block text-body p-1 px-2"
                                                 ><i class="ri-delete-bin-fill text-muted align-bottom me-1" onclick="deleteGroup(${productId})"></i>Xoá</button>
                                             </div>

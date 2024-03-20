@@ -30,7 +30,8 @@ public class ControllerKhachHang {
     @Autowired
     private DiaChiRepository dcrp;
 
-    private   BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String show() {
@@ -82,7 +83,7 @@ public class ControllerKhachHang {
         khachHang.setMatKhau("12345");
         khachHang.setLoaiKhachHang(0);
         khachHang.setNgayTao(LocalDateTime.now());
-//        khachHang.setMatKhauMaHoa(passwordEncoder.encode(khachHang.getMatKhau()));
+        khachHang.setMatKhauMaHoa(passwordEncoder.encode(khachHang.getMatKhau()));
         DiaChi diaChi = new DiaChi();
         diaChi.setKh(khachHang);
         diaChi.setNgayTao(LocalDateTime.now());
@@ -131,7 +132,7 @@ public class ControllerKhachHang {
             isValid = true;
             model.addAttribute("errorWard", "Chưa chọn Xã Phường !");
         }
-        if (isValid == false) {
+        if (!isValid) {
             khsv.save(khachHang);
             dcrp.save(diaChi);
             redirectAttributes.addFlashAttribute("message", true);

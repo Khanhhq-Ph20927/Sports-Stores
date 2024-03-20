@@ -20,3 +20,48 @@
     "listColors": ["1", "2", "3"],
     "listSizes": null
 }
+
+func in product_list : 
+
+    async function editProductDetail(idProductDetail) {
+        fetch('/api/admin/product_detail/detail/' + idProductDetail, {
+            method: 'GET'
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }).then(data => {
+            console.log(data);
+            idProduct_Detail = idProductDetail;
+            document.getElementById('product-name-input-edit').value = data.sp.tenSP;
+            document.getElementById('productdetail-count-input-edit').value = data.soLuong;
+
+            const colorId = data.ms.id;
+            document.getElementById('color-' + colorId + '-update').checked = true;
+
+            const sizeName = data.size;
+            document.getElementById('productsize-radio-update-' + sizeName.toLowerCase()).checked = true;
+            var url = '/api/admin/product_detail/picture/' + idProductDetail;
+
+            const pictureResponse = await fetch(url, {
+                method: 'GET'
+            });
+            console.log(pictureResponse);
+
+            $('#myModalEdit').modal('show');
+        })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function reloadQrJs() {
+        var scriptElement = document.querySelector('script[src*="/assets/js/qr.js"]');
+        if (scriptElement) {
+            scriptElement.remove();
+            var newScriptElement = document.createElement('script');
+            newScriptElement.src = '/assets/js/qr.js';
+            newScriptElement.defer = true;
+            document.body.appendChild(newScriptElement);
+        }
+    }
+style="width: 50%; height: 70%;padding-right: 15px;"

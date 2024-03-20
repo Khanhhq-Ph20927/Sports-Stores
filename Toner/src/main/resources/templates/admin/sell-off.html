@@ -183,7 +183,8 @@
                                                         <label class="form-label">Màu Sắc</label>
                                                         <select class="form-select mb-3"
                                                                 aria-label=".form-select-lg example"
-                                                                id="filter-color" onchange="loadProductDetail(undefined)">
+                                                                id="filter-color"
+                                                                onchange="loadProductDetail(undefined)">
                                                             <option value="0" selected>Tất Cả</option>
                                                             <option value="1">Đen</option>
                                                             <option value="2">Trắng</option>
@@ -618,6 +619,8 @@
                 `;
             document.getElementById("pagination_cart_" + index).innerHTML = currentPageOfCart;
             document.getElementById("list_product_detail_of_cart_" + index).innerHTML = mainOfCart;
+            document.getElementById("count-total-input_" + index).value = '';
+
         } else {
             for (i = 0; i < listInvoiceDetail.length; i++) {
                 var count = listInvoiceDetail[i].soLuong;
@@ -666,7 +669,9 @@
                 <button class="page-link" onclick="event.preventDefault(); loadInvoiceDetail(${id},${totalPageOfCart - 1},${index})" aria-label="Last">Last</button>
             </li>`;
             document.getElementById("pagination_cart_" + index).innerHTML = currentPageOfCart;
+
             document.getElementById("count-total-input_" + index).value = formatmoney(totalCount + (totalCount * 0.1)) + "(VAT: 10%)";
+
             document.getElementById("time-input_" + index).value = moment(listInvoiceDetail[0].dh.ngayTao).format('DD/MM/YY HH:mm:ss');
         }
     }
@@ -786,7 +791,7 @@
         }
     }
 
-     function deleteInvoiceDetail(id) {
+    function deleteInvoiceDetail(id) {
         console.log(id);
         swal.fire({
             text: "Bạn Có Muốn Xoá Sản Phẩm Khỏi Giỏ Hàng?",
@@ -806,7 +811,7 @@
                             icon: "success",
                             title: "Xoá thành công!"
                         }).then(async () => {
-                             await loadInvoiceDetail(selectedInvoiceId, currentPageCart, idElementInvoiceDetail);
+                            await loadInvoiceDetail(selectedInvoiceId, currentPageCart, idElementInvoiceDetail);
                         })
                     }
                 })

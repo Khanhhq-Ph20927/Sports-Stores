@@ -76,10 +76,6 @@
                                                 <select class="form-select mb-3" aria-label=".form-select-lg example"
                                                         id="product-brand-input"
                                                         onchange="validBrand()">
-                                                    <option selected value="-1">Open this select menu</option>
-                                                    <option value="1">Local Brand 1</option>
-                                                    <option value="2">Local Brand 2</option>
-                                                    <option value="3">Local Brand 3</option>
                                                 </select>
                                                 <span id="errorBrand" class="text-danger fw-bold"></span>
                                             </div>
@@ -129,10 +125,6 @@
                                                 <select class="form-select mb-3" aria-label=".form-select-lg example"
                                                         id="product-provider-input"
                                                         onchange="validProvider()">
-                                                    <option selected value="-1">Open this select menu</option>
-                                                    <option value="1">Nhà Cung Cấp A</option>
-                                                    <option value="2">Nhà Cung Cấp B</option>
-                                                    <option value="3">Nhà Cung Cấp C</option>
                                                 </select>
                                                 <span id="errorProvider" class="text-danger fw-bold"></span>
                                             </div>
@@ -148,6 +140,16 @@
                                                            required onkeyup="validPrice()"/>
                                                 </div>
                                                 <span id="errorPrice" class="text-danger fw-bold"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="product-type-input">Môn Thể Thao</label>
+                                                <select class="form-select mb-3" aria-label=".form-select-lg example"
+                                                        id="product-type-input"
+                                                        onchange="validProvider()">
+                                                </select>
+                                                <span id="errorType" class="text-danger fw-bold"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -177,6 +179,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script th:inline="javascript">
 
+    window.onload = function (){
+        findDataInSelect();
+    }
+
     function formatMoney(money) {
         const VND = new Intl.NumberFormat('vi-VN', {
             style: 'currency',
@@ -196,6 +202,46 @@
         timer: 1500,
         timerProgressBar: true,
     });
+
+    function findType(){
+        let type = `
+            <option selected value="-1">Open this select menu</option>
+        `;
+    }
+
+    async function findDataInSelect(){
+        let urlProvider = '/api/admin/supplier/find-all';
+        let urlBrand = '/api/admin/trademark/find-all';
+
+        const responseProvider = await fetch(urlProvider,{
+            method: 'GET'
+        })
+        const listProvider = await responseProvider.json();
+
+        const responseBrand = await fetch(urlBrand,{
+            method: 'GET'
+        })
+        const listBrand = await responseBrand.json();
+        console.log(listBrand);
+
+        let brand = `<option selected value="-1">Open this select menu</option>`;
+
+        let provider = `<option selected value="-1">Open this select menu</option>`;
+
+        for (let i = 0; i < listBrand.length; i++){
+            brand += `
+                   <option value="${listBrand[i].id}">${listBrand[i].ten}</option>
+            `;
+        }
+        for (let i = 0; i < listProvider.length; i++){
+            provider += `
+                   <option value="${listProvider[i].id}">${listProvider[i].ten}</option>
+            `;
+        }
+
+        document.getElementById('product-brand-input').innerHTML = brand;
+        document.getElementById('product-provider-input').innerHTML = provider;
+    }
 
     function getDataFromForm() {
 
