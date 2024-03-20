@@ -7,4 +7,6 @@ import java.util.List;
 public interface ServiceTheLoai {
 
     List<TheLoai> findAll();
+
+    TheLoai findById(String id);
 }

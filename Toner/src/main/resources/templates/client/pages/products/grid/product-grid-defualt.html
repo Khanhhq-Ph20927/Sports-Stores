@@ -1166,13 +1166,24 @@
             });
             var dataPicture = await pictureResponse.json();
             console.log(dataPicture);
-            var img = `<img id="picture-product" src="${dataPicture[0].linkAnh}" alt="Ảnh Sản Phẩm"
+            var img;
+            if(dataPicture.statusText === 'failure'){
+                img = `<img id="picture-product" src="../assets/images/products/img-8.png" alt="Ảnh Sản Phẩm"
                     style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">
                          <div class="action vstack gap-2">
                                     <button class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action "
                                             data-bs-toggle="button"><span class="icon-on"><i class="ri-eye-fill"></i></span>
                                     <span class="icon-off"><i class="ri-eye-fill"></i></span></button>
                          </div>`;
+            } else {
+                img = `<img id="picture-product" src="${dataPicture[0].linkAnh}" alt="Ảnh Sản Phẩm"
+                    style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">
+                         <div class="action vstack gap-2">
+                                    <button class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action "
+                                            data-bs-toggle="button"><span class="icon-on"><i class="ri-eye-fill"></i></span>
+                                    <span class="icon-off"><i class="ri-eye-fill"></i></span></button>
+                         </div>`;
+            }
             document.getElementById('image-product-'+idPD).innerHTML = img;
             var result = await response.json();
             if (selectedProduct === undefined && selectedProductDetailColor === undefined) {
@@ -1290,6 +1301,7 @@
 
         async function AddToCart() {
             var userId = localStorage.getItem("userId");
+            console.log(userId);
             if(userId === null || userId === undefined){
                 swal.fire({
                     icon: "error",
@@ -1297,61 +1309,62 @@
                     text: "Bạn phải đăng nhập để sử dụng chức năng này!",
                     confirmButtonText: "OK"
                 })
-            }
-            let product = {};
-            if (selectedProductDetailColor === undefined && selectedProductDetailSize === undefined) {
-                (async () => {
-                    await Toast.fire({
-                        icon: "warning",
-                        title: "Chưa Chọn Màu Và Size!",
-                    });
-                })();
-            } else if (selectedProductDetailColor === undefined) {
-                (async () => {
-                    await Toast.fire({
-                        icon: "warning",
-                        title: "Chưa Chọn Màu!",
-                    });
-                })();
-            } else if (selectedProductDetailSize === undefined) {
-                (async () => {
-                    await Toast.fire({
-                        icon: "warning",
-                        title: "Chưa Chọn Size!",
-                    });
-                })();
             } else {
-                product = {idSP: selectedProduct, ms: selectedProductDetailColor, size: selectedProductDetailSize};
-                var url = '/api/client/cart_detail/add/'+userId;
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(product)
-                });
-                console.log(response);
-                if (response.status === 200) {
-                    var input = document.querySelectorAll('input[type=radio]');
-                    input.forEach(function (inputE) {
-                        inputE.checked = false;
-                    })
-                    selectedProduct = undefined;
-                    selectedProductDetailColor = undefined;
-                    selectedProductDetailSize = undefined;
+                let product = {};
+                if (selectedProductDetailColor === undefined && selectedProductDetailSize === undefined) {
                     (async () => {
                         await Toast.fire({
-                            icon: "success",
-                            title: "Thêm thành công!",
+                            icon: "warning",
+                            title: "Chưa Chọn Màu Và Size!",
+                        });
+                    })();
+                } else if (selectedProductDetailColor === undefined) {
+                    (async () => {
+                        await Toast.fire({
+                            icon: "warning",
+                            title: "Chưa Chọn Màu!",
+                        });
+                    })();
+                } else if (selectedProductDetailSize === undefined) {
+                    (async () => {
+                        await Toast.fire({
+                            icon: "warning",
+                            title: "Chưa Chọn Size!",
                         });
                     })();
                 } else {
-                    (async () => {
-                        await Toast.fire({
-                            icon: "error",
-                            title: "Thêm thất bại!",
-                        });
-                    })();
+                    product = {idSP: selectedProduct, ms: selectedProductDetailColor, size: selectedProductDetailSize};
+                    var url = '/api/client/cart_detail/add/' + userId;
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(product)
+                    });
+                    console.log(response);
+                    if (response.status === 200) {
+                        var input = document.querySelectorAll('input[type=radio]');
+                        input.forEach(function (inputE) {
+                            inputE.checked = false;
+                        })
+                        selectedProduct = undefined;
+                        selectedProductDetailColor = undefined;
+                        selectedProductDetailSize = undefined;
+                        (async () => {
+                            await Toast.fire({
+                                icon: "success",
+                                title: "Thêm thành công!",
+                            });
+                        })();
+                    } else {
+                        (async () => {
+                            await Toast.fire({
+                                icon: "error",
+                                title: "Thêm thất bại!",
+                            });
+                        })();
+                    }
                 }
             }
         }

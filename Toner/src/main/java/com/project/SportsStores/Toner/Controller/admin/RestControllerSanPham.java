@@ -225,6 +225,9 @@ public class RestControllerSanPham {
         if (dto.getTenSP().isEmpty()) {
             isValid = false;
         }
+        if (dto.getTheLoai() == -1) {
+            isValid = false;
+        }
         if (!matcherName.matches()) {
             isValid = false;
             ResponseCustom responseCustom = new ResponseCustom();

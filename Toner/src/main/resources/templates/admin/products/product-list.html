@@ -164,14 +164,9 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label class="form-label">Nhà Cung Cấp</label>
-                                                    <select class="form-select mb-3"
-                                                            aria-label=".form-select-lg example"
+                                                    <select class="form-select mb-3" aria-label=".form-select-lg example"
                                                             id="product-provider-update-input"
                                                             onchange="validProvider()">
-                                                        <option selected value="-1">Open this select menu</option>
-                                                        <option value="1">Nhà Cung Cấp A</option>
-                                                        <option value="2">Nhà Cung Cấp B</option>
-                                                        <option value="3">Nhà Cung Cấp C</option>
                                                     </select>
                                                     <span id="error-provider-update" class="text-danger fw-bold"></span>
                                                 </div>
@@ -219,21 +214,17 @@
                                         <!--end row-->
 
                                         <div class="row">
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-3 col-sm-6">
                                                 <div class="md-3">
                                                     <label class="form-label">Thương Hiệu</label>
-                                                    <select class="form-select mb-3"
-                                                            aria-label=".form-select-lg example"
-                                                            id="product-brand-update-input" onchange="validBrand()">
-                                                        <option selected value="-1">Open this select menu</option>
-                                                        <option value="1">Local Brand 1</option>
-                                                        <option value="2">Local Brand 2</option>
-                                                        <option value="3">Local Brand 3</option>
+                                                    <select class="form-select mb-3" aria-label=".form-select-lg example"
+                                                            id="product-brand-update-input"
+                                                            onchange="validBrand()">
                                                     </select>
+                                                    <span id="error-brand-update" class="text-danger fw-bold"></span>
                                                 </div>
-                                                <span id="error-brand-update" class="text-danger fw-bold"></span>
                                             </div>
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-3 col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label"
                                                            for="product-price-update-input">Giá</label>
@@ -249,6 +240,16 @@
                                                 </div>
                                                 <span id="error-price-update"
                                                       class="text-danger fw-bold"></span>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="product-type-update-input">Môn Thể Thao</label>
+                                                    <select class="form-select mb-3" aria-label=".form-select-lg example"
+                                                            id="product-type-update-input"
+                                                            onchange="validType()">
+                                                    </select>
+                                                    <span id="error-type-update" class="text-danger fw-bold"></span>
+                                                </div>
                                             </div>
                                         </div>
                                         <!-- end col -->
@@ -864,6 +865,8 @@
 
     window.onload = function () {
         loadPage(0);
+        findType();
+        findDataInSelect();
     }
 
     function detailProduct(productId) {
@@ -881,6 +884,7 @@
             document.getElementById('product-collections-update-input').value = data.danhMuc;
             document.getElementById('product-provider-update-input').value = data.ncc.id;
             document.getElementById('product-price-update-input').value = data.donGia;
+            document.getElementById('product-type-update-input').value = data.tl.id;
             idProduct = productId;
             if (data.trangThai === 0) {
                 document.getElementById('radioStatus1').checked = true;
@@ -978,6 +982,7 @@
         var tenSP = document.getElementById('product-name-update-input').value;
         var thieu = document.getElementById('product-brand-update-input').value;
         var danhMuc = document.getElementById('product-collections-update-input').value;
+        var theLoai = document.getElementById('product-type-update-input').value;
         var trangThai = document.querySelector('input[name="status-update"]:checked').value;
         var ncc = document.getElementById('product-provider-update-input').value;
         var donGia = document.getElementById('product-price-update-input').value;
@@ -987,6 +992,7 @@
             thieu: thieu,
             danhMuc: danhMuc,
             trangThai: trangThai,
+            theLoai: theLoai,
             ncc: ncc,
             donGia: donGia
         };
@@ -1018,6 +1024,10 @@
         }
         if (data.danhMuc === '-1') {
             document.getElementById('error-collections-update').innerText = 'Vui lòng chọn danh mục!';
+            isValid += 1;
+        }
+        if (data.theLoai === '-1') {
+            document.getElementById('error-type-update').innerText = 'Vui lòng chọn môn thể thao!';
             isValid += 1;
         }
         if (data.donGia === '') {
@@ -1407,7 +1417,6 @@
         var list = result.content;
         var totalPage = result.totalPages;
         var number = result.number;
-        console.log(number);
         var main = '';
         for (i = 0; i < list.length; i++) {
             var trangThaiBadge = (list[i].trangThai == 0) ? '<div class="form-check form-switch" \>\n' +
@@ -1734,6 +1743,62 @@
 </script>
 <script th:inline="javascript">
 
+    async function findType(){
+        let url = '/api/admin/sport/find-all';
+
+        const response = await fetch(url,{
+            method: 'GET'
+        })
+
+        const data = await response.json();
+
+        console.log(data);
+
+        var sport = '<option selected value="-1">Open this select menu</option>';
+
+        for (let i = 0; i < data.length; i++){
+            sport += `
+                <option value="${data[i].id}">${data[i].ten}</option>
+            `;
+        }
+
+        document.getElementById('product-type-update-input').innerHTML = sport;
+    }
+
+    async function findDataInSelect(){
+        let urlProvider = '/api/admin/supplier/find-all';
+        let urlBrand = '/api/admin/trademark/find-all';
+
+        const responseProvider = await fetch(urlProvider,{
+            method: 'GET'
+        })
+        const listProvider = await responseProvider.json();
+
+        const responseBrand = await fetch(urlBrand,{
+            method: 'GET'
+        })
+        const listBrand = await responseBrand.json();
+        console.log(listBrand);
+
+        let brand = `<option selected value="-1">Open this select menu</option>`;
+
+        let provider = `<option selected value="-1">Open this select menu</option>`;
+
+        for (let i = 0; i < listBrand.length; i++){
+            brand += `
+                   <option value="${listBrand[i].id}">${listBrand[i].ten}</option>
+            `;
+        }
+        for (let i = 0; i < listProvider.length; i++){
+            provider += `
+                   <option value="${listProvider[i].id}">${listProvider[i].ten}</option>
+            `;
+        }
+
+        document.getElementById('product-brand-update-input').innerHTML = brand;
+        document.getElementById('product-provider-update-input').innerHTML = provider;
+    }
+
     function validPrice() {
         var priceInput = document.getElementById('product-price-update-input');
         var errorPrice = document.getElementById('error-price-update');
@@ -1768,6 +1833,18 @@
             errorCollections.style.display = 'none';
         } else {
             errorCollections.style.display = 'block';
+        }
+
+    }
+
+    function validType() {
+        var typeInput = document.getElementById('product-type-update-input');
+        var errorType = document.getElementById('error-type-update');
+
+        if (typeInput.value !== "-1") {
+            errorType.style.display = 'none';
+        } else {
+            errorType.style.display = 'block';
         }
 
     }

@@ -6,6 +6,7 @@ import com.project.SportsStores.Toner.Model.SanPham;
 import com.project.SportsStores.Toner.Repository.NhaCungCapRepository;
 import com.project.SportsStores.Toner.Repository.ThuongHieuRepository;
 import com.project.SportsStores.Toner.Service.Impl.SanPhamServiceImpl;
+import com.project.SportsStores.Toner.Service.ServiceTheLoai;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,9 @@ public class ControllerSanPham {
 
     @Autowired
     private ThuongHieuRepository rp2;
+
+    @Autowired
+    private ServiceTheLoai sv2;
 
     @RequestMapping(value = "/product_detail", method = RequestMethod.GET)
     private String viewProductDetail() {
@@ -90,6 +94,7 @@ public class ControllerSanPham {
         if (sanPhamDTO.getTenSP().isEmpty()) {
             isValid = false;
         }
+
         if (!matcherName.matches()) {
             isValid = false;
             ResponseCustom responseCustom = new ResponseCustom();
@@ -101,6 +106,9 @@ public class ControllerSanPham {
             isValid = false;
         }
         if (sanPhamDTO.getNcc() == null || rp1.findById(sanPhamDTO.getNcc()).isEmpty()) {
+            isValid = false;
+        }
+        if (sanPhamDTO.getTheLoai() == null || sv2.findById(String.valueOf(sanPhamDTO.getTheLoai())) == null) {
             isValid = false;
         }
         if (sanPhamDTO.getDonGia() == null) {
@@ -139,6 +147,7 @@ public class ControllerSanPham {
             sp.setDonGia(BigDecimal.valueOf(Long.parseLong(sanPhamDTO.getDonGia())));
             sp.setThieu(rp2.findById(sanPhamDTO.getThieu()).get());
             sp.setNcc(rp1.findById(sanPhamDTO.getNcc()).get());
+            sp.setTl(sv2.findById(String.valueOf(sanPhamDTO.getTheLoai())));
             sv.save(sp);
             return ResponseEntity.ok("success");
         } else {

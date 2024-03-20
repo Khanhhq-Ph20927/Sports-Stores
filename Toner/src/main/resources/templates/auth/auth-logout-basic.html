@@ -44,24 +44,5 @@
 </section>
 </body>
 <script>
-    window.onload = function () {
-        logout();
-    }
-
-    async function logout() {
-        $.ajax({
-            url: '/api/v1/auth/logout',
-            method: 'POST',
-            success: function (response) {
-                console.log(response);
-            },
-            error: function (xhr, status, error) {
-                console.error('Error:', error);
-            }
-        });
-        localStorage.removeItem("token");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("userId");
-    }
 </script>
 </html>

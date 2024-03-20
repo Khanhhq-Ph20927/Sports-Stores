@@ -13,6 +13,7 @@ public class SanPhamDTO {
     private String donGia;
     private Integer danhMuc;
     private Integer trangThai;
+    private Integer theLoai;
     private Long ncc;
     private Long thieu;
 }

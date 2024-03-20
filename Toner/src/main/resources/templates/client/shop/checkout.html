@@ -468,6 +468,7 @@
     var listCart = [];
     var userId = localStorage.getItem('userId');
     window.onload = function () {
+        handleStatusLogin()
         loadCart();
         loadAdress();
     }

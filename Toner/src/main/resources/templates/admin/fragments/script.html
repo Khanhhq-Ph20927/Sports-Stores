@@ -399,4 +399,12 @@
             chart.render();
         }
     </script>
+    <script>
+        function logout() {
+            localStorage.removeItem("token");
+            localStorage.removeItem("refreshToken");
+            localStorage.removeItem("userId");
+            window.location.href = '/auth-signin-basic';
+        }
+    </script>
 </div>

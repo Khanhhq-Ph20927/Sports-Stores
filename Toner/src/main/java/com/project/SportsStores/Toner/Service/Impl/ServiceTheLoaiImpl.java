@@ -10,11 +10,20 @@ import java.util.List;
 
 @Service
 public class ServiceTheLoaiImpl implements ServiceTheLoai {
+
     @Autowired
     private TheLoaiRepository rp;
 
     @Override
     public List<TheLoai> findAll() {
         return rp.findAll();
+    }
+
+    @Override
+    public TheLoai findById(String id) {
+        if(rp.findById(Long.parseLong(id)).isPresent()){
+            return rp.findById(Long.parseLong(id)).get();
+        }
+        return null;
     }
 }
