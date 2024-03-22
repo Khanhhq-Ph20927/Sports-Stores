@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+      data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<head th:replace="admin/fragments/head::head"></head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer"
+/>
+<body>
+
+<div id="layout-wrapper">
+    <div th:replace="admin/fragments/header::header"></div>
+    <div th:replace="admin/fragments/sidebar::sidebar"></div>
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">List Category</h4>
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Category</a></li>
+                                    <li class="breadcrumb-item active">List View</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+
+                <div class="row" id="orderList">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row g-3">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive table-card mb-1">
+                                    <table class="table table-striped tablefix">
+                                        <thead class="thead-tablefix">
+                                        <tr>
+                                            <th>id</th>
+                                            <th>Ảnh</th>
+                                            <th>Tên</th>
+                                            <th>Mô tả</th>
+                                            <th class="sticky-col">Hành động</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="listcategory">
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination" id="pageable">
+                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    </ul>
+                                </nav>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    window.onload = function (){
+        loadCategory(0);
+    }
+    var size = 10;
+    async function loadCategory(page) {
+        var url = 'http://localhost:8080/admin/theloai/findAll-page?page=' + page + '&size=' + size;
+        const response = await fetch(url, {
+            method: 'GET'
+        });
+        var result = await response.json();
+        console.log(result)
+        var list = result.content;
+        var totalPage = result.totalPages;
+        var main = '';
+        for (i = 0; i < list.length; i++) {
+            main += `<tr>
+                    <td>${list[i].id}</td>
+                    <td><img src="${list[i].hinhAnh}" style="width: 100px"></td>
+                    <td>${list[i].ten}</td>
+                    <td>${list[i].moTa}</td>
+                    <td class="sticky-col">
+                        <a href="add-theloai?id=${list[i].id}"><i class="fa fa-edit iconaction"></i></a>
+                        <i onclick="deleteCategory(${list[i].id})" class="fa fa-trash iconaction" style="cursor: pointer"></i>
+                    </td>
+                </tr>`
+        }
+        document.getElementById("listcategory").innerHTML = main
+        var mainpage = ''
+        for (i = 1; i <= totalPage; i++) {
+            mainpage += `<li onclick="loadCategory(${(Number(i) - 1)})" class="page-item"><a class="page-link" href="#listsp">${i}</a></li>`
+        }
+        document.getElementById("pageable").innerHTML = mainpage
+    }
+
+
+
+    async function deleteCategory(id) {
+        var con = confirm("Bạn muốn xóa thể loại này?");
+        if(con == false){
+            return;
+        }
+        var url = 'http://localhost:8080/admin/delete-theloai?id='+ id;
+        const response = await fetch(url, {
+            method: 'DELETE'
+        });
+        if(response.status < 300){
+            window.location.reload();
+        }
+        else{
+            alert("Xóa thất bại");
+        }
+    }
+
+</script>
+
+<div th:replace="admin/fragments/chat::chat"></div>
+<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+<div th:replace="admin/fragments/script::script"></div>
+</body>
+</html>
