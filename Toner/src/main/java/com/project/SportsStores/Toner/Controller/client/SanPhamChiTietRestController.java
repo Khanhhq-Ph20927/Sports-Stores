@@ -60,4 +60,8 @@ public class SanPhamChiTietRestController {
         System.out.println(serviceASP.getByIdProductAndColor(id,color).toString());
         return ResponseEntity.ok().body(serviceASP.getByIdProductAndColor(id,color));
     }
+    @RequestMapping(value = "/detailSL/{id}/{color}/{size}", method = RequestMethod.GET)
+    private ResponseEntity<?> findIdProductAndColorAndSize(@PathVariable("id") String id, @PathVariable("color") String color, @PathVariable("size") String size) {
+        return ResponseEntity.ok().body(sv.findIdProductByColorAndSize(id, color, size));
+    }
 }

@@ -1067,7 +1067,7 @@
                             <div class="bg-light bg-opacity-50 rounded py-4 position-relative" id="image-product-${list[i].id}">
                                 ${img}
                                 <div class="action vstack gap-2">
-                                    <button class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action "
+                                    <button onclick="nextPageDetail(${list[i].id})" class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action "
                                             data-bs-toggle="button"><span class="icon-on"><i class="ri-eye-fill"></i></span>
                                         <span class="icon-off"><i class="ri-eye-fill"></i></span></button>
                                 </div>
@@ -1782,6 +1782,10 @@
                 });
             });
         }
+
+    function nextPageDetail(id) {
+        window.location.href = '/product/detail/' + id;
+    }
 </script>
 </body>
 </html>

@@ -2,6 +2,7 @@ package com.project.SportsStores.Toner.Controller.client;
 
 import com.project.SportsStores.Toner.Model.CustomModel.ResponseCustom;
 import com.project.SportsStores.Toner.Model.DTO.ChiTietSanPhamDTO;
+import com.project.SportsStores.Toner.Model.DTO.SanPhamChiTietDTO;
 import com.project.SportsStores.Toner.Model.GioHang;
 import com.project.SportsStores.Toner.Model.GioHangChiTiet;
 import com.project.SportsStores.Toner.Model.KhachHang;
@@ -234,6 +235,32 @@ public class GioHangChiTietRestController {
         }
         return new ResponseEntity<>(listGHCT,HttpStatus.OK);
     }
+    @RequestMapping(value = "/addByProductDetailPage/{idPD}", method = RequestMethod.POST)
+    private ResponseEntity<?> addByProductDetailPage(@PathVariable("idPD") Long idPD, @RequestBody SanPhamChiTietDTO dto) {
+        SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietService.findIdProductByColorAndSize(String.valueOf(idPD), dto.getMs(), dto.getSize());
+        GioHang gioHang = gioHangService.getById("19");
+        boolean isCheck = false;
+        GioHangChiTiet ghctAssign = null;
+        for (GioHangChiTiet ghct : gioHangChiTietService.getByIdGHList("19")) {
 
+            if (ghct.getSpct().getId() == sanPhamChiTiet.getId()) {
+                isCheck = true;
+                ghctAssign = ghct;
+                break;
+            }
+        }
+        if (isCheck == false) {
+            GioHangChiTiet gioHangChiTiet = new GioHangChiTiet();
+            gioHangChiTiet.setGh(gioHang);
+            gioHangChiTiet.setSoLuong(Integer.valueOf(dto.getSl()));
+            gioHangChiTiet.setNgaySua(LocalDateTime.now());
+            gioHangChiTiet.setSpct(sanPhamChiTiet);
+            service.save(gioHangChiTiet);
+        } else {
+            ghctAssign.setSoLuong(ghctAssign.getSoLuong() + Integer.valueOf(dto.getSl()));
+            service.save(ghctAssign);
+        }
+        return ResponseEntity.ok().body(HttpStatus.OK);
+    }
 
 }
