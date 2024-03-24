@@ -926,15 +926,17 @@
 
             const sizeName = data.size;
             document.getElementById('productsize-radio-update-' + sizeName.toLowerCase()).checked = true;
-            await findPicture(idProductDetail);
+
+            const idProduct = data.sp.id;
+            await findPicture(idProduct,colorId);
             $('#myModalEdit').modal('show');
         } catch (error) {
             console.error('Error:', error);
         }
     }
 
-    async function findPicture(idProductDetail) {
-        const pictureResponse = await fetch('/api/admin/product_detail/picture/' + idProductDetail,{
+    async function findPicture(idProduct,idColor) {
+        const pictureResponse = await fetch('/api/admin/product_detail/picture/' + idProduct + '/' + idColor,{
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem("token")
@@ -946,8 +948,8 @@
             const pictureData = await pictureResponse.json();
             console.log(pictureData);
 
-            document.getElementById("linkPicture").value = pictureData.linkAnh;
-            document.getElementById("preview").src = pictureData.linkAnh;
+            document.getElementById("linkPicture").value = pictureData[0].linkAnh;
+            document.getElementById("preview").src = pictureData[0].linkAnh;
             labelElement.textContent = 'Thay ảnh khác';
         } else {
             document.getElementById("linkPicture").value = '';

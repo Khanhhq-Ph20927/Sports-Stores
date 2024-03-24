@@ -3,9 +3,7 @@ package com.project.SportsStores.Toner.Controller.client;
 import com.project.SportsStores.Toner.Model.*;
 import com.project.SportsStores.Toner.Model.DTO.GioHangChiTietDTO;
 import com.project.SportsStores.Toner.Service.*;
-import com.project.SportsStores.Toner.Service.Impl.KhachHangServiceImpl;
-import com.project.SportsStores.Toner.Service.Impl.PhuongThucTTServiceImpl;
-import com.project.SportsStores.Toner.Service.Impl.SanPhamChiTietServiceImpl;
+import com.project.SportsStores.Toner.Service.Impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +21,9 @@ public class DonHangRestController {
 
     @Autowired
     private KhachHangServiceImpl khachHangService;
+
+    @Autowired
+    private NhanVienServiceImpl nhanVienService;
 
     @Autowired
     private PhuongThucTTServiceImpl ptttService;
@@ -115,4 +116,16 @@ public class DonHangRestController {
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
+    @GetMapping("/invoice/change-status/{id}")
+    private ResponseEntity<?> confirmOrder(@PathVariable("id") String id,
+                                           @RequestParam("status") int status,
+                                           @RequestParam("idStaff") Long idStaff) {
+        DonHang dh = donHangService.findById(Long.parseLong(id)).get();
+        dh.setTrangThai(status);
+        if (status == 2) {
+            dh.setNv(nhanVienService.findById(idStaff).get());
+        }
+        donHangService.save(dh);
+        return new ResponseEntity<>("success", HttpStatus.OK);
+    }
 }

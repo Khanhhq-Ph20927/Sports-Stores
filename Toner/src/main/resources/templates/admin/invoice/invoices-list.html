@@ -212,11 +212,8 @@
                                                 <h5 class="fs-15 mb-0"><span id="invoice-date"></span></h5>
                                             </div>
                                             <!--end col-->
-                                            <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Trạng
-                                                    Thái</p>
-                                                <span class="badge bg-success-subtle text-success "
-                                                      id="payment-status"></span>
+                                            <div class="col-lg-3 col-6" id="payment-status">
+
                                             </div>
                                             <!--end col-->
                                             <div class="col-lg-3 col-6">
@@ -247,18 +244,27 @@
                                                 </tbody>
                                             </table><!--end table-->
                                         </div>
-                                        <div class="border-top border-top-dashed mt-2">
+                                        <div class="border-top border-top-dashed mt-2 d-flex justify-content-between">
+                                            <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto"
+                                                   style="width:100%">
+                                                <tbody id="address">
+                                                </tbody>
+                                            </table>
+
                                             <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto"
                                                    style="width:250px">
                                                 <tbody id="sub-total">
                                                 </tbody>
                                             </table>
-                                            <!--end table-->
                                         </div>
-                                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                            <button class="btn btn-success" onclick="printModal()" id="printButton"><i
-                                                    class="ri-printer-line align-bottom me-1"></i> Print
-                                            </button>
+                                        <div class="hstack gap-2 justify-content-between d-print-none mt-4">
+                                            <div class="justify-content-start" id="statusButtonGroup">
+                                            </div>
+                                            <div class="justify-content-end">
+                                                <button class="btn btn-success" onclick="printModal()" id="printButton">
+                                                    <i class="ri-printer-line align-bottom me-1"></i> Print
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                     <!--end card-body-->
@@ -269,11 +275,6 @@
                     </div>
                     <!--end col-->
                 </div>
-            </div>
-            <div class="modal-footer justify-content-end" id="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Đóng
-                </button>
             </div>
             <!-- end col -->
         </div>
@@ -415,8 +416,21 @@
             if (list[i].trangThai === 1) {
                 statusBadge = '<span class="badge bg-success">Chờ Xác Nhận</span>'
             }
+            if (list[i].trangThai === 2) {
+                statusBadge = '<span class="badge bg-success">Đang Xử Lý</span>'
+            }
+            if (list[i].trangThai === 3) {
+                statusBadge = '<span class="badge bg-success">Đang Giao Hàng</span>'
+            }
+
             if (list[i].trangThai === 4) {
                 statusBadge = '<span class="badge bg-success">Hoàn Thành</span>';
+            }
+            if (list[i].trangThai === 5) {
+                statusBadge = '<span class="badge bg-danger">Giao Hàng Thất Bại</span>'
+            }
+            if (list[i].trangThai === 6) {
+                statusBadge = '<span class="badge bg-danger">Huỷ</span>'
             }
             main += `<tr >
                             <td scope="row">${list[i].maDonHang}</td>
@@ -464,9 +478,28 @@
         var main = '';
         var sub_total = '';
         var total_amount = 0;
+        let address;
+        let customer;
+        let order_status;
+        let order_id;
         if (response.status === 200) {
-            console.log(data);
+            order_status = data[0].dh.trangThai;
+            order_id = data[0].dh.id;
+            address = data[0].dh.ttvc;
+            customer = data[0].dh.kh;
+            let hidden;
+            if (data[0].dh.trangThai > 0 && data[0].dh.trangThai < 4) {
+                hidden = 'style="display: none;"';
+            } else {
+                hidden = '';
+            }
             for (i = 0; i < data.length; i++) {
+                let hidden;
+                if (data[i].dh.trangThai > 0 && data[i].dh.trangThai < 4) {
+                    hidden = 'style="display: none;"';
+                } else {
+                    hidden = '';
+                }
                 total_amount += data[i].spct.sp.donGia * data[i].soLuong;
                 main += `
                 <tr>
@@ -498,23 +531,64 @@
                                <th scope="row">Tổng số tiền</th>
                                <th class="text-end">${formatmoney(total_amount + vat)}</th>
                    </tr>
-                    <tr>
+                    <tr ${hidden}>
                               <td>Tiền Khách Trả</td>
                               <td class="text-end">${formatmoney(data[0].dh.tienKhachTra)}</td>
                    </tr>
-                    <tr>
+                    <tr ${hidden}>
                               <td>Tiền trả lại</td>
                               <td class="text-end">${formatmoney(data[0].dh.tienKhachTra - (total_amount + vat))}</td>
                    </tr>
             `;
             var momentDate = moment(data[0].dh.ngayTao);
             var status = '';
-            if (data[0].dh.trangThai === 0) {
-                status = 'Chờ';
+            if (data[0].dh.trangThai > 0 && data[0].dh.trangThai < 4) {
+                status = `
+                 <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Trạng Thái</p>
+                            <span class="badge bg-success-subtle text-info"
+                                                      >Chưa Thanh Toán</span>
+                `;
             }
-            if (data[0].dh.trangThai === 1) {
-                status = 'Đã thanh toán';
+            if (data[0].dh.trangThai === 4) {
+                status = `
+                 <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Trạng Thái</p>
+                            <span class="badge bg-success-subtle text-success"
+                                                      >Đã Thanh Toán</span>
+                `;
             }
+            if (data[0].dh.trangThai === 6 || data[0].dh.trangThai === 5) {
+                status = `
+                 <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Trạng Thái</p>
+                            <span class="badge bg-success-subtle text-danger"
+                                                      >Huỷ</span>
+                `;
+            }
+            if (address) {
+                let addressDetail;
+                if (isNaN(address.diaChiCuThe.charAt(0))) {
+                    addressDetail = address.diaChiCuThe.charAt(0).toUpperCase() + address.diaChiCuThe.slice(1);
+                } else {
+                    addressDetail = address.diaChiCuThe;
+                }
+                document.getElementById('address').innerHTML = `
+                        <div class="col-lg-12">
+                            <div class="card border-0">
+                                <br>
+                                <label class="form-label">
+                                    <div class="row">
+                                        <div class="col-md-6"><span class="mb-3 text-uppercase fw-semibold d-block">Địa chỉ nhận hàng</span></div>
+                                    </div>
+                                    <span class="fs-14 mb-2 d-block fw-semibold">${customer.hoTen}</span>
+                                    <span class="text-muted fw-normal text-wrap mb-1 d-block">${address.ttp + ', ' + address.qh + ', ' + address.xp + '.'}</span>
+                                    <span class="text-muted fw-normal text-wrap mb-1 d-block">${addressDetail + '.'}</span>
+                                    <span class="text-muted fw-normal d-block">${address.sdtNguoiNhan}</span>
+                                </label>
+                            </div>
+                        </div>`;
+            } else {
+                document.getElementById('address').innerHTML = '';
+            }
+            handleStatusInvoice(order_status, order_id);
             document.getElementById('products-list').innerHTML = main;
             document.getElementById('sub-total').innerHTML = sub_total;
             document.getElementById('invoice-no').innerText = data[0].dh.maDonHang;
@@ -527,11 +601,84 @@
 
     function printModal() {
         document.getElementById('layout-wrapper').style.display = 'none';
-        document.getElementById('modal-footer').style.display = 'none';
+        document.getElementById('statusButtonGroup').style.display = 'none';
         window.print();
         document.getElementById('layout-wrapper').style.display = 'block';
-        document.getElementById('modal-footer').style.display = 'block';
+        document.getElementById('statusButtonGroup').style.display = 'block';
     }
 
+    function handleStatusInvoice(status, id_order) {
+        console.log('id order : ' + id_order);
+        let buttonGroup = '';
+        if (status === 1) {
+            buttonGroup = `
+                <button class="btn btn-success" onclick="handleInvoice(2,${id_order})"><i
+                     class="ri-check-line align-bottom me-1"></i> Xác Nhận
+                </button>
+                  <button class="btn btn-danger" onclick="handleInvoice(6,${id_order})"><i
+                     class="ri-close-line align-bottom me-1"></i> Huỷ
+                </button>
+            `;
+            document.getElementById('statusButtonGroup').innerHTML = buttonGroup;
+        } else if (status === 2) {
+            buttonGroup = `
+                <button class="btn btn-success" onclick="handleInvoice(3,${id_order})"><i
+                     class="ri-truck-fill align-bottom me-1"></i> Giao Hàng
+                </button>
+            `;
+            document.getElementById('statusButtonGroup').innerHTML = buttonGroup;
+        } else if (status === 3) {
+            buttonGroup = `
+                <button class="btn btn-success" onclick="handleInvoice(4,${id_order})"><i
+                     class="ri-check-line align-bottom me-1"></i> Giao Thành Công
+                </button>
+                 <button class="btn btn-danger" onclick="handleInvoice(5,${id_order})"><i
+                     class="ri-error-warning-fill align-bottom me-1"></i> Giao Thất Bại
+                </button>
+            `;
+            document.getElementById('statusButtonGroup').innerHTML = buttonGroup;
+        } else {
+            document.getElementById('statusButtonGroup').innerHTML = buttonGroup;
+        }
+    }
+
+    async function handleInvoice(status, id) {
+        let staff_id = localStorage.getItem("adminId");
+        swal.fire({
+            icon: 'question',
+            title: 'Thông báo',
+            text: 'Bạn có muốn thay đổi trạng thái!',
+            confirmButtonText: 'Có',
+            showCancelButton: true,
+            cancelButtonText: 'Không'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/api/client/order/invoice/change-status/' +
+                        id + '?status=' + status + '&idStaff=' + staff_id,
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    success: function (response) {
+                        console.log(response)
+                        if (response === 'success') {
+                            swal.fire({
+                                icon: 'success',
+                                title: 'Thông Báo',
+                                text: 'Chuyển Trạng Thái Thành Công!'
+                            }).then(() => {
+                                $('#myModal').modal('hide');
+                                loadPage();
+                            })
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                })
+            }
+        })
+    }
 </script>
 </html>

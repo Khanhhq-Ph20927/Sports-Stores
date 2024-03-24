@@ -31,12 +31,13 @@ public class RestControllerSanPhamChiTiet {
         return ResponseEntity.ok().body(sv.getById(id));
     }
 
-    @RequestMapping(value = "/picture/{id}", method = RequestMethod.GET)
-    private ResponseEntity<?> getPictureByIdProductDetail(@PathVariable("id") String id) {
-        if (serviceASP.getByIdProductDetail(id) == null) {
+    @RequestMapping(value = "/picture/{id}/{idColor}", method = RequestMethod.GET)
+    private ResponseEntity<?> getPictureByIdProductDetail(@PathVariable("id") String id,
+                                                          @PathVariable("idColor") String idColor) {
+        if (serviceASP.getByIdProductAndColor(id, idColor).size() == 0) {
             return ResponseEntity.status(400).body("null");
         }
-        return ResponseEntity.ok().body(serviceASP.getByIdProductDetail(id));
+        return ResponseEntity.ok().body(serviceASP.getByIdProductAndColor(id, idColor));
     }
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
@@ -45,18 +46,16 @@ public class RestControllerSanPhamChiTiet {
         sanPhamChiTiet.setSoLuong(Integer.parseInt(spct.getSl()));
         sanPhamChiTiet.setSize(spct.getSize().toUpperCase(Locale.ROOT));
         sanPhamChiTiet.setMs(serviceMS.getById(Integer.valueOf(spct.getMs())));
-        if (spct.getImgSrc() != null) {
-            AnhSanPham pic = serviceASP.getByIdProductDetail(String.valueOf(sanPhamChiTiet.getId()));
-            if(pic==null){
-                AnhSanPham picture = new AnhSanPham();
-                picture.setLinkAnh(spct.getImgSrc());
-                picture.setSpct(sanPhamChiTiet);
-                System.out.println(spct.toString());
-                serviceASP.save(picture);
-            } else {
-                pic.setLinkAnh(spct.getImgSrc());
-                serviceASP.save(pic);
-            }
+        if (serviceASP.getByIdProductAndColor(id, spct.getMs()).size() == 0) {
+            AnhSanPham pic = new AnhSanPham();
+            pic.setLinkAnh(spct.getImgSrc());
+            pic.setSpct(sanPhamChiTiet);
+            System.out.println(spct.toString());
+            serviceASP.save(pic);
+        } else {
+            AnhSanPham pic = serviceASP.getByIdProductAndColor(id, spct.getMs()).get(0);
+            pic.setLinkAnh(spct.getImgSrc());
+            serviceASP.save(pic);
         }
         List<SanPhamChiTiet> listSPCT = sv.getListByIdSp(String.valueOf(sanPhamChiTiet.getSp().getId()));
         listSPCT.remove(sanPhamChiTiet);
