@@ -38,4 +38,9 @@ public class DiaChiServiceImpl implements DiaChiService {
             return null;
         }
     }
+
+    @Override
+    public void save(DiaChi diaChi) {
+        rp.save(diaChi);
+    }
 }

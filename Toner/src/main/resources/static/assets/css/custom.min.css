@@ -1,6 +1,7 @@
 /*# sourceMappingURL=custom.min.css.map */
-.colored-toast{
+.colored-toast {
     box-shadow: none;
+    margin-bottom: 15px;
 }
 
 .colored-toast .swal2-icon {

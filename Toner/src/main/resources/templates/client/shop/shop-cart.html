@@ -512,7 +512,10 @@
         var sub_total = 0;
         var vat = 0;
         const response = await fetch(url, {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
         });
         var result = await response.json();
         console.log(result);
@@ -537,7 +540,10 @@
                     vat += (arrChild[j].spct.sp.donGia * count) * 0.1;
                     var urlGetPicture = '/api/client/product_detail/picture-detail/' + arrChild[j].spct.sp.id + '/' + arrChild[j].spct.ms.id;
                     const pictureResponse = await fetch(urlGetPicture, {
-                        method: 'GET'
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+                        }
                     });
                     var dataPicture = await pictureResponse.json();
                     var img;
@@ -843,7 +849,10 @@
             if (result.isConfirmed) {
                 var url = '/api/client/cart_detail/delete/' + id;
                 const promise = fetch(url, {
-                    method: 'GET'
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    }
                 });
                 promise.then(response => {
                     if (response.status === 200) {
@@ -884,7 +893,9 @@
                     const promise = fetch(url, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+
                         },
                         body: JSON.stringify(selectedProduct)
                     });
@@ -945,7 +956,9 @@
                     const promise = fetch(url, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+
                         },
                         body: JSON.stringify(arrProduct)
                     });
@@ -986,6 +999,9 @@
         $.ajax({
             url: '/api/client/cart_detail/add-quantity/' + id,
             method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            },
             success: function (response) {
                 console.log(response);
                 if (response.statusText === "success") {
@@ -1021,6 +1037,9 @@
                     $.ajax({
                         url: '/api/client/cart_detail/minus-quantity/' + id,
                         method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+                        },
                         success: function (response) {
                             console.log(response);
                             if (response.statusText === "success") {
@@ -1045,6 +1064,9 @@
             $.ajax({
                 url: '/api/client/cart_detail/minus-quantity/' + id,
                 method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                },
                 success: function (response) {
                     console.log(response);
                     if (response.statusText === "success") {
@@ -1066,6 +1088,9 @@
         $.ajax({
             url: '/api/client/cart_detail/edit-quantity/' + id + '/' + count,
             method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            },
             success: function (response) {
                 console.log(response);
                 if (response.statusText === "failure") {
@@ -1114,6 +1139,9 @@
                 url: '/api/client/cart_detail/add-to-invoice/' + userId,
                 method: 'POST',
                 contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                },
                 data: JSON.stringify(selectedProduct),
                 success: function (response) {
                     console.log(response);

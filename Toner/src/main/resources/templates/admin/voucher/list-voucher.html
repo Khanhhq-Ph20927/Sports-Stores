@@ -169,12 +169,15 @@
         var sort = document.getElementById("sort").value;
         var start = document.getElementById("start").value;
         var end = document.getElementById("end").value;
-        var url = 'http://localhost:8080/admin/voucher/findAll-page?page=' + page + '&size=' + size+'&sort='+sort;
+        var url = '/admin/voucher/findAll-page?page=' + page + '&size=' + size+'&sort='+sort;
         if (start != null && start != "" && end != null && end != "" && start != 'null' && end != 'null') {
             url += '&start=' + start + '&end=' + end
         }
         const response = await fetch(url, {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
         });
         var result = await response.json();
         console.log(result)
@@ -191,6 +194,7 @@
                     <td>${list[i].ngayKetThuc}</td>
                     <td class="sticky-col">
                         <a href="add-voucher?id=${list[i].id}"><i class="fa fa-edit iconaction"></i></a>
+                        <span class="p-2"></span>
                         <a onclick="loadChiTiet(${list[i].id})" href="#" data-bs-toggle="modal" data-bs-target="#chitiet"><i class="fa fa-eye iconaction"></i></a>
                     </td>
                 </tr>`
@@ -204,7 +208,7 @@
     }
 
     async function loadChiTiet(id) {
-        var url = 'http://localhost:8080/public/voucher/find-by-id?id=' + id ;
+        var url = '/public/voucher/find-by-id?id=' + id ;
 
         const response = await fetch(url, {
             method: 'GET'
@@ -214,8 +218,8 @@
         document.getElementById("tenkm").innerHTML = result.tenKhuyenMai
         document.getElementById("ngaybd").innerHTML = result.ngayBatDau
         document.getElementById("ngaykt").innerHTML = result.ngayKetThuc
-        document.getElementById("loaigg").innerHTML = result.loaiKM == true ? "Giảm giá theo %":"Giảm giá theo số tiền";
-        document.getElementById("giatg").innerHTML = result.loaiKM == true ? result.giaTriGiam +"%":formatmoney(result.giaTriGiam)
+        document.getElementById("loaigg").innerHTML = result.loaiKM === true ? "Giảm giá theo %":"Giảm giá theo số tiền";
+        document.getElementById("giatg").innerHTML = result.loaiKM === true ? result.giaTriGiam +"%":formatmoney(result.giaTriGiam)
         document.getElementById("ngayt").innerHTML = result.ngayTao
         document.getElementById("anh").src = result.banner
 

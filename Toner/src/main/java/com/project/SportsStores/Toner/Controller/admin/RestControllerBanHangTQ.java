@@ -247,7 +247,7 @@ public class RestControllerBanHangTQ {
                                                  @RequestParam(value = "total_amount", required = false) Long totalAmount,
                                                  @RequestParam(value = "cash_from_customer", required = false) Long cash) {
         DonHang dh = donHangService.findById(Long.parseLong(id)).get();
-        dh.setTrangThai(1);
+        dh.setTrangThai(4);
         dh.setTongTien(BigDecimal.valueOf(totalAmount));
         dh.setTienKhachTra(BigDecimal.valueOf(cash));
         donHangService.save(dh);

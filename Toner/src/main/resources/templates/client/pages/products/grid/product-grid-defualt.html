@@ -940,6 +940,9 @@
         var priceMax = "/api/client/product/priceMax";
         const responsePriceMax = await fetch(priceMax, {
             method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
         });
         var resultPriceMax = await responsePriceMax.json();
         dataPriceMax = resultPriceMax;
@@ -954,7 +957,8 @@
         const response = await fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
             },
             body: JSON.stringify(request)
         });
@@ -975,7 +979,10 @@
             var urlDetailPD = '/api/client/product_detail/detailPD/' + list[i].id;
 
             const responseDetailPD = await fetch(urlDetailPD, {
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
             });
 
             const data = await responseDetailPD.json();
@@ -984,7 +991,10 @@
             var urlPicture = '/api/client/product_detail/picture/' + list[i].id;
 
             const responsePicture = await fetch(urlPicture, {
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
             })
 
             const dataPicture = await responsePicture.json();
@@ -1158,11 +1168,17 @@
             var liSize = document.querySelectorAll('li.li-size' + idPD);
             var inputSize = document.querySelectorAll('input.size-input' + idPD);
             const response = await fetch(url, {
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
             });
             var urlGetPicture = '/api/client/product_detail/picture-detail/' + idPD + '/' + id;
             const pictureResponse = await fetch(urlGetPicture, {
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
             });
             var dataPicture = await pictureResponse.json();
             console.log(dataPicture);
@@ -1338,7 +1354,8 @@
                     const response = await fetch(url, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + localStorage.getItem("token")
                         },
                         body: JSON.stringify(product)
                     });
@@ -1373,6 +1390,9 @@
             var pathPriceMax = "/api/client/product/priceMax";
             const responsePriceMax = await fetch(pathPriceMax, {
                 method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
             });
             var resultPriceMax = await responsePriceMax.json();
             var minCost = document.getElementById("minCost").value;
@@ -1461,7 +1481,9 @@
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+
                 },
                 body: JSON.stringify(request)
             });
@@ -1483,7 +1505,10 @@
                 var urlDetailPD = '/api/client/product_detail/detailPD/' + list[i].id;
 
                 const responseDetailPD = await fetch(urlDetailPD, {
-                    method: 'GET'
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    }
                 });
 
                 const data = await responseDetailPD.json();
@@ -1492,7 +1517,10 @@
                 var urlPicture = '/api/client/product_detail/picture/' + list[i].id;
 
                 const responsePicture = await fetch(urlPicture, {
-                    method: 'GET'
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    }
                 })
 
                 const dataPicture = await responsePicture.json();
@@ -1680,7 +1708,11 @@
             // Hàm để gọi API và cập nhật giá trị max của input range
             function updateRangeMaxFromAPI() {
                 // Gọi API từ Spring Boot
-                fetch('/api/client/product/priceMax')
+                fetch('/api/client/product/priceMax',{
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    }
+                })
                     .then(response => response.json())
                     .then(data => {
                         // Lấy giá trị max từ phản hồi của API
@@ -1750,7 +1782,6 @@
                 });
             });
         }
-
 </script>
 </body>
 </html>

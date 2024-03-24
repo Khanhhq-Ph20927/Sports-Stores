@@ -1,22 +1,24 @@
 package com.project.SportsStores.Toner.Controller.client;
 
+import com.project.SportsStores.Toner.Model.*;
 import com.project.SportsStores.Toner.Model.DTO.GioHangChiTietDTO;
-import com.project.SportsStores.Toner.Model.DonHang;
-import com.project.SportsStores.Toner.Service.DonHangService;
+import com.project.SportsStores.Toner.Service.*;
 import com.project.SportsStores.Toner.Service.Impl.KhachHangServiceImpl;
 import com.project.SportsStores.Toner.Service.Impl.PhuongThucTTServiceImpl;
+import com.project.SportsStores.Toner.Service.Impl.SanPhamChiTietServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/client/invoice")
+@RequestMapping("/api/client/order/")
 public class DonHangRestController {
 
     @Autowired
@@ -26,27 +28,91 @@ public class DonHangRestController {
     private PhuongThucTTServiceImpl ptttService;
 
     @Autowired
+    private SanPhamChiTietServiceImpl spService;
+
+    @Autowired
     private DonHangService donHangService;
 
-    @PostMapping("/save/{id}")
+    @Autowired
+    private DonHangChiTietService donHangCTService;
+
+    @Autowired
+    private DiaChiService diaChiService;
+
+    @Autowired
+    private TTVCService ttvcService;
+
+    @Autowired
+    private GioHangChiTietService ghService;
+
+    // đơn hàng được xác nhận -> chỉnh sửa số lượng sản phẩm
+    @PostMapping("/invoice/save/{id}/{idAddress}")
     private ResponseEntity<?> saveInvoice(@RequestBody List<GioHangChiTietDTO> list,
-                                          @PathVariable("id") String id) {
+                                          @PathVariable("id") String id,
+                                          @PathVariable("idAddress") String idAddress) {
+
+        ThongTinVanChuyen ttvc = new ThongTinVanChuyen();
+        DiaChi diaChi = diaChiService.getById(idAddress);
+        ttvc.setTtp(diaChi.getTtp());
+        ttvc.setQh(diaChi.getQh());
+        ttvc.setXp(diaChi.getXp());
+        ttvc.setDiaChiCuThe(diaChi.getDiaChiCuThe());
+        ttvc.setSdtNguoiNhan(diaChi.getSdt());
+        ttvc.setTenNguoiNhan(diaChi.getKh().getHoTen());
+        ttvcService.save(ttvc);
+
         // tạo đơn hàng
         DonHang dh = new DonHang();
+        dh.setTtvc(ttvc);
         List<DonHang> listAll = donHangService.getAll();
         List<Integer> listId = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            int index = Integer.parseInt(listAll.get(i).getMaDonHang().substring(2));
+        for (DonHang donHang : listAll) {
+            int index = Integer.parseInt(donHang.getMaDonHang().substring(2));
             listId.add(index);
         }
         Optional<Integer> maxNumber = listId.stream().max(Integer::compareTo);
-        maxNumber.ifPresent(integer -> dh.setMaDonHang("DH" + integer + 1));
+        maxNumber.ifPresent(integer -> dh.setMaDonHang("DH" + (integer + 1)));
         dh.setKh(khachHangService.getByID(Long.parseLong(id)));
         dh.setPttt(ptttService.getById("1"));
-        dh.setTrangThai(0);
+        dh.setTrangThai(1);
         dh.setNgayTao(LocalDateTime.now());
         donHangService.save(dh);
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        DonHang donHangNew = donHangService.findByDH(dh.getMaDonHang());
+
+        // tạo hoá đơn chi tiết
+        for (GioHangChiTietDTO ghct : list) {
+            DonHangChiTiet dhct = new DonHangChiTiet();
+            dhct.setSpct(spService.getById(String.valueOf(ghct.getIdSanPhamChiTiet())));
+            dhct.setSoLuong(Integer.parseInt(ghct.getSoLuong()));
+            dhct.setDh(donHangNew);
+            dhct.setNgayTao(LocalDateTime.now());
+            dhct.setGiaGoc(spService.getById(String.valueOf(ghct.getIdSanPhamChiTiet())).getSp().getDonGia());
+            dhct.setGiaThoiDiemMua(spService.getById(String.valueOf(ghct.getIdSanPhamChiTiet())).getSp().getDonGia());
+            BigDecimal tongTien = BigDecimal.valueOf(Integer.parseInt(ghct.getSoLuong()))
+                    .multiply(spService.getById(String.valueOf(ghct.getIdSanPhamChiTiet())).getSp().getDonGia());
+            dhct.setTongTien(tongTien);
+            donHangCTService.save(dhct);
+            for (GioHangChiTiet gioHangChiTiet : ghService.getByIdGHList(ghct.getIdGioHang())) {
+                if (Long.parseLong(ghct.getIdSanPhamChiTiet()) == gioHangChiTiet.getSpct().getId()) {
+                    ghService.delete(String.valueOf(gioHangChiTiet.getId()));
+                    break;
+                }
+            }
+
+        }
+
+        BigDecimal tongGiaTri = new BigDecimal("0");
+        for (DonHangChiTiet donHangChiTiet :
+                donHangCTService.findByIdHD(String.valueOf(donHangNew.getId()))
+        ) {
+            tongGiaTri = tongGiaTri.add(donHangChiTiet.getTongTien());
+        }
+
+        donHangNew.setTongTien(tongGiaTri);
+        donHangService.save(donHangNew);
+
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
 }

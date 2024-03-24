@@ -257,7 +257,7 @@
             document.getElementById('customer-sdt-input').value = data.sdt;
             document.getElementById('customer-ngaySinh-input').value = data.ngaySinh;
             document.getElementById('customer-email-input').value = data.email;
-            document.getElementById('customer-gender-input').value = data.gioiTinh == true ? 'Nam' : 'Nữ';
+            document.getElementById('customer-gender-input').value = data.gioiTinh === true ? 'Nam' : 'Nữ';
 
             document.getElementById('update-form').action = '/api/admin/customer/update/' + customerId;
             $('#myModal').modal('show');
@@ -283,7 +283,10 @@
     async function loadPage(pageNumber) {
         var url = "/api/admin/customer/page/" + pageNumber;
         const response = await fetch(url, {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer '+ localStorage.getItem('token')
+            }
         });
         page = pageNumber;
         var result = await response.json();
@@ -370,7 +373,10 @@
         //     url = "/api/admin/invoice/page/search/" + pageNumber + "/" + keyword;
         // }
         const response = await fetch(url, {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer '+ localStorage.getItem('token')
+            }
         });
         var result = await response.json();
         console.log(result);

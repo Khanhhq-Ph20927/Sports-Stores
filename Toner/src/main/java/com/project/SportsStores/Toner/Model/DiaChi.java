@@ -37,6 +37,9 @@ public class DiaChi {
     @Column(name = "sdt")
     private String sdt;
 
+    @Column(name = "IsDefault")
+    private boolean isDefault;
+
     @ManyToOne
     @JoinColumn(name="IdKhachHang")
     private KhachHang kh;

@@ -3,6 +3,8 @@ package com.project.SportsStores.Toner.Model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,8 +28,18 @@ public class ThongTinVanChuyen {
     @JoinColumn(name="IdDonViVanChuyen")
     private DonViVanChuyen dvvc;
 
-    @ManyToOne
-    @JoinColumn(name="idDiaChi")
-    private DiaChi dc;
+    @Column(name="Tinh_ThanhPho")
+    private String ttp;
 
+    @Column(name="Quan_Huyen")
+    private String qh;
+
+    @Column(name="Xa_Phuong")
+    private String xp;
+
+    @Column(name="DiaChiCuThe")
+    private String diaChiCuThe;
+
+    @Column(name = "ngayDuKienGiaoHang")
+    private Date ngayDuKienGiaoHang;
 }

@@ -47,34 +47,58 @@
                             <div class="card-body bg-soft-light border border-dashed border-start-0 border-end-0">
                                 <form>
                                     <div class="row g-3">
-                                        <div class="col-xxl-5 col-sm-12">
+                                        <div class="col-xxl-3 col-sm-12">
+                                            <label class="form-label" for="search-input">Tìm Kiếm</label>
                                             <div class="search-box">
                                                 <input type="text" class="form-control search bg-light border-light"
-                                                       placeholder="....">
+                                                       placeholder="Mã đơn hàng" id="search-input"
+                                                       onkeyup="loadPage()">
                                                 <i class="ri-search-line search-icon"></i>
                                             </div>
                                         </div>
                                         <!--end col-->
-                                        <div class="col-xxl-3 col-sm-4">
-                                            <input type="text" class="form-control bg-light border-light"
-                                                   id="datepicker-range" placeholder="Select date">
+                                        <div class="col-xxl-5 col-sm-4">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <label class="form-label" for="start-date">Ngày Bắt Đầu</label>
+                                                    <input type="date" class="form-control bg-light border-light"
+                                                           id="start-date">
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label class="form-label" for="end-date">Ngày Kết Thúc</label>
+                                                    <input type="date" class="form-control bg-light border-light"
+                                                           id="end-date">
+                                                </div>
+                                            </div>
                                         </div>
                                         <!--end col-->
-                                        <div class="col-xxl-3 col-sm-4">
+                                        <div class="col-xxl-2 col-sm-4">
                                             <div class="input-light">
-                                                <select class="form-control" data-choices data-choices-search-false
-                                                        name="choices-single-default" id="status-select" onclick="loadPage()">
+                                                <label class="form-label" for="status-select">Trạng Thái</label>
+                                                <select class="form-control bg-light border-light"
+                                                        data-choices data-choices-search-false
+                                                        name="choices-single-default" id="status-select"
+                                                        onchange="loadPage()">
                                                     <option value="-1" selected>Tất Cả</option>
-                                                    <option value="0">Chờ</option>
-                                                    <option value="1">Hoàn Thành</option>
+                                                    <option value="1">Chờ Xác Nhận</option>
+                                                    <option value="4">Hoàn Thành</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <!--end col-->
 
                                         <div class="col-xxl-1 col-sm-4">
-                                            <button type="button" class="btn btn-info w-100">
-                                                <i class="ri-equalizer-fill me-1 align-bottom"></i> Lọc
+                                            <br>
+                                            <button type="button" class="btn btn-info w-100" style="margin-top: 10px;"
+                                                    onclick="loadPage()">
+                                                <i class="ri-equalizer-fill me-1 align-bottom"></i> Filter
+                                            </button>
+                                        </div>
+                                        <div class="col-xxl-1 col-sm-12" style="padding: 0 0;">
+                                            <br>
+                                            <button type="button" class="btn btn-info w-100" style="margin-top: 10px;"
+                                                    onclick="handleResetFilter()">
+                                                <i class="ri-restart-fill me-1 align-bottom"></i>Reset
                                             </button>
                                         </div>
                                         <!--end col-->
@@ -88,11 +112,6 @@
                                         <table class="table align-middle table-nowrap" id="invoiceTable">
                                             <thead class="text-muted">
                                             <tr>
-                                                <!--                                                        <th scope="col" style="width: 50px;">-->
-                                                <!--                                                            <div class="form-check">-->
-                                                <!--                                                                <input class="form-check-input" type="checkbox" id="checkAll" value="option">-->
-                                                <!--                                                            </div>-->
-                                                <!--                                                        </th>-->
                                                 <th>Mã Hoá Đơn</th>
                                                 <th>Khách Hàng</th>
                                                 <th>Nhân Viên</th>
@@ -183,7 +202,8 @@
                                     <div class="card-body p-4">
                                         <div class="row g-3">
                                             <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Mã Hoá Đơn</p>
+                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Mã Hoá
+                                                    Đơn</p>
                                                 <h5 class="fs-15 mb-0">#<span id="invoice-no"></span></h5>
                                             </div>
                                             <!--end col-->
@@ -193,12 +213,15 @@
                                             </div>
                                             <!--end col-->
                                             <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Trạng Thái</p>
-                                                <span class="badge bg-success-subtle text-success " id="payment-status"></span>
+                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Trạng
+                                                    Thái</p>
+                                                <span class="badge bg-success-subtle text-success "
+                                                      id="payment-status"></span>
                                             </div>
                                             <!--end col-->
                                             <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Tổng Tiền</p>
+                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Tổng
+                                                    Tiền</p>
                                                 <h5 class="fs-15 mb-0"><span id="total-amount"></span></h5>
                                             </div>
                                             <!--end col-->
@@ -207,30 +230,6 @@
                                     </div>
                                     <!--end card-body-->
                                 </div><!--end col-->
-                                <!--                                    <div class="col-lg-12">-->
-                                <!--                                        <div class="card-body p-4 border-top border-top-dashed">-->
-                                <!--                                            <div class="row g-3">-->
-                                <!--                                                <div class="col-6">-->
-                                <!--                                                    <h6 class="text-muted text-uppercase fw-semibold fs-14 mb-3">Billing Address</h6>-->
-                                <!--                                                    <p class="fw-medium mb-2 fs-16" id="billing-name">Edward Diana</p>-->
-                                <!--                                                    <p class="text-muted mb-1" id="billing-address-line-1">4430 Holt Street, Miami, Florida-33169</p>-->
-                                <!--                                                    <p class="text-muted mb-1"><span>Phone: +</span><span id="billing-phone-no">(123) 561-238-1000</span></p>-->
-                                <!--                                                    <p class="text-muted mb-0"><span>Tax: </span><span id="billing-tax-no">65-498700</span> </p>-->
-                                <!--                                                </div>-->
-                                <!--                                                &lt;!&ndash;end col&ndash;&gt;-->
-                                <!--                                                <div class="col-6">-->
-                                <!--                                                    <h6 class="text-muted text-uppercase fw-semibold fs-14 mb-3">Shipping Address</h6>-->
-                                <!--                                                    <p class="fw-medium mb-2 fs-16" id="shipping-name">Edward Diana</p>-->
-                                <!--                                                    <p class="text-muted mb-1" id="shipping-address-line-1">4430 Holt Street, Miami, Florida-33169</p>-->
-                                <!--                                                    <p class="text-muted mb-1"><span>Phone: +</span><span id="shipping-phone-no">(123) 561-238-1000</span></p>-->
-                                <!--                                                </div>-->
-                                <!--                                                &lt;!&ndash;end col&ndash;&gt;-->
-                                <!--                                            </div>-->
-                                <!--                                            &lt;!&ndash;end row&ndash;&gt;-->
-                                <!--                                        </div>-->
-                                <!--                                        &lt;!&ndash;end card-body&ndash;&gt;-->
-                                <!--                                    </div>-->
-                                <!--end col-->
                                 <div class="col-lg-12">
                                     <div class="card-body p-4">
                                         <div class="table-responsive">
@@ -249,32 +248,17 @@
                                             </table><!--end table-->
                                         </div>
                                         <div class="border-top border-top-dashed mt-2">
-                                            <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto" style="width:250px">
+                                            <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto"
+                                                   style="width:250px">
                                                 <tbody id="sub-total">
                                                 </tbody>
                                             </table>
                                             <!--end table-->
                                         </div>
-                                        <!--                                            <div class="mt-3">-->
-                                        <!--                                                <h6 class="text-muted text-uppercase fw-semibold mb-3">Payment Details:</h6>-->
-                                        <!--                                                <p class="text-muted mb-1">Payment Method: <span class="fw-medium" id="payment-method">Mastercard</span></p>-->
-                                        <!--                                                <p class="text-muted mb-1">Card Holder: <span class="fw-medium" id="card-holder-name">David Nichols</span></p>-->
-                                        <!--                                                <p class="text-muted mb-1">Card Number: <span class="fw-medium" id="card-number">xxx xxxx xxxx 1234</span></p>-->
-                                        <!--                                                <p class="text-muted">Total Amount: <span class="fw-medium">$ </span><span id="card-total-amount">1406.92</span></p>-->
-                                        <!--                                            </div>-->
-                                        <!--                                            <div class="mt-4">-->
-                                        <!--                                                <div class="alert alert-info">-->
-                                        <!--                                                    <p class="mb-0"><span class="fw-semibold">NOTES:</span>-->
-                                        <!--                                                        <span id="note">All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or-->
-                                        <!--                                                            credit card or direct payment online. If account is not paid within 7-->
-                                        <!--                                                            days the credits details supplied as confirmation of work undertaken-->
-                                        <!--                                                            will be charged the agreed quoted fee noted above.-->
-                                        <!--                                                        </span>-->
-                                        <!--                                                    </p>-->
-                                        <!--                                                </div>-->
-                                        <!--                                            </div>-->
                                         <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                            <button class="btn btn-success" onclick="printModal()" id="printButton"><i class="ri-printer-line align-bottom me-1"></i> Print</button>
+                                            <button class="btn btn-success" onclick="printModal()" id="printButton"><i
+                                                    class="ri-printer-line align-bottom me-1"></i> Print
+                                            </button>
                                         </div>
                                     </div>
                                     <!--end card-body-->
@@ -310,28 +294,98 @@
         loadPage();
     }
 
+    function handleResetFilter() {
+
+        document.getElementById('status-select').value = '-1';
+
+        document.getElementById('search-input').value = '';
+
+        document.getElementById('start-date').value = '';
+
+        document.getElementById('end-date').value = '';
+
+        loadPage();
+    }
+
     async function loadPage(pageNumber) {
 
-        var status = document.getElementById('status-select').value;
+        let status = document.getElementById('status-select').value;
+
+        let keyword = document.getElementById('search-input').value;
+
+        let startDate = document.getElementById('start-date').value;
+
+        let endDate = document.getElementById('end-date').value;
 
         var baseUrl;
 
         indexCurrentPage = pageNumber;
 
-        if (pageNumber === undefined && status === "-1") {
+        // load default
+        if (pageNumber === undefined && status === "-1" && keyword === "" && (startDate === "" || endDate === "")) {
             baseUrl = "/api/admin/invoice/index/" + 0;
         }
-        if (pageNumber !== undefined && status === "-1"){
+        if (pageNumber !== undefined && status === "-1" && keyword === "" && (startDate === "" || endDate === "")) {
             baseUrl = "/api/admin/invoice/index/" + pageNumber;
         }
-        if (pageNumber === undefined && status !== "-1"){
+        //filter with date
+        if (pageNumber === undefined && status === "-1" && keyword === "" && startDate !== "" && endDate !== "") {
+            baseUrl = "/api/admin/invoice/index/" + 0 + "?startDate=" + startDate + "&endDate=" + endDate;
+        }
+        if (pageNumber !== undefined && status === "-1" && keyword === "" && startDate !== "" && endDate !== "") {
+            baseUrl = "/api/admin/invoice/index/" + pageNumber + "?startDate=" + startDate + "&endDate=" + endDate;
+        }
+        //filter with status
+        if (pageNumber === undefined && status !== "-1" && keyword === "" && (startDate === "" || endDate === "")) {
             baseUrl = "/api/admin/invoice/index/" + 0 + "?status=" + status;
         }
-        if (pageNumber !== undefined && status !== "-1"){
+        if (pageNumber !== undefined && status !== "-1" && keyword === "" && (startDate === "" || endDate === "")) {
             baseUrl = "/api/admin/invoice/index/" + pageNumber + "?status=" + status;
         }
+        //search
+        if (pageNumber === undefined && status === "-1" && keyword !== "" && (startDate === "" || endDate === "")) {
+            baseUrl = "/api/admin/invoice/index/" + 0 + "?keyword=" + keyword;
+        }
+        if (pageNumber !== undefined && status === "-1" && keyword !== "" && (startDate === "" || endDate === "")) {
+            baseUrl = "/api/admin/invoice/index/" + pageNumber + "?keyword=" + keyword;
+        }
+        //search and filter with status
+        if (pageNumber === undefined && status !== "-1" && keyword !== "" && (startDate === "" || endDate === "")) {
+            baseUrl = "/api/admin/invoice/index/" + 0 + "?status=" + status + "&keyword=" + keyword;
+        }
+        if (pageNumber !== undefined && status !== "-1" && keyword !== "" && (startDate === "" || endDate === "")) {
+            baseUrl = "/api/admin/invoice/index/" + pageNumber + "?status=" + status + "&keyword=" + keyword;
+        }
+        //search and filter with date
+        if (pageNumber === undefined && status === "-1" && keyword !== "" && startDate !== "" && endDate !== "") {
+            baseUrl = "/api/admin/invoice/index/" + 0 + "?keyword=" + keyword + "&startDate=" + startDate + "&endDate=" + endDate;
+        }
+        if (pageNumber !== undefined && status === "-1" && keyword !== "" && (startDate === "" || endDate === "")) {
+            baseUrl = "/api/admin/invoice/index/" + pageNumber + "?keyword=" + keyword + "&startDate=" + startDate + "&endDate=" + endDate;
+        }
+
+        //filter with date and status
+        if (pageNumber === undefined && status !== "-1" && keyword === "" && startDate !== "" && endDate !== "") {
+            baseUrl = "/api/admin/invoice/index/" + 0 + "?status=" + status + "&startDate=" + startDate + "&endDate=" + endDate;
+        }
+        if (pageNumber !== undefined && status !== "-1" && keyword === "" && (startDate === "" || endDate === "")) {
+            baseUrl = "/api/admin/invoice/index/" + pageNumber + "?status=" + status + "&startDate=" + startDate + "&endDate=" + endDate;
+        }
+
+        //search and filter all
+        if (pageNumber === undefined && status !== "-1" && keyword !== "" && startDate !== "" && endDate !== "") {
+            baseUrl = "/api/admin/invoice/index/" + 0 + "?status=" + status + "&startDate=" + startDate + "&endDate=" + endDate + "&keyword=" + keyword;
+        }
+        if (pageNumber !== undefined && status !== "-1" && keyword !== "" && (startDate === "" || endDate === "")) {
+            baseUrl = "/api/admin/invoice/index/" + pageNumber + "?status=" + status + "&startDate=" + startDate + "&endDate=" + endDate + "&keyword=" + keyword;
+        }
+
+        console.log(baseUrl);
         const response = await fetch(baseUrl, {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
         });
         var result = await response.json();
         console.log(result);
@@ -344,24 +398,30 @@
             var money = list[i].tongTien;
             var momentDate = moment(createAt);
             var customerName;
+            var staffName;
             if (list[i].kh === null) {
                 customerName = 'Anonymous';
             } else {
                 customerName = list[i].kh.hoTen;
             }
+            if (list[i].nv === null) {
+                staffName = 'Chưa Có';
+            } else {
+                staffName = list[i].nv.hoTen;
+            }
             const formattedDate = momentDate.format('DD/MM/YYYY HH:mm');
             const formattedMoney = formatmoney(money);
             var statusBadge;
-            if (list[i].trangThai === 0) {
-                statusBadge = '<span class="badge bg-success">Chờ</span>'
-            }
             if (list[i].trangThai === 1) {
+                statusBadge = '<span class="badge bg-success">Chờ Xác Nhận</span>'
+            }
+            if (list[i].trangThai === 4) {
                 statusBadge = '<span class="badge bg-success">Hoàn Thành</span>';
             }
             main += `<tr >
                             <td scope="row">${list[i].maDonHang}</td>
                             <td scope="row">${customerName}</td>
-                            <td scope="row">${list[i].nv.hoTen}</td>
+                            <td scope="row">${staffName}</td>
                             <td scope="row">${formattedDate}</td>
                             <td scope="row">${formattedMoney}</td>
                             <td scope="row">${statusBadge}</td>
@@ -376,7 +436,7 @@
                             <button class="page-item pagination-prev" onclick="loadPage(${number - 1 < 0 ? totalPage - 1 : number - 1})">
                                     Quay Lại
                             </button>
-                            <button class="page-item pagination-wrap" disabled>${number+1}</button>
+                            <button class="page-item pagination-wrap" disabled>${number + 1}</button>
                             <button class="page-item pagination-next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
                                     Tiếp
                             </button>
@@ -394,30 +454,33 @@
 
     async function detailInvoice(id) {
         var url = '/api/admin/invoice/invoice-detail/' + id;
-        const response = await fetch(url,{
-            method: 'GET'
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
         })
         const data = await response.json();
         var main = '';
         var sub_total = '';
         var total_amount = 0;
-        if(response.status === 200){
+        if (response.status === 200) {
             console.log(data);
-            for (i = 0; i < data.length ;i++){
-                total_amount += data[i].spct.sp.donGia*data[i].soLuong;
+            for (i = 0; i < data.length; i++) {
+                total_amount += data[i].spct.sp.donGia * data[i].soLuong;
                 main += `
                 <tr>
-                      <th scope="row">${i+1}</th>
+                      <th scope="row">${i + 1}</th>
                       <td class="text-start">
                       <span class="fw-medium">${data[i].spct.sp.tenSP}</span>
                              <p class="text-muted mb-0">${data[i].spct.ms.ten} & ${data[i].spct.size}</p>
                       </td>
                       <td>${formatmoney(data[i].spct.sp.donGia)}</td>
                       <td>${data[i].soLuong}</td>
-                      <td class="text-end">${formatmoney(data[i].spct.sp.donGia*data[i].soLuong)}</td>
+                      <td class="text-end">${formatmoney(data[i].spct.sp.donGia * data[i].soLuong)}</td>
                 </tr>`
             }
-            var vat = (total_amount)-(total_amount*0.9);
+            var vat = (total_amount) - (total_amount * 0.9);
             sub_total = `
                    <tr>
                               <td>Tổng tiền <small class="text-muted">(Trước thuế)</small></td>
@@ -441,17 +504,18 @@
                    </tr>
                     <tr>
                               <td>Tiền trả lại</td>
-                              <td class="text-end">${formatmoney(data[0].dh.tienKhachTra-(total_amount + vat))}</td>
+                              <td class="text-end">${formatmoney(data[0].dh.tienKhachTra - (total_amount + vat))}</td>
                    </tr>
             `;
             var momentDate = moment(data[0].dh.ngayTao);
             var status = '';
-            if(data[0].dh.trangThai === 0){
+            if (data[0].dh.trangThai === 0) {
                 status = 'Chờ';
             }
-            if(data[0].dh.trangThai === 1){
+            if (data[0].dh.trangThai === 1) {
                 status = 'Đã thanh toán';
-            }            document.getElementById('products-list').innerHTML = main;
+            }
+            document.getElementById('products-list').innerHTML = main;
             document.getElementById('sub-total').innerHTML = sub_total;
             document.getElementById('invoice-no').innerText = data[0].dh.maDonHang;
             document.getElementById('invoice-date').innerText = momentDate.format('DD/MM/YYYY HH:mm');

@@ -411,7 +411,10 @@
     async function loadPage(pageNumber) {
         var url = "/api/admin/supplier/page/" + pageNumber;
         const response = await fetch(url, {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer '+ localStorage.getItem('token')
+            }
         });
         page = pageNumber;
         var result = await response.json();
@@ -426,18 +429,18 @@
                             <td scope="row">${list[i].ten}</td>
                             <td scope="row">${list[i].email}</td>
                             <td scope="row">${list[i].sdt}</td>
-                            <td class="text-wrap text-break" >${list[i].diaChi}</td>                            <td>
+                            <td class="text-wrap text-break" >${list[i].diaChi}</td>
+                            <td>
                                 <div class="hstack gap-3 flex-warp">
                                 <div onclick="detailSuppliers(${list[i].id})"
                                      class="ri-eye-line"></div>
                                  </div>
                             </td>
                             <td>
-                            <div onclick="detailSuppliers1(${list[i].id})"
-                                     class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
-                            </div>
+                                <div onclick="detailSuppliers1(${list[i].id})"
+                                         class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
+                                </div>
                             </td>
-</td>
                      </tr>`
         }
         document.getElementById("list_Supplier").innerHTML = main;
@@ -474,7 +477,10 @@
             console.log(3);
         }
         const response = await fetch(url, {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer '+ localStorage.getItem('token')
+            }
         });
         var result = await response.json();
         console.log(result);

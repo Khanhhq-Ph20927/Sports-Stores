@@ -65,9 +65,12 @@
 <script>
     async function sendForgotPass() {
         var email = document.getElementById("email").value
-        var url = 'http://localhost:8080/init-reset-pass?email='+email;
+        var url = 'http://localhost:8080/api/v1/auth/init-reset-pass?email='+email;
         const response = await fetch(url, {
-            method: 'POST'
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
         });
         if (response.status < 300) {
             swal({

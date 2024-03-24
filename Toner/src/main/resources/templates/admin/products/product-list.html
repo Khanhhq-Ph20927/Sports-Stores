@@ -871,7 +871,10 @@
 
     function detailProduct(productId) {
         fetch('/api/admin/product/detail/' + productId, {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
         }).then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -903,7 +906,12 @@
 
     async function editProductDetail(idProductDetail) {
         try {
-            const response = await fetch('/api/admin/product_detail/detail/' + idProductDetail);
+            const response = await fetch('/api/admin/product_detail/detail/' + idProductDetail,
+                {   method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    }
+                });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -926,7 +934,12 @@
     }
 
     async function findPicture(idProductDetail) {
-        const pictureResponse = await fetch('/api/admin/product_detail/picture/' + idProductDetail);
+        const pictureResponse = await fetch('/api/admin/product_detail/picture/' + idProductDetail,{
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
+        });
         var labelElement = document.getElementById("text-label");
         console.log(pictureResponse);
         if (pictureResponse.status === 200) {
@@ -1048,6 +1061,9 @@
                         url: '/api/admin/product/update/' + idProduct,
                         method: 'POST',
                         contentType: 'application/json',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+                        },
                         data: JSON.stringify(data),
                         success: function (response) {
                             console.log(response);
@@ -1226,6 +1242,9 @@
                         url: '/api/admin/product/save_product_detail/validation/' + idProduct,
                         method: 'POST',
                         contentType: 'application/json',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+                        },
                         data: JSON.stringify(uniqueArr),
                         success: function (response) {
                             var countIsValid = {
@@ -1263,6 +1282,9 @@
                                     url: '/api/admin/product/save_product_detail/save/' + idProduct,
                                     method: 'POST',
                                     contentType: 'application/json',
+                                    headers: {
+                                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                                    },
                                     data: JSON.stringify(response),
                                     success: function (response) {
                                         console.log(response);
@@ -1295,6 +1317,9 @@
                                     url: '/api/admin/product/save_product_detail/save/' + idProduct,
                                     method: 'POST',
                                     contentType: 'application/json',
+                                    headers: {
+                                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                                    },
                                     data: JSON.stringify(uniqueArr),
                                     success: function (response) {
                                         console.log(response);
@@ -1378,6 +1403,9 @@
                         url: '/api/admin/product_detail/update/' + idProduct_Detail,
                         method: 'POST',
                         contentType: 'application/json',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+                        },
                         data: JSON.stringify(spct),
                         success: function (response, status) {
                             console.log(response);
@@ -1409,7 +1437,10 @@
     async function loadPage(pageNumber) {
         var url = "/api/admin/product/page/search/" + pageNumber + "/" + "null";
         const response = await fetch(url, {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
         });
         page = pageNumber;
         var result = await response.json();
@@ -1475,7 +1506,10 @@
             });
         } else {
             fetch('/api/admin/product/detail/' + idProduct, {
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
             }).then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -1508,19 +1542,26 @@
         var url = "/api/admin/product/product_detail/" + Idproduct + "/" + 0 + "?color=" + 0 + "&size=" + 0;
 
         const response_check = await fetch(url, {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
         });
+
 
         const checkResult = await response_check.json();
 
         let checkList = checkResult.content;
 
-        const response = await fetch(baseUrl, {
-            method: 'GET'
-        });
-
         idProduct = Idproduct;
         pageProductDetail = pageNumber;
+
+        const response = await fetch(baseUrl, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
+        });
         var result = await response.json();
         var list = result.content;
         console.log(list);
@@ -1633,36 +1674,33 @@
         }// if start search with keyword
         else if (pageNumber === undefined && keyword !== '' && status === "-1" && collection === "-1") {
             url = "/api/admin/product/page/search/" + 0 + "/" + keyword;
-            console.log(url);
-            console.log(1);
+
         }// search and paging
         else if (pageNumber !== undefined && keyword !== '' && status === "-1" && collection === "-1") {
             url = "/api/admin/product/page/search/" + pageNumber + "/" + keyword + "/" + -1 + "/" - 1;
-            console.log(url);
-            console.log(2);
+
         }// filter
         else if (pageNumber === undefined && keyword === '' && (status !== "-1" || collection !== "-1")) {
             url = "/api/admin/product/page/" + "null" + "/" + 0 + "/" + status + "/" + collection;
-            console.log(url);
-            console.log(3);
+
         }// filter and search
         else if (pageNumber === undefined && keyword !== '' && (status !== "-1" || collection !== "-1")) {
             url = "/api/admin/product/page/" + keyword + "/" + 0 + "/" + status + "/" + collection;
-            console.log(url);
-            console.log(4);
+
         }// filter and paging
         else if (pageNumber !== undefined && keyword === '' && (status !== "-1" || collection !== "-1")) {
             url = "/api/admin/product/page/" + "null" + "/" + pageNumber + "/" + status + "/" + collection;
-            console.log(url);
-            console.log(5);
+
         }// filter, search and paging
         else if (pageNumber !== undefined && (status !== "-1" || collection !== "-1") && keyword !== '') {
             url = "/api/admin/product/page/" + keyword + "/" + pageNumber + "/" + status + "/" + collection;
-            console.log(url);
-            console.log(6);
+
         }
         const response = await fetch(url, {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
         });
         var result = await response.json();
         console.log(result);
@@ -1724,7 +1762,10 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 fetch('/api/admin/product/update_status/' + idProduct + '/' + status, {
-                    method: 'GET'
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    }
                 }).then(response => {
                     return response.json();
                 }).then(data => {
@@ -1747,7 +1788,10 @@
         let url = '/api/admin/sport/find-all';
 
         const response = await fetch(url,{
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
         })
 
         const data = await response.json();
@@ -1770,12 +1814,18 @@
         let urlBrand = '/api/admin/trademark/find-all';
 
         const responseProvider = await fetch(urlProvider,{
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
         })
         const listProvider = await responseProvider.json();
 
         const responseBrand = await fetch(urlBrand,{
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
         })
         const listBrand = await responseBrand.json();
         console.log(listBrand);

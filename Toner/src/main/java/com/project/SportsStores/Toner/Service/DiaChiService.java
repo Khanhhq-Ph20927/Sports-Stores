@@ -14,4 +14,6 @@ public interface DiaChiService {
     void deleteById(String id);
 
     DiaChi getById(String id);
+
+    void save(DiaChi diaChi);
 }

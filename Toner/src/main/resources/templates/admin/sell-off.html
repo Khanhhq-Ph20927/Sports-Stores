@@ -321,6 +321,9 @@
                 $.ajax({
                     url: '/api/admin/sell-off/delete/' + id,
                     method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer '+ localStorage.getItem('token')
+                    },
                     success: function (response) {
                         console.log(response);
                         if (response === "success") {
@@ -404,6 +407,9 @@
                 url: '/api/admin/sell-off/cart/save/' + selectedInvoiceId + '?idProductDetail=' + id,
                 method: 'POST',
                 contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer '+ localStorage.getItem('token')
+                },
                 success: function (response) {
                     console.log(response);
                     if (response === "success") {
@@ -530,7 +536,10 @@
             console.log(baseUrl);
         }
         const response = await fetch(baseUrl, {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer '+ localStorage.getItem('token')
+            }
         });
         var result = await response.json();
         console.log(result);
@@ -542,7 +551,10 @@
         for (i = 0; i < list.length; i++) {
             var url = '/api/admin/product_detail/picture/' + list[i].id;
             const responsePicture = await fetch(url, {
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer '+ localStorage.getItem('token')
+                }
             })
             const data = await responsePicture.json();
             console.log(data);
@@ -600,7 +612,10 @@
 
         var urlGetDetaiIlnvoice = "/api/admin/sell-off/invoice/list-invoice/" + id + "/" + page;
         const responseDetailInvoice = await fetch(urlGetDetaiIlnvoice, {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer '+ localStorage.getItem('token')
+            }
         });
         var resultInvoiceDetail = await responseDetailInvoice.json();
         var listInvoiceDetail = resultInvoiceDetail.content;
@@ -684,6 +699,9 @@
             $.ajax({
                 url: '/api/admin/sell-off/cart/edit-quantity/' + id + '?quantity=' + count,
                 method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer '+ localStorage.getItem('token')
+                },
                 success: function (response) {
                     console.log(response);
                     loadInvoiceDetail(selectedInvoiceId, currentPageCart, idElementInvoiceDetail);
@@ -721,6 +739,9 @@
         $.ajax({
             url: '/api/admin/sell-off/cart/add-quantity/' + id,
             method: 'GET',
+            headers: {
+                'Authorization': 'Bearer '+ localStorage.getItem('token')
+            },
             success: function (response) {
                 console.log(response);
                 if (response === "success") {
@@ -752,6 +773,9 @@
                     $.ajax({
                         url: '/api/admin/sell-off/cart/minus-quantity/' + id,
                         method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer '+ localStorage.getItem('token')
+                        },
                         success: function (response) {
                             console.log(response);
                             if (response === "success") {
@@ -777,6 +801,9 @@
             $.ajax({
                 url: '/api/admin/sell-off/cart/minus-quantity/' + id,
                 method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer '+ localStorage.getItem('token')
+                },
                 success: function (response) {
                     console.log(response);
                     if (response === "success") {
@@ -803,7 +830,10 @@
             if (result.isConfirmed) {
                 var url = '/api/admin/sell-off/cart/delete/' + id;
                 const promise = fetch(url, {
-                    method: 'GET'
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer '+ localStorage.getItem('token')
+                    }
                 });
                 promise.then(response => {
                     if (response.status === 200) {
@@ -823,7 +853,10 @@
     async function loadInvoice() {
         var url = "/api/admin/sell-off/page/" + 0;
         const response = await fetch(url, {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer '+ localStorage.getItem('token')
+            }
         });
         var result = await response.json();
         console.log(result);
@@ -1290,6 +1323,9 @@
             url: '/api/admin/sell-off/cart/save/' + selectedInvoiceId + "?idProductDetail=" + id,
             method: 'POST',
             contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer '+ localStorage.getItem('token')
+            },
             success: function (response) {
                 console.log(response);
                 if (response === "success") {
@@ -1327,7 +1363,10 @@
             var url = '/api/admin/product_detail/picture/' + keyword;
 
             const responsePicture = await fetch(url, {
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer '+ localStorage.getItem('token')
+                }
             })
 
             const data = await responsePicture.json();
@@ -1338,6 +1377,9 @@
                 $.ajax({
                     url: '/api/admin/sell-off/product-detail/search-by-id/' + keyword,
                     method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer '+ localStorage.getItem('token')
+                    },
                     success: function (response) {
                         console.log(response);
                         if (response !== 'null') {
@@ -1380,6 +1422,9 @@
                 $.ajax({
                     url: '/api/admin/sell-off/product-detail/search-by-id/' + keyword,
                     method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer '+ localStorage.getItem('token')
+                    },
                     success: function (response) {
                         console.log(response);
                         if (response !== 'null') {
@@ -1460,6 +1505,9 @@
                 url: '/api/admin/sell-off/invoice/change-status/' + selectedInvoiceId + '?total_amount=' + totalAmount
                     + '&cash_from_customer=' + moneyToPay,
                 method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer '+ localStorage.getItem('token')
+                },
                 success: function (response) {
                     console.log(response);
                     if (response === 'success') {
