@@ -64,4 +64,6 @@ public class SanPhamChiTietRestController {
     private ResponseEntity<?> findIdProductAndColorAndSize(@PathVariable("id") String id, @PathVariable("color") String color, @PathVariable("size") String size) {
         return ResponseEntity.ok().body(sv.findIdProductByColorAndSize(id, color, size));
     }
+
+
 }

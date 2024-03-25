@@ -102,9 +102,6 @@
         });
         var result = await response.json();
         if (response.status < 300) {
-
-            localStorage.setItem("refreshToken", result.refreshToken);
-            localStorage.setItem("token", result.token);
             var role = jwtDecode(result.token).roles[0];
             if (role === "CUSTOMER") {
                 const responseGetUser = await fetch('/api/v1/auth/getCustomer/' + username, {
@@ -114,12 +111,15 @@
                     }),
                     body: JSON.stringify(user)
                 });
+                localStorage.setItem("user_refreshToken", result.refreshToken);
+                localStorage.setItem("user_token", result.token);
                 userItem = await responseGetUser.json();
                 console.log(userItem);
                 if (localStorage.getItem("userId")) {
                     localStorage.removeItem("userId");
                 }
                 localStorage.setItem("userId", userItem.id);
+                localStorage.setItem("userName", userItem.hoTen);
                 window.location.href = '/client/product';
             }
             if (role === "ADMIN") {
@@ -130,12 +130,15 @@
                     }),
                     body: JSON.stringify(user)
                 });
+                localStorage.setItem("refreshToken", result.refreshToken);
+                localStorage.setItem("token", result.token);
                 userItem = await responseGetStaff.json();
                 console.log(userItem);
                 if (localStorage.getItem("adminId")) {
                     localStorage.removeItem("adminId");
                 }
                 localStorage.setItem("adminId", userItem.id);
+                localStorage.setItem("adminName", userItem.hoTen);
                 window.location.href = '/admin/index';
             }
         }

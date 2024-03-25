@@ -514,7 +514,7 @@
         const response = await fetch(url, {
             method: 'GET',
             headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("token")
+                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
             }
         });
         var result = await response.json();
@@ -528,13 +528,15 @@
             }
             groupedProducts[list[i].spct.sp.id].push(list[i]);
         }
+        var indexFor = 0;
         for (var key in groupedProducts) {
+            indexFor += 1;
             if (groupedProducts.hasOwnProperty(key)) {
                 var groupSP = '';
                 var arrChild = groupedProducts[key];
                 var productName = arrChild[0].spct.sp.tenSP;
                 var productId = arrChild[0].spct.sp.id;
-                for (j = 0; j < arrChild.length; j++) {
+                for (let j = 0; j < arrChild.length; j++) {
                     var count = arrChild[j].soLuong;
                     sub_total += arrChild[j].spct.sp.donGia * count;
                     vat += (arrChild[j].spct.sp.donGia * count) * 0.1;
@@ -542,7 +544,7 @@
                     const pictureResponse = await fetch(urlGetPicture, {
                         method: 'GET',
                         headers: {
-                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+                            'Authorization': 'Bearer ' + localStorage.getItem("user_token")
                         }
                     });
                     var dataPicture = await pictureResponse.json();
@@ -578,7 +580,8 @@
                                           <ul class="list-inline text-muted fs-13 mb-auto">
                                             <li class="list-inline-item">Quantity :</li><div class="input-step">
                                             <button type="button" onclick="minusQuantity(${arrChild[j].id},${j + 1})" class="minus">–</button>
-                                            <input type="number" class="product-quantity" id="product-quantity-${j + 1}" onblur="editQuantity(${arrChild[j].id},${j + 1})" value="${arrChild[j].soLuong}" min="1" max="100">
+                                            <input type="number" class="product-quantity" id="product-quantity-${arrChild[j].id}-${indexFor}"
+                                            onblur="editQuantity(${arrChild[j].id},${indexFor})" value="${arrChild[j].soLuong}" min="1" max="1000">
                                             <button type="button" onclick="addQuantity(${arrChild[j].id})" class="plus">+</button></div>
                                         </ul>
                                     </div>
@@ -588,7 +591,7 @@
                                             <h5 class="fs-16"><span class="product-price">${formatMoney(arrChild[j].spct.sp.donGia)}</span></h5>
                                         </div>
                                     </div>
-                                </div>`
+                                </div>`;
                 }
                 main += `<div class="card product">
                             <div class="card-header">
@@ -851,7 +854,7 @@
                 const promise = fetch(url, {
                     method: 'GET',
                     headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                        'Authorization': 'Bearer ' + localStorage.getItem("user_token")
                     }
                 });
                 promise.then(response => {
@@ -894,7 +897,7 @@
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+                            'Authorization': 'Bearer ' + localStorage.getItem("user_token")
 
                         },
                         body: JSON.stringify(selectedProduct)
@@ -957,7 +960,7 @@
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+                            'Authorization': 'Bearer ' + localStorage.getItem("user_token")
 
                         },
                         body: JSON.stringify(arrProduct)
@@ -1000,7 +1003,7 @@
             url: '/api/client/cart_detail/add-quantity/' + id,
             method: 'GET',
             headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("token")
+                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
             },
             success: function (response) {
                 console.log(response);
@@ -1038,7 +1041,7 @@
                         url: '/api/client/cart_detail/minus-quantity/' + id,
                         method: 'GET',
                         headers: {
-                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+                            'Authorization': 'Bearer ' + localStorage.getItem("user_token")
                         },
                         success: function (response) {
                             console.log(response);
@@ -1065,7 +1068,7 @@
                 url: '/api/client/cart_detail/minus-quantity/' + id,
                 method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    'Authorization': 'Bearer ' + localStorage.getItem("user_token")
                 },
                 success: function (response) {
                     console.log(response);
@@ -1083,13 +1086,15 @@
         }
     }
 
+
     function editQuantity(id, index) {
-        var count = document.getElementById('product-quantity-' + index).value;
+        var count = document.getElementById('product-quantity-' + id + '-' + index).value;
+        console.log("So Luong : " + count);
         $.ajax({
             url: '/api/client/cart_detail/edit-quantity/' + id + '/' + count,
             method: 'GET',
             headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("token")
+                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
             },
             success: function (response) {
                 console.log(response);
@@ -1140,12 +1145,13 @@
                 method: 'POST',
                 contentType: 'application/json',
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    'Authorization': 'Bearer ' + localStorage.getItem("user_token")
                 },
                 data: JSON.stringify(selectedProduct),
                 success: function (response) {
                     console.log(response);
                     sessionStorage.removeItem("listCart");
+                    sessionStorage.removeItem("product_buy_now");
                     sessionStorage.setItem("listCart", JSON.stringify(response));
                     window.location.href = '/order';
 

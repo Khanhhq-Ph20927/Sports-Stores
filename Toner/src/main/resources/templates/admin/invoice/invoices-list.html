@@ -467,7 +467,7 @@
     }
 
     async function detailInvoice(id) {
-        var url = '/api/admin/invoice/invoice-detail/' + id;
+        let url = '/api/admin/invoice/invoice-detail/' + id;
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -475,9 +475,9 @@
             }
         })
         const data = await response.json();
-        var main = '';
-        var sub_total = '';
-        var total_amount = 0;
+        let main = '';
+        let sub_total = '';
+        let total_amount = 0;
         let address;
         let customer;
         let order_status;
@@ -593,7 +593,7 @@
             document.getElementById('sub-total').innerHTML = sub_total;
             document.getElementById('invoice-no').innerText = data[0].dh.maDonHang;
             document.getElementById('invoice-date').innerText = momentDate.format('DD/MM/YYYY HH:mm');
-            document.getElementById('payment-status').innerText = status;
+            document.getElementById('payment-status').innerHTML = status;
             document.getElementById('total-amount').innerText = formatmoney(total_amount);
             $('#myModal').modal('show');
         }
@@ -667,6 +667,16 @@
                                 icon: 'success',
                                 title: 'Thông Báo',
                                 text: 'Chuyển Trạng Thái Thành Công!'
+                            }).then(() => {
+                                $('#myModal').modal('hide');
+                                loadPage();
+                            })
+                        }
+                        if (response === 'failure') {
+                            swal.fire({
+                                icon: 'warning',
+                                title: 'Thông Báo',
+                                text: 'Đơn Hàng Đã Được Chuyển Trạng Thái Trước Đó!'
                             }).then(() => {
                                 $('#myModal').modal('hide');
                                 loadPage();

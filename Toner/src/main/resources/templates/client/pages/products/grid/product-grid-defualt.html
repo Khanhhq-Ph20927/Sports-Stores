@@ -941,7 +941,7 @@
         const responsePriceMax = await fetch(priceMax, {
             method: 'GET',
             headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("token")
+                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
             }
         });
         var resultPriceMax = await responsePriceMax.json();
@@ -958,7 +958,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem("token")
+                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
             },
             body: JSON.stringify(request)
         });
@@ -981,7 +981,7 @@
             const responseDetailPD = await fetch(urlDetailPD, {
                 method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    'Authorization': 'Bearer ' + localStorage.getItem("user_token")
                 }
             });
 
@@ -993,7 +993,7 @@
             const responsePicture = await fetch(urlPicture, {
                 method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    'Authorization': 'Bearer ' + localStorage.getItem("user_token")
                 }
             })
 
@@ -1170,14 +1170,14 @@
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    'Authorization': 'Bearer ' + localStorage.getItem("user_token")
                 }
             });
             var urlGetPicture = '/api/client/product_detail/picture-detail/' + idPD + '/' + id;
             const pictureResponse = await fetch(urlGetPicture, {
                 method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    'Authorization': 'Bearer ' + localStorage.getItem("user_token")
                 }
             });
             var dataPicture = await pictureResponse.json();
@@ -1187,7 +1187,8 @@
                 img = `<img id="picture-product" src="../assets/images/products/img-8.png" alt="Ảnh Sản Phẩm"
                     style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">
                          <div class="action vstack gap-2">
-                                    <button class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action "
+                                    <button class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action"
+                                            onclick="nextPageDetail(${idPD})"
                                             data-bs-toggle="button"><span class="icon-on"><i class="ri-eye-fill"></i></span>
                                     <span class="icon-off"><i class="ri-eye-fill"></i></span></button>
                          </div>`;
@@ -1195,7 +1196,8 @@
                 img = `<img id="picture-product" src="${dataPicture[0].linkAnh}" alt="Ảnh Sản Phẩm"
                     style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">
                          <div class="action vstack gap-2">
-                                    <button class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action "
+                                    <button class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action"
+                                            onclick="nextPageDetail(${idPD})"
                                             data-bs-toggle="button"><span class="icon-on"><i class="ri-eye-fill"></i></span>
                                     <span class="icon-off"><i class="ri-eye-fill"></i></span></button>
                          </div>`;
@@ -1355,7 +1357,7 @@
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+                            'Authorization': 'Bearer ' + localStorage.getItem("user_token")
                         },
                         body: JSON.stringify(product)
                     });
@@ -1391,7 +1393,7 @@
             const responsePriceMax = await fetch(pathPriceMax, {
                 method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    'Authorization': 'Bearer ' + localStorage.getItem("user_token")
                 }
             });
             var resultPriceMax = await responsePriceMax.json();
@@ -1482,7 +1484,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    'Authorization': 'Bearer ' + localStorage.getItem("user_token")
 
                 },
                 body: JSON.stringify(request)
@@ -1507,7 +1509,7 @@
                 const responseDetailPD = await fetch(urlDetailPD, {
                     method: 'GET',
                     headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                        'Authorization': 'Bearer ' + localStorage.getItem("user_token")
                     }
                 });
 
@@ -1519,7 +1521,7 @@
                 const responsePicture = await fetch(urlPicture, {
                     method: 'GET',
                     headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                        'Authorization': 'Bearer ' + localStorage.getItem("user_token")
                     }
                 })
 
@@ -1710,7 +1712,7 @@
                 // Gọi API từ Spring Boot
                 fetch('/api/client/product/priceMax',{
                     headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                        'Authorization': 'Bearer ' + localStorage.getItem("user_token")
                     }
                 })
                     .then(response => response.json())

@@ -1,12 +1,15 @@
 package com.project.SportsStores.Toner.Controller.admin;
 
 import com.project.SportsStores.Toner.Model.AnhSanPham;
+import com.project.SportsStores.Toner.Model.DTO.SPDTO;
 import com.project.SportsStores.Toner.Model.DTO.SanPhamChiTietDTO;
+import com.project.SportsStores.Toner.Model.DonHang;
 import com.project.SportsStores.Toner.Model.SanPhamChiTiet;
 import com.project.SportsStores.Toner.Service.Impl.AnhSanPhamServiceImpl;
 import com.project.SportsStores.Toner.Service.Impl.MauSacServiceImpl;
 import com.project.SportsStores.Toner.Service.Impl.SanPhamChiTietServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,14 +49,15 @@ public class RestControllerSanPhamChiTiet {
         sanPhamChiTiet.setSoLuong(Integer.parseInt(spct.getSl()));
         sanPhamChiTiet.setSize(spct.getSize().toUpperCase(Locale.ROOT));
         sanPhamChiTiet.setMs(serviceMS.getById(Integer.valueOf(spct.getMs())));
-        if (serviceASP.getByIdProductAndColor(id, spct.getMs()).size() == 0) {
+        String idProduct = String.valueOf(sanPhamChiTiet.getSp().getId());
+        if (serviceASP.getByIdProductAndColor(idProduct, spct.getMs()).size() == 0) {
             AnhSanPham pic = new AnhSanPham();
             pic.setLinkAnh(spct.getImgSrc());
             pic.setSpct(sanPhamChiTiet);
             System.out.println(spct.toString());
             serviceASP.save(pic);
         } else {
-            AnhSanPham pic = serviceASP.getByIdProductAndColor(id, spct.getMs()).get(0);
+            AnhSanPham pic = serviceASP.getByIdProductAndColor(idProduct, spct.getMs()).get(0);
             pic.setLinkAnh(spct.getImgSrc());
             serviceASP.save(pic);
         }

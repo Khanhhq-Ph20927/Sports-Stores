@@ -16,68 +16,72 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             handleAuth();
         });
     </script>
     <script>
+
         function handleAuth() {
             let handleAuthElement = '';
             let userId = localStorage.getItem("userId");
-            console.log(userId);
-            if(userId !== null){
+            let userName = localStorage.getItem("userName");
+            if (userId !== null) {
                 handleAuthElement = `
-                    <div class="dropdown header-item dropdown-hover-end">
-                        <button
-                                type="button"
-                                class="btn"
-                                id="page-header-user-dropdown"
-                                data-bs-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                        >
-                            <img
-                                    class="rounded-circle header-profile-user"
-                                    src="../assets/images/users/avatar-1.jpg"
-                                    alt="Header Avatar"
-                            />
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <!-- item-->
-                            <h6 class="dropdown-header">Welcome Diana!</h6>
-                            <a class="dropdown-item" href="order-history"
-                            ><i class="bi bi-cart4 text-muted fs-16 align-middle me-1"></i>
+                            <div class="dropdown header-item dropdown-hover-end">
+                                <button
+                                        type="button"
+                                        class="btn"
+                                        id="page-header-user-dropdown"
+                                        data-bs-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                >
+                                    <img
+                                            class="rounded-circle header-profile-user"
+                                            src="/assets/images/users/user-dummy-img.jpg"
+                                            alt="Header Avatar"
+                                    />
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <!-- item-->
+                                <h6 class="dropdown-header">Welcome ${userName}!</h6>
+                                <a class="dropdown-item" href="order-history"
+                                ><i class="bi bi-cart4 text-muted fs-16 align-middle me-1"></i>
                                 <span class="align-middle">Order History</span></a
-                            >
-                            <a class="dropdown-item" href="track-order"
-                            ><i class="bi bi-truck text-muted fs-16 align-middle me-1"></i>
-                                <span class="align-middle">Track Orders</span></a
-                            >
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="account.html"
-                            ><i
-                                    class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"
-                            ></i>
+                                >
+                                <a class="dropdown-item" href="account.html"
+                                ><i
+                                class="bi bi-person-circle text-muted fs-15 align-middle me-1"
+                                ></i>
+                                <span class="align-middle">Profile</span></a
+                                >
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="account.html"
+                                ><i
+                                class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"
+                                ></i>
                                 <span class="align-middle">Settings</span></a
-                            >
-                            <a class="dropdown-item" onclick="logout()"
-                            ><i
-                                    class="bi bi-box-arrow-right text-muted fs-16 align-middle me-1"
-                            ></i>
+                                >
+                                <a class="dropdown-item" onclick="logout()"
+                                ><i
+                                class="bi bi-box-arrow-right text-muted fs-16 align-middle me-1"
+                                ></i>
                                 <span class="align-middle" data-key="t-logout">Logout</span></a
-                            >
-                        </div>
-                    </div>
-                `;
+                                >
+                                </div>
+                                </div>
+                                `;
                 document.getElementById('login-logout').innerHTML = handleAuthElement;
             }
         }
     </script>
     <script>
         function logout() {
-            localStorage.removeItem("token");
-            localStorage.removeItem("refreshToken");
+            localStorage.removeItem("user_token");
+            localStorage.removeItem("user_refreshToken");
             localStorage.removeItem("userId");
+            localStorage.removeItem("userName");
             window.location.href = '/auth-signin-basic';
         }
     </script>
@@ -85,7 +89,7 @@
         function handleNextShopCart() {
             let userId = localStorage.getItem("userId");
             console.log(userId);
-            if(userId === null || userId === undefined){
+            if (userId === null || userId === undefined) {
                 swal.fire({
                     icon: "error",
                     title: "Thông Báo",
@@ -98,19 +102,19 @@
         }
     </script>
     <script>
-        function handleLogin(){
+        function handleLogin() {
             window.location.href = '/auth-signin-basic';
         }
     </script>
     <script>
         function handleStatusLogin() {
-            if(localStorage.getItem("userId")=== null){
+            if (localStorage.getItem("userId") === null || localStorage.getItem("user_token") === null) {
                 swal.fire({
                     icon: "warning",
                     title: "Thông Báo",
                     text: "Vui Lòng Đăng Nhập!"
-                }).then((result)=>{
-                    if(result.isConfirmed){
+                }).then((result) => {
+                    if (result.isConfirmed) {
                         window.location.href = '/client/product';
                     }
                 })
