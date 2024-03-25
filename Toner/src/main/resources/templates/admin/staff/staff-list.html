@@ -248,7 +248,6 @@
                                         <select class="form-control" required id="staff-status-filter"
                                                 onchange="search()">
                                             <option value="-1">Trạng thái</option>
-                                            <!--                                            <option th:value="-1">Tất cả</option>-->
                                             <option value="0">Đang làm</option>
                                             <option value="1">Đã nghỉ</option>
                                         </select>
@@ -257,27 +256,15 @@
                                         <select class="form-control" required id="staff-position-filter"
                                                 onchange="search()">
                                             <option value="0">Chức vụ</option>
-                                            <!--                                            <option th:value="0">Tất cả</option>-->
                                             <option th:each="position:${chucVu}" th:value="${position.id}"
                                                     th:text="${position.tenChucVu}"></option>
                                         </select>
                                     </div>
                                     <div class="col-lg-auto col-sm-3 ms-auto">
-                                        <a class="btn btn-primary w-100 add-btn" th:href="@{/api/admin/staff/add}">
+                                        <a class="btn btn-primary w-100 add-btn" th:href="@{/admin/staff/add}">
                                             Thêm nhân viên
                                         </a>
                                     </div>
-                                    <!--                                        <div class="col-lg-auto col-sm-9">-->
-                                    <!--                                            <select class="form-control" data-choices data-choices-search-false name="choices-single-default" id="idStatus">-->
-                                    <!--                                                <option value="all" selected>Tất cả</option>-->
-                                    <!--                                                <option value="Today">Hôm nay</option>-->
-                                    <!--                                                <option value="Yesterday">Hôm qua</option>-->
-                                    <!--                                                <option value="Last 7 Days">7 ngày qua</option>-->
-                                    <!--                                                <option value="Last 30 Days">30 ngày trước</option>-->
-                                    <!--                                                <option value="This Month">Tháng này</option>-->
-                                    <!--                                                <option value="Last Month">Tháng trước</option>-->
-                                    <!--                                            </select>-->
-                                    <!--                                        </div>-->
                                 </div>
                             </div>
                         </div>
@@ -294,7 +281,7 @@
                                             <!--                                                </div>-->
                                             <!--                                            </th>-->
                                             <th class="sort">Mã</th>
-                                            <th class="sort desc">Họ tên</th>
+                                            <th class="sort">Họ tên</th>
                                             <th class="sort">Số điện thoại</th>
                                             <th class="sort">Email</th>
                                             <th class="sort">Ngày sinh</th>
@@ -468,11 +455,8 @@
 
     function detail(Id) {
         console.log(Id);
-        fetch('/api/admin/staff/detail/' + Id, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer '+ localStorage.getItem('token')
-            }
+        fetch('/admin/staff/detail/' + Id, {
+            method: 'GET'
         }).then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -492,7 +476,7 @@
             document.getElementById('staff-birthday-input').value = data.ngaySinh;
             document.getElementById('staff-status-input').value = data.trangThai;
             document.getElementById('staff-position-input').value = data.cv.id;
-            document.getElementById('update-form').action = '/api/admin/staff/update/' + Id;
+            document.getElementById('update-form').action = '/admin/staff/update/' + Id;
             if (data.cv.id === 1) {
                 document.getElementById('staff-position-input').checked = true;
             } else if (data.trangThai === 2) {
@@ -520,16 +504,16 @@
                 document.getElementById('update-form').submit();
                 loadPage(page);
             }
+            // else if (result.isDenied) {
+            //     // swal.fire("Changes are not saved", "", "info");
+            // }
         });
     }
 
     async function loadPage(pageNumber) {
-        var url = "/api/admin/staff/page/" + pageNumber + "/" + "null" + "/" + -1 + "/" + 0;
+        var url = "/api/admin/staff/page/" + pageNumber + "/" + "null" + "/" + -1 + "/" + 0 + "/" + "null" + "/" + "desc";
         const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer '+ localStorage.getItem('token')
-            }
+            method: 'GET'
         });
         page = pageNumber;
         var result = await response.json();
@@ -538,10 +522,11 @@
         var totalPage = result.totalPages;
         var number = result.number;
         var main = '';
+        var pageNum = '';
         for (i = 0; i < list.length; i++) {
             var trangThaiBadge = (list[i].trangThai == 0) ?
-                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',0)"/></div>' :
-                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',1)"/></div>';
+                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',1)"/></div>' :
+                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',0)"/></div>';
             main += `<tr >
                             <td scope="row">${list[i].maNV}</td>
                             <td scope="row">${list[i].hoTen}</td>
@@ -556,21 +541,42 @@
                                      class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
                                  </div>
                             </td>
-                     </tr>`
+                     </tr>`;
+            if (i <= totalPage - 1) {
+                pageNum += `<li class="${i + 1 === number + 1 ? "active" : ""}"><a class="page" onclick="loadPage(${i})">${i + 1}</a></li>`;
+            }
         }
         document.getElementById("list_Staff").innerHTML = main;
         var currentPage = `<div class="pagination-wrap hstack gap-2">
-       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(0)"  >
+       <button class="page-item pagination-prev " id="pagination-start" onclick="loadPage(0)"  >
        <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
-       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number - 1 < 0 ? totalPage - 1 : number - 1})">
+       <button class="page-item pagination-prev " id="pagination-prev" onclick="loadPage(${number - 1})">
        <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
-       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
-       <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
+<!--       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>-->
+      <ul class="pagination listjs-pagination mb-0" id="pageNum">${pageNum}</ul>
+       <button class="page-item pagination-next " id="pagination-next" onclick="loadPage(${number + 1})">
        <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
-       <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${totalPage - 1})">
+       <button class="page-item pagination-next" id="pagination-end"  onclick="loadPage(${totalPage - 1})">
        <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
-      </div>`;
+      </div>
+`;
         document.getElementById("pagination").innerHTML = currentPage;
+        if (number === 0 && number === totalPage - 1) {
+            document.getElementById('pagination-start').style.display = "none";
+            document.getElementById('pagination-prev').style.display = "none";
+            document.getElementById('pagination-next').style.display = "none";
+            document.getElementById('pagination-end').style.display = "none";
+        } else if (number === 0) {
+            document.getElementById('pagination-start').style.display = "none";
+            document.getElementById('pagination-prev').style.display = "none";
+            document.getElementById('pagination-next').style.display = "block";
+            document.getElementById('pagination-end').style.display = "block";
+        } else if (number === totalPage - 1) {
+            document.getElementById('pagination-start').style.display = "block";
+            document.getElementById('pagination-prev').style.display = "block";
+            document.getElementById('pagination-next').style.display = "none";
+            document.getElementById('pagination-end').style.display = "none";
+        }
     }
 
     async function search(pageNumber) {
@@ -585,40 +591,37 @@
         if (pageNumber === undefined && keyword === '' && status === "-1" && position === "0") {
             loadPage(page);
         } else if (pageNumber === undefined && keyword !== '' && status === "-1" && position === "0") {
-            url = "/api/admin/staff/page/" + 0 + "/" + keyword + "/" + -1 + "/" + 0;
+            url = "/api/admin/staff/page/" + 0 + "/" + keyword + "/" + -1 + "/" + 0 + "/" + "null" + "/" + "desc";
             console.log(url);
             console.log(1);
         } else if (pageNumber === undefined && keyword === '' && (status !== "-1" || position !== "0")) {
-            url = "/api/admin/staff/page/" + 0 + "/" + "null" + "/" + status + "/" + position;
+            url = "/api/admin/staff/page/" + 0 + "/" + "null" + "/" + status + "/" + position + "/" + "null" + "/" + "desc";
             console.log(url);
             console.log(2);
         } else if (pageNumber === undefined && keyword !== '' && (status !== "-1" || position !== "0")) {
-            url = "/api/admin/staff/page/" + 0 + "/" + keyword + "/" + status + "/" + position;
+            url = "/api/admin/staff/page/" + 0 + "/" + keyword + "/" + status + "/" + position + "/" + "null" + "/" + "desc";
             console.log(url);
             console.log(3);
         } else if (pageNumber !== undefined && keyword !== '' && status === "-1" && position === "0") {
-            url = "/api/admin/staff/page/" + pageNumber + "/" + keyword + "/" + -1 + "/" + 0;
+            url = "/api/admin/staff/page/" + pageNumber + "/" + keyword + "/" + -1 + "/" + 0 + "/" + "null" + "/" + "desc";
             console.log(url);
             console.log(4);
         } else if (pageNumber !== undefined && keyword === '' && (status !== "-1" || position !== "0")) {
-            url = "/api/admin/staff/page/" + pageNumber + "/" + "null" + "/" + status + "/" + position;
+            url = "/api/admin/staff/page/" + pageNumber + "/" + "null" + "/" + status + "/" + position + "/" + "null" + "/" + "desc";
             console.log(url);
             console.log(5);
         } else if (pageNumber !== undefined && keyword !== '' && (status !== "-1" || position !== "0")) {
-            url = "/api/admin/staff/page/" + pageNumber + "/" + keyword + "/" + status + "/" + position;
+            url = "/api/admin/staff/page/" + pageNumber + "/" + keyword + "/" + status + "/" + position + "/" + "null" + "/" + "desc";
             console.log(url);
             console.log(6);
         } else if (pageNumber !== undefined && keyword !== '' && status !== "-1" && position !== "0") {
-            url = "/api/admin/staff/page/" + pageNumber + "/" + keyword + "/" + status + "/" + position;
+            url = "/api/admin/staff/page/" + pageNumber + "/" + keyword + "/" + status + "/" + position + "/" + "null" + "/" + "desc";
             console.log(url);
             console.log(7);
         }
         pageNumber === undefined ? page = 0 : page = pageNumber;
         const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer '+ localStorage.getItem('token')
-            }
+            method: 'GET'
         });
         var result = await response.json();
         console.log(result);
@@ -629,10 +632,11 @@
         var number = result.number;
         console.log(number);
         var main = '';
+        var pageNum = '';
         for (i = 0; i < list.length; i++) {
             var trangThaiBadge = (list[i].trangThai == 0) ?
-                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',0)"/></div>' :
-                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',1)"/></div>';
+                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',1)"/></div>' :
+                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',0)"/></div>';
             main += `<tr >
                             <td scope="row">${list[i].maNV}</td>
                             <td scope="row">${list[i].hoTen}</td>
@@ -647,22 +651,41 @@
                                      class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
                                  </div>
                             </td>
-                     </tr>`
+                     </tr>`;
+            if (i <= totalPage - 1) {
+                pageNum += `<li class="${i + 1 === number + 1 ? "active" : ""}"><button class="page" onclick="search(${i})">${i + 1}</button></li>`;
+            }
         }
         document.getElementById("list_Staff").innerHTML = main;
         var currentPage = `<div class="pagination-wrap hstack gap-2">
-       <button class="page-item pagination-prev" id="pagination-prev" onclick="search(0)" >
+       <button class="page-item pagination-prev" id="pagination-start" onclick="search(0)" >
        <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
-       <button class="page-item pagination-prev" id="pagination-prev" onclick="search(${number - 1 < 0 ? totalPage - 1 : number - 1})">
+       <button class="page-item pagination-prev" id="pagination-prev" onclick="search(${number - 1})">
        <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
-       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
-       <button class="page-item pagination-next" id="pagination-next" onclick="search(${number + 1 === totalPage ? 0 : number + 1})">
+       <ul class="pagination listjs-pagination mb-0" id="pageNum">${pageNum}</ul>
+       <button class="page-item pagination-next" id="pagination-next" onclick="search(${number + 1})">
        <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
-       <button class="page-item pagination-next" id="pagination-next" onclick="search(${totalPage - 1})">
+       <button class="page-item pagination-next" id="pagination-end" onclick="search(${totalPage - 1})">
        <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
       </div>
         `;
         document.getElementById("pagination").innerHTML = currentPage;
+        if (number === 0 && number === totalPage - 1) {
+            document.getElementById('pagination-start').style.display = "none";
+            document.getElementById('pagination-prev').style.display = "none";
+            document.getElementById('pagination-next').style.display = "none";
+            document.getElementById('pagination-end').style.display = "none";
+        } else if (number === 0) {
+            document.getElementById('pagination-start').style.display = "none";
+            document.getElementById('pagination-prev').style.display = "none";
+            document.getElementById('pagination-next').style.display = "block";
+            document.getElementById('pagination-end').style.display = "block";
+        } else if (number === totalPage - 1) {
+            document.getElementById('pagination-start').style.display = "block";
+            document.getElementById('pagination-prev').style.display = "block";
+            document.getElementById('pagination-next').style.display = "none";
+            document.getElementById('pagination-end').style.display = "none";
+        }
     }
 
     function updateStatus(id, status) {
@@ -675,10 +698,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 fetch('/api/admin/staff/update_status/' + id + '/' + status, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer '+ localStorage.getItem('token')
-                    }
+                    method: 'GET'
                 }).then(response => {
                     return response.json();
                 }).then(data => {
@@ -686,7 +706,7 @@
                 }).catch(error => console.log('Error:', error));
             } else {
                 // If the user has not confirmed, then check the status of the checkbox and return it to its original state.
-                if (status === 1) {
+                if (status === 0) {
                     document.getElementById("input-status-" + id).checked = false;
                 } else {
                     document.getElementById("input-status-" + id).checked = true;

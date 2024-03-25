@@ -34,7 +34,7 @@
                 <!-- end page title -->
 
                 <form id="create-form" autocomplete="off" class="needs-validation" novalidate method="post"
-                      th:action="@{/api/admin/staff/add}" th:object="${nhanVien}">
+                      th:action="@{/admin/staff/add}" th:object="${nhanVien}">
                     <div class="row">
                         <div class="card">
                             <div class="card-header">
@@ -58,9 +58,10 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="staff-name-input">Họ tên</label>
                                             <input type="text" class="form-control" id="staff-name-input"
-                                                   placeholder="Họ tên" required th:field="*{hoTen}" onkeyup="validName()">
+                                                   placeholder="Họ tên" required th:field="*{hoTen}"
+                                                   onkeyup="validName()">
                                             <div class="text-danger" th:if="${errorName}" th:text="${errorName}">
-                                                Please enter a staff.
+
                                             </div>
                                         </div>
                                     </div>
@@ -68,9 +69,10 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="staff-phone-input">Số điện thoại</label>
                                             <input type="text" class="form-control" id="staff-phone-input"
-                                                   placeholder="Số điện thoại" required th:field="*{sdt}" onkeyup="validPhone()">
+                                                   placeholder="Số điện thoại" required th:field="*{sdt}"
+                                                   onkeyup="validPhone()">
                                             <div class="text-danger" th:if="${errorPhone}" th:text="${errorPhone}">
-                                                Please enter a staff.
+
                                             </div>
                                         </div>
                                     </div>
@@ -81,10 +83,11 @@
                                     <div class="col-lg-6 col-sm-12">
                                         <div class="mb-3">
                                             <label class="form-label" for="staff-email-input">Email</label>
-                                            <input type="text" class="form-control" id="staff-email-input" placeholder="Email"
+                                            <input type="text" class="form-control" id="staff-email-input"
+                                                   placeholder="Email"
                                                    required th:field="*{email}" onkeyup="validEmail()">
                                             <div class="text-danger" th:if="${errorEmail}" th:text="${errorEmail}">
-                                                Please enter a staff.
+
                                             </div>
                                         </div>
                                     </div>
@@ -92,9 +95,9 @@
                                         <div class="mb-3">
                                             <label for="staff-birthday-input" class="form-label">Ngày sinh</label>
                                             <input type="date" id="staff-birthday-input" class="form-control"
-                                                   data-provider="flatpickr" required data-date-format="d M, Y" th:field="*{ngaySinh}" onkeyup="validBirthday()"/>
-                                            <div class="text-danger" th:if="${errorBirthday}" th:text="${errorBirthday}">
-                                                Please enter a staff.
+                                                   required th:field="*{ngaySinh}" onchange="validBirthday()"/>
+                                            <div class="text-danger" th:if="${errorBirthday}"
+                                                 th:text="${errorBirthday}">
                                             </div>
                                         </div>
                                     </div>
@@ -104,25 +107,26 @@
                                 <div class="row">
                                     <div class="col-lg-6 col-sm-12">
                                         <div class="mb-3">
-                                            <label class="form-label" for="staff-image-input">Hình ảnh</label>
-                                            <input type="file" class="form-control" id="staff-image-input"
-                                                   placeholder="Hình ảnh" required th:field="*{anhNhanVien}">
-                                            <!--                                            <div class="text-danger">-->
-                                            <!--                                                Please enter a staff.-->
-                                            <!--                                            </div>-->
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-sm-12">
-                                        <div class="mb-3">
                                             <label for="staff-position-input" class="form-label">Chức vụ</label>
-                                            <select class="form-control" required id="staff-position-input" th:field="*{cv}" onchange="validPosition()">
+                                            <select class="form-control" required id="staff-position-input"
+                                                    th:field="*{cv}" onchange="validPosition()">
                                                 <option value="0">Chức vụ</option>
                                                 <option th:each="position:${chucVu}" th:value="${position.id}"
                                                         th:text="${position.tenChucVu}"></option>
                                             </select>
-                                            <div class="text-danger" th:if="${errorPosition}" th:text="${errorPosition}">
-                                                Please enter a staff.
+                                            <div class="text-danger" th:if="${errorPosition}"
+                                                 th:text="${errorPosition}">
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="staff-image-input">Hình ảnh</label>
+                                            <input type="file" class="form-control" id="staff-image-input"
+                                                   placeholder="Hình ảnh" required th:field="*{anhNhanVien}">
+                                            <!--                                            <div class="text-danger">-->
+                                            <!--                                                -->
+                                            <!--                                            </div>-->
                                         </div>
                                     </div>
                                     <!-- end col -->
@@ -132,8 +136,9 @@
                         </div>
                         <!-- end card -->
                         <div class="text-end mb-3">
-                            <a th:href="@{/api/admin/staff}" class="btn btn-danger w-sm">Trở lại</a>
-                            <button type="button" class="btn btn-success w-sm" onclick="showConfirmPopup()">Thêm mới</button>
+                            <a th:href="@{/admin/staff}" class="btn btn-danger w-sm">Trở lại</a>
+                            <button type="button" class="btn btn-success w-sm" onclick="showConfirmPopup()">Thêm mới
+                            </button>
                         </div>
                     </div>
                     <!-- end col -->
@@ -152,7 +157,6 @@
 <div th:replace="admin/fragments/script::script"></div>
 </body>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
 <script th:inline="javascript">
     function showConfirmPopup() {
         swal.fire({
@@ -175,7 +179,7 @@
     function validName() {
         var nameInput = document.getElementById('staff-name-input');
         var errorName = document.getElementById('errorName');
-
+        console.log(nameInput);
         nameInput.addEventListener('input', function () {
             if (nameInput.value.trim() !== '') {
                 errorName.style.display = 'none';
@@ -188,7 +192,7 @@
     function validPhone() {
         var phoneInput = document.getElementById('staff-phone-input');
         var errorPhone = document.getElementById('errorPhone');
-
+        console.log(phoneInput);
         phoneInput.addEventListener('input', function () {
             if (phoneInput.value.trim() !== '') {
                 errorPhone.style.display = 'none';
@@ -201,7 +205,7 @@
     function validEmail() {
         var emailInput = document.getElementById('staff-email-input');
         var errorEmail = document.getElementById('errorEmail');
-
+        console.log(emailInput);
         if (emailInput.value.trim() !== '') {
             errorEmail.style.display = 'none';
         } else {
@@ -213,7 +217,7 @@
     function validBirthday() {
         var birthdayInput = document.getElementById('staff-birthday-input');
         var errorBirthday = document.getElementById('errorBirthday');
-
+        console.log(birthdayInput);
         if (birthdayInput.value.trim() !== '') {
             errorBirthday.style.display = 'none';
         } else {
@@ -224,7 +228,7 @@
     function validPosition() {
         var positionInput = document.getElementById('staff-position-input');
         var errorPosition = document.getElementById('errorPosition');
-
+        console.log(positionInput);
         if (positionInput.value !== 0) {
             errorPosition.style.display = 'none';
         } else {
