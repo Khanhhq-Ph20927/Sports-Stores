@@ -34,7 +34,7 @@ public class NhanVien implements UserDetails {
     private String sdt;
 
     @Column(name="NgaySinh")
-    private Date ngaySinh;
+    private String ngaySinh;
 
     @Column(name="TrangThai")
     private int trangThai;

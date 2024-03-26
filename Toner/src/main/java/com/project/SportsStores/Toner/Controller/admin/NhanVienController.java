@@ -3,18 +3,19 @@ package com.project.SportsStores.Toner.Controller.admin;
 import com.project.SportsStores.Toner.Model.NhanVien;
 import com.project.SportsStores.Toner.Service.ChucVuService;
 import com.project.SportsStores.Toner.Service.NhanVienService;
-import jakarta.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 @RequestMapping("/admin/staff")
@@ -24,6 +25,8 @@ public class NhanVienController {
     NhanVienService service;
     @Autowired
     ChucVuService chucVuService;
+    @Autowired
+    PasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     @GetMapping()
     public String getAll(Model model) {
@@ -59,6 +62,7 @@ public class NhanVienController {
         }
         nhanVien.setMatKhau("12345");
         nhanVien.setNgayTao(LocalDateTime.now());
+        nhanVien.setMatKhauMaHoa(encoder.encode("12345"));
         if (nhanVien.getHoTen().isEmpty()) {
             isValid = true;
             model.addAttribute("errorName", "Họ tên trống !");
@@ -81,19 +85,24 @@ public class NhanVienController {
             isValid = true;
             model.addAttribute("errorEmail", "Email không đúng định dạng !");
         }
-        if (nhanVien.getNgaySinh()==null) {
+
+        if (nhanVien.getNgaySinh().isEmpty()) {
             isValid = true;
             model.addAttribute("errorBirthday", "Ngày sinh trống !");
+        } else if (!nhanVien.getNgaySinh().isEmpty()) {
+            LocalDate now = LocalDate.now();
+            LocalDate birthDate = LocalDate.parse(nhanVien.getNgaySinh(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            int age = Period.between(birthDate, now).getYears();
+            if (age < 18) {
+                isValid = true;
+                model.addAttribute("errorBirthday", "Chưa đủ tuổi !");
+            }
         }
-//        else if () {
-//            isValid = true;
-//            model.addAttribute("errorBirthday", "Ngày sinh trống");
-//        }
         if (nhanVien.getCv() == null) {
             isValid = true;
             model.addAttribute("errorPosition", "Chưa chọn chức vụ !");
         }
-        if (isValid) {
+        if (isValid == false) {
             service.save(nhanVien);
             redirectAttributes.addFlashAttribute("message", true);
             return "redirect:/admin/staff/add";
@@ -118,11 +127,11 @@ public class NhanVienController {
         updateNV.setTrangThai(nhanVien.getTrangThai());
         updateNV.setEmail(nhanVien.getEmail());
         updateNV.setCv(nhanVien.getCv());
+        updateNV.setMatKhauMaHoa(encoder.encode(nhanVien.getMatKhau()));
 //        updateNV.setAnhNhanVien(nhanVien.getAnhNhanVien());
         service.save(nhanVien);
         redirectAttributes.addFlashAttribute("message", true);
         return "redirect:/admin/staff";
-//        return "admin/staff/staff-list";
     }
 
 }

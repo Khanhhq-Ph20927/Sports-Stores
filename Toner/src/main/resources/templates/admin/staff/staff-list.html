@@ -41,7 +41,7 @@
                         <div class="card card-height-100 bg-warning-subtle border-0 overflow-hidden">
                             <div class="position-absolute end-0 start-0 top-0 z-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
-                                     xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="250"
+                                     height="250" width="400"
                                      preserveAspectRatio="none" viewBox="0 0 400 250">
                                     <g mask="url(&quot;#SvgjsMask1530&quot;)" fill="none">
                                         <path d="M209 112L130 191" stroke-width="10"
@@ -107,7 +107,7 @@
                         <div class="card card-height-100 bg-success-subtle border-0 overflow-hidden">
                             <div class="position-absolute end-0 start-0 top-0 z-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
-                                     xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="250"
+                                     height="250" width="400"
                                      preserveAspectRatio="none" viewBox="0 0 400 250">
                                     <g mask="url(&quot;#SvgjsMask1608&quot;)" fill="none">
                                         <path d="M390 87L269 208" stroke-width="10"
@@ -170,7 +170,7 @@
                         <div class="card card-height-100 bg-info-subtle border-0 overflow-hidden">
                             <div class="position-absolute end-0 start-0 top-0 z-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
-                                     xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="250"
+                                     height="250" width="400"
                                      preserveAspectRatio="none" viewBox="0 0 400 250">
                                     <g mask="url(&quot;#SvgjsMask1551&quot;)" fill="none">
                                         <path d="M306 65L446 -75" stroke-width="8"
@@ -385,6 +385,12 @@
                                    th:name="matKhau"/>
                         </div>
                         <div class="mb-3">
+                            <label class="form-label" for="staff-datecreated-input">Mật khẩu mã hóa</label>
+                            <input class="form-control" id="staff-password-encoder-input" required
+                                   th:name="matKhauMaHoa"
+                                   type="text"/>
+                        </div>
+                        <div class="mb-3">
                             <label for="staff-datecreated-input" class="form-label">Ngày tạo</label>
                             <input type="text" id="staff-datecreated-input" class="form-control" required
                                    th:name="ngayTao"/>
@@ -468,6 +474,7 @@
             // none
             document.getElementById('staff-code-input').value = data.maNV;
             document.getElementById('staff-password-input').value = data.matKhau;
+            document.getElementById('staff-password-encoder-input').value = data.matKhauMaHoa;
             document.getElementById('staff-datecreated-input').value = data.ngayTao;
             // none
             document.getElementById('staff-name-input').value = data.hoTen;
@@ -522,7 +529,8 @@
         var totalPage = result.totalPages;
         var number = result.number;
         var main = '';
-        var pageNum = '';
+        // var currentPage = '';
+
         for (i = 0; i < list.length; i++) {
             var trangThaiBadge = (list[i].trangThai == 0) ?
                 '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',1)"/></div>' :
@@ -542,28 +550,25 @@
                                  </div>
                             </td>
                      </tr>`;
-            if (i <= totalPage - 1) {
-                pageNum += `<li class="${i + 1 === number + 1 ? "active" : ""}"><a class="page" onclick="loadPage(${i})">${i + 1}</a></li>`;
-            }
         }
+
         document.getElementById("list_Staff").innerHTML = main;
+
         var currentPage = `<div class="pagination-wrap hstack gap-2">
        <button class="page-item pagination-prev " id="pagination-start" onclick="loadPage(0)"  >
        <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
        <button class="page-item pagination-prev " id="pagination-prev" onclick="loadPage(${number - 1})">
        <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
-<!--       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>-->
-      <ul class="pagination listjs-pagination mb-0" id="pageNum">${pageNum}</ul>
+      <ul class="pagination listjs-pagination mb-0" id="pageNum"><li class="active"><a class="page">${number + 1}</a></li></ul>
        <button class="page-item pagination-next " id="pagination-next" onclick="loadPage(${number + 1})">
        <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
        <button class="page-item pagination-next" id="pagination-end"  onclick="loadPage(${totalPage - 1})">
-       <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
-      </div>
-`;
+       <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button></div>`;
         document.getElementById("pagination").innerHTML = currentPage;
         if (number === 0 && number === totalPage - 1) {
             document.getElementById('pagination-start').style.display = "none";
             document.getElementById('pagination-prev').style.display = "none";
+            document.getElementById('pageNum').style.display = "none";
             document.getElementById('pagination-next').style.display = "none";
             document.getElementById('pagination-end').style.display = "none";
         } else if (number === 0) {
@@ -632,7 +637,8 @@
         var number = result.number;
         console.log(number);
         var main = '';
-        var pageNum = '';
+        var currentPage = '';
+
         for (i = 0; i < list.length; i++) {
             var trangThaiBadge = (list[i].trangThai == 0) ?
                 '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',1)"/></div>' :
@@ -652,27 +658,26 @@
                                  </div>
                             </td>
                      </tr>`;
-            if (i <= totalPage - 1) {
-                pageNum += `<li class="${i + 1 === number + 1 ? "active" : ""}"><button class="page" onclick="search(${i})">${i + 1}</button></li>`;
-            }
         }
         document.getElementById("list_Staff").innerHTML = main;
-        var currentPage = `<div class="pagination-wrap hstack gap-2">
+        currentPage = `<div class="pagination-wrap hstack gap-2">
        <button class="page-item pagination-prev" id="pagination-start" onclick="search(0)" >
        <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
        <button class="page-item pagination-prev" id="pagination-prev" onclick="search(${number - 1})">
        <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
-       <ul class="pagination listjs-pagination mb-0" id="pageNum">${pageNum}</ul>
+         <ul class="pagination listjs-pagination mb-0" id="pageNum"><li class="active"><a class="page">${number + 1}</a></li></ul>
        <button class="page-item pagination-next" id="pagination-next" onclick="search(${number + 1})">
        <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
        <button class="page-item pagination-next" id="pagination-end" onclick="search(${totalPage - 1})">
        <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
       </div>
         `;
+
         document.getElementById("pagination").innerHTML = currentPage;
         if (number === 0 && number === totalPage - 1) {
             document.getElementById('pagination-start').style.display = "none";
             document.getElementById('pagination-prev').style.display = "none";
+            document.getElementById('pageNum').style.display = "none";
             document.getElementById('pagination-next').style.display = "none";
             document.getElementById('pagination-end').style.display = "none";
         } else if (number === 0) {
@@ -690,11 +695,10 @@
 
     function updateStatus(id, status) {
         swal.fire({
-            title: "Bạn Có Muốn Thay Đổi Trạng Thái?",
-            showDenyButton: true,
+            title: "Bạn Muốn Thay Đổi Trạng Thái?",
             showCancelButton: true,
-            confirmButtonText: "Lưu Thay Đổi",
-            denyButtonText: `Quay Về`
+            confirmButtonText: "Thay Đổi",
+            cancelButtonText: "Quay Về"
         }).then((result) => {
             if (result.isConfirmed) {
                 fetch('/api/admin/staff/update_status/' + id + '/' + status, {
