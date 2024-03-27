@@ -2,13 +2,18 @@ package com.project.SportsStores.Toner.Filter;
 
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+
+import java.util.Arrays;
 
 
 public class AdminInterceptor implements HandlerInterceptor {
@@ -18,20 +23,25 @@ public class AdminInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        String token = String.valueOf(request.getSession().getAttribute("token"));
+        Cookie[] cookies = request.getCookies();
+        Cookie tokenCookie = Arrays.stream(cookies)
+                .filter(cookie -> cookie.getName().equals("token"))
+                .findFirst()
+                .orElse(null);
+        String token = tokenCookie != null ? tokenCookie.getValue() : null;
+        System.out.println("token prehandle : " + token);
         if (request.getRequestURI().startsWith("/admin/")) {
             System.out.println(token);
-            if (token.equalsIgnoreCase("null")) {
+            if (token == null) {
                 String loginPageUrl = "/auth-signin-basic";
                 String redirectUrl = UriComponentsBuilder.fromUriString(request.getContextPath() + loginPageUrl)
                         .build().toUriString();
                 response.sendRedirect(redirectUrl);
                 return false;
             } else {
-                String handleToken = token.replace("\"", "");
                 Algorithm algorithm = Algorithm.HMAC256(secret_key.getBytes());
                 JWTVerifier verifier = JWT.require(algorithm).build();
-                DecodedJWT decodedJWT = verifier.verify(handleToken);
+                DecodedJWT decodedJWT = verifier.verify(token);
                 String username = decodedJWT.getSubject();
                 String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
                 System.out.println("After Decode Token : " + username);

@@ -7,7 +7,9 @@ import com.project.SportsStores.Toner.Model.NhanVien;
 import com.project.SportsStores.Toner.Repository.KhachHangRepository;
 import com.project.SportsStores.Toner.Repository.NhanVienRepository;
 import com.project.SportsStores.Toner.Service.AuthenticationService;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,14 +36,20 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpSession session) {
-        session.removeAttribute("token");
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        HttpServletResponse response = (HttpServletResponse) request.getAttribute("response");
+        Cookie cookie = new Cookie("token", "");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
         return ResponseEntity.ok("success");
     }
 
     @PostMapping("/getStaff/{email}")
-    public NhanVien getStaff(@PathVariable("email") String email, HttpSession session, @RequestBody String token) {
-        session.setAttribute("token", token);
+    public NhanVien getStaff(@PathVariable("email") String email, @RequestBody String token, HttpServletResponse response) {
+        System.out.println("Body  : " + token);
+        Cookie cookie = new Cookie("token", token);
+        cookie.setMaxAge(86400);
+        response.addCookie(cookie);
         System.out.println(email);
         if (nvrp.getByEmail(email).isPresent()) {
             return nvrp.getByEmail(email).get();
@@ -52,7 +60,7 @@ public class AuthController {
 
     @PostMapping("/getCustomer/{email}")
     public KhachHang getCustomer(@PathVariable("email") String email, @RequestBody String token) {
-        System.out.println(token);
+        System.out.println("Body  : " + token);
         System.out.println(email);
         if (khrp.findByEmail(email).isPresent()) {
             return khrp.getByEmail(email).get();

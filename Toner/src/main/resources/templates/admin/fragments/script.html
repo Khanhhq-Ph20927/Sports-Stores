@@ -400,21 +400,20 @@
         }
     </script>
     <script>
-        function logout() {
+        async function logout() {
             localStorage.removeItem("token");
             localStorage.removeItem("refreshToken");
-            localStorage.removeItem("userId");
+            localStorage.removeItem("adminId");
+            localStorage.removeItem("adminName");
+            await fetch('/api/v1/auth/logout', {
+                method: 'POST'
+            })
             window.location.href = '/auth-signin-basic';
         }
-    </script>
+    </script>>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             handleAuth();
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            handleStatusLoginWithAdmin();
         });
     </script>
     <script>
@@ -485,36 +484,10 @@
             }
         }
     </script>
-    <script>
-        async function logout() {
-            localStorage.removeItem("token");
-            localStorage.removeItem("refreshToken");
-            localStorage.removeItem("adminId");
-            localStorage.removeItem("adminName");
-            await fetch('/api/v1/auth/logout', {
-                method: 'POST'
-            })
-            window.location.href = '/auth-signin-basic';
-        }
-    </script>
 
     <script>
         function handleLogin() {
             window.location.href = '/auth-signin-basic';
-        }
-    </script>
-    <script>
-        function handleStatusLoginWithAdmin() {
-            if (localStorage.getItem("adminId") === null || localStorage.getItem("token") === null) {
-                window.stop();
-                swal.fire({
-                    icon: "warning",
-                    title: "Thông Báo",
-                    text: "Vui Lòng Đăng Nhập!"
-                }).then(() => {
-                    window.location.href = '/auth-signin-basic';
-                });
-            }
         }
     </script>
 </div>

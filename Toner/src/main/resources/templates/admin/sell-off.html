@@ -549,7 +549,7 @@
         var main = '';
         var img = '';
         for (i = 0; i < list.length; i++) {
-            var url = '/api/admin/product_detail/picture/' + list[i].id;
+            var url = '/api/admin/product_detail/picture/' + list[i].sp.id + '/' + list[i].ms.id;
             const responsePicture = await fetch(url, {
                 method: 'GET',
                 headers: {
@@ -1114,7 +1114,7 @@
                                              <div class="row">
                                                   <div class="col-lg-3 col-sm-12">
                                                         <div class="mb-auto">
-                                                                     <div class="mt-auto" style="height: 50%;width: 100%;" id="my-qr-reader">
+                                                                     <div class="mt-auto" style="height: 50%;width: 100%;" id="my-qr-reader-${i}">
                                                                       </div>
                                                         </div>
                                                   </div>
@@ -1343,78 +1343,32 @@
         var keyword = inputElement.value.trim().toLowerCase();
 
         if (keyword.length > 0 && !isNaN(keyword)) {
-            var url = '/api/admin/product_detail/picture/' + keyword;
-
-            const responsePicture = await fetch(url, {
+            $.ajax({
+                url: '/api/admin/sell-off/product-detail/search-by-id/' + keyword,
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('token')
-                }
-            })
+                },
+                success: async function (response) {
+                    console.log(response);
+                    if (response !== 'null') {
 
-            const data = await responsePicture.json();
+                        var url = '/api/admin/product_detail/picture/' + response.sp.id + '/' + response.ms.id;
 
-            console.log(data);
+                        const responsePicture = await fetch(url, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                            }
+                        })
 
-            if (data === null) {
-                $.ajax({
-                    url: '/api/admin/sell-off/product-detail/search-by-id/' + keyword,
-                    method: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    },
-                    success: function (response) {
-                        console.log(response);
-                        if (response !== 'null') {
+                        const data = await responsePicture.json();
+
+                        if (data !== null) {
                             result += `
                                 <li>
                                     <div class="dropdown-item d-flex align-items-center">
-                                           <div class="d-flex justify-content-center align-items-center" style="width: 25%; height: 70%; padding-right: 15px;">
-                                               <i class="ri-question-mark"></i>
-                                           </div>
-                                         <div>
-                                            <span>${response.sp.tenSP}</span>
-                                            <p class="small">${response.ms.ten}, ${response.size}</p>
-                                        </div>
-                                        <i class="ri-add-line ms-auto" onclick="addProduct(${response.id})"></i>
-                                    </div>
-                                </li>`;
-
-                            // Kích hoạt dropdown
-                            searchResults.style.display = 'block';
-                            searchResults.innerHTML = result;
-                        }
-                        if (response === 'null') {
-                            result = `
-                                <li>
-                                    <div class="dropdown-item d-flex align-items-center">
-                                         <div>
-                                            <span>Không có kết quả!</span>
-                                        </div>
-                                    </div>
-                                </li>`;
-                            searchResults.style.display = 'block';
-                            searchResults.innerHTML = result;
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error:', error);
-                    }
-                });
-            } else {
-                $.ajax({
-                    url: '/api/admin/sell-off/product-detail/search-by-id/' + keyword,
-                    method: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    },
-                    success: function (response) {
-                        console.log(response);
-                        if (response !== 'null') {
-                            result += `
-                                <li>
-                                    <div class="dropdown-item d-flex align-items-center">
-                                         <img src="${data.linkAnh}" alt="Ảnh sản phẩm"
+                                         <img src="${data[0].linkAnh}" alt="Ảnh sản phẩm"
                                           style="width: 25%; height: 70%; padding-right: 15px;">
                                          <div>
                                             <span>${response.sp.tenSP}</span>
@@ -1427,9 +1381,28 @@
                             // Kích hoạt dropdown
                             searchResults.style.display = 'block';
                             searchResults.innerHTML = result;
+                        } else {
+                            result += `
+                                <li>
+                                    <div class="dropdown-item d-flex align-items-center">
+                                        <div class="d-flex justify-content-center align-items-center" style="width: 25%; height: 70%; padding-right: 15px;">
+                                                       <i class="ri-question-mark"></i>
+                                                   </div>
+                                        <div>
+                                            <span>${response.sp.tenSP}</span>
+                                            <p class="small">${response.ms.ten}, ${response.size}</p>
+                                        </div>
+                                        <i class="ri-add-line ms-auto" onclick="addProduct(${response.id})"></i>
+                                    </div>
+                            </li>`;
+
+                            // Kích hoạt dropdown
+                            searchResults.style.display = 'block';
+                            searchResults.innerHTML = result;
                         }
-                        if (response === 'null') {
-                            result = `
+                    }
+                    if (response === 'null') {
+                        result = `
                                 <li>
                                     <div class="dropdown-item d-flex align-items-center">
                                          <div>
@@ -1437,15 +1410,15 @@
                                         </div>
                                     </div>
                                 </li>`;
-                            searchResults.style.display = 'block';
-                            searchResults.innerHTML = result;
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error:', error);
+                        searchResults.style.display = 'block';
+                        searchResults.innerHTML = result;
                     }
-                });
-            }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+
         } else {
             // Ẩn dropdown nếu không có keyword
             searchResults.style.display = 'none';
