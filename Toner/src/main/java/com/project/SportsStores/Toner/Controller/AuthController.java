@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/auth")
 @RestController
 public class AuthController {
+
     @Autowired
     NhanVienRepository nvrp;
     @Autowired
@@ -26,13 +27,21 @@ public class AuthController {
     @Autowired
     private AuthenticationService authenticationService;
 
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest authenticationRequest) {
         return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpSession session) {
+        session.removeAttribute("token");
+        return ResponseEntity.ok("success");
+    }
+
     @PostMapping("/getStaff/{email}")
-    public NhanVien getStaff(@PathVariable("email") String email) {
+    public NhanVien getStaff(@PathVariable("email") String email, HttpSession session, @RequestBody String token) {
+        session.setAttribute("token", token);
         System.out.println(email);
         if (nvrp.getByEmail(email).isPresent()) {
             return nvrp.getByEmail(email).get();
@@ -42,7 +51,8 @@ public class AuthController {
     }
 
     @PostMapping("/getCustomer/{email}")
-    public KhachHang getCustomer(@PathVariable("email") String email) {
+    public KhachHang getCustomer(@PathVariable("email") String email, @RequestBody String token) {
+        System.out.println(token);
         System.out.println(email);
         if (khrp.findByEmail(email).isPresent()) {
             return khrp.getByEmail(email).get();

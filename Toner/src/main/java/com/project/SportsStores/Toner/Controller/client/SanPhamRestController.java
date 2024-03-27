@@ -38,7 +38,9 @@ public class SanPhamRestController {
                                                   @PathVariable("priceStart") String priceStart,
                                                   @PathVariable("priceEnd") String priceEnd,
                                                   @RequestBody FilterRequest filterRequest,
-                                                  @RequestParam("sort") int sort) {
+                                                  @RequestParam("sort") int sort,
+                                                  @RequestParam("brand") String brand,
+                                                  @RequestParam("sport") String sport) {
         Pageable pageable = PageRequest.of(Integer.parseInt(pageNumber), 8, Sort.by("ngayTao").descending());
         Page<SanPham> page = null;
         if (sort == 1) {
@@ -74,49 +76,71 @@ public class SanPhamRestController {
             System.out.println("sort default");
         }
         //default
-        if ((Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) == service.priceMax()) && (filterRequest.getListColors() == null && filterRequest.getListSizes() == null)) {
+
+        if ((Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) == service.priceMax()) && (filterRequest.getListColors() == null && filterRequest.getListSizes() == null)
+        && (sport.equalsIgnoreCase("-1") && brand.equalsIgnoreCase("-1"))) {
             page = service.pageClient(pageable);
             System.out.println("Case Default");
         }
         //color
-        else if ((Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() != null && filterRequest.getListSizes() == null) {
+        else if ((Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() != null && filterRequest.getListSizes() == null
+                && (sport.equalsIgnoreCase("-1") && brand.equalsIgnoreCase("-1"))) {
             page = service.filterColor(pageable, filterRequest.getListColors());
             System.out.println("Case " + 2);
         }
         //size
-        else if ((Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() == null && filterRequest.getListSizes() != null) {
+        else if ((Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() == null && filterRequest.getListSizes() != null
+                && (sport.equalsIgnoreCase("-1") && brand.equalsIgnoreCase("-1"))) {
             page = service.filterSize(pageable, filterRequest.getListSizes());
             System.out.println("Case " + 3);
         }
+        //brand
+        else if ((Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() == null && filterRequest.getListSizes() == null
+                && (sport.equalsIgnoreCase("-1") && !brand.equalsIgnoreCase("-1"))) {
+            page = service.filterBrand(pageable, brand);
+            System.out.println("Case " + 2);
+        }
+        //sport
+        else if ((Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() == null && filterRequest.getListSizes() == null
+                && (!sport.equalsIgnoreCase("-1") && brand.equalsIgnoreCase("-1"))) {
+            page = service.filterSport(pageable, sport);
+            System.out.println("Case " + 2);
+        }
         //color+size
-        else if ((Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() != null && filterRequest.getListSizes() != null) {
+        else if ((Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() != null && filterRequest.getListSizes() != null
+                && (sport.equalsIgnoreCase("-1") && brand.equalsIgnoreCase("-1"))) {
             page = service.filterColorAndSize(pageable, filterRequest.getListColors(), filterRequest.getListSizes());
             System.out.println("Case " + 4);
         }
         //price
         else if ((Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) != service.priceMax() || Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) != service.priceMax()
-                || Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() == null && filterRequest.getListSizes() == null) {
+                || Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() == null && filterRequest.getListSizes() == null
+                && (sport.equalsIgnoreCase("-1") && brand.equalsIgnoreCase("-1"))) {
             page = service.price(pageable, priceStart, priceEnd);
             System.out.println("Case " + 5);
         }
         //price+color
         else if ((Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) != service.priceMax() || Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) != service.priceMax()
-                || Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() != null && filterRequest.getListSizes() == null) {
+                || Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() != null && filterRequest.getListSizes() == null
+                && (sport.equalsIgnoreCase("-1") && brand.equalsIgnoreCase("-1"))) {
             page = service.priceAndFilterColor(pageable, priceStart, priceEnd, filterRequest.getListColors());
             System.out.println("Case " + 6);
         }
         //price+size
         else if ((Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) != service.priceMax() || Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) != service.priceMax()
-                || Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() == null && filterRequest.getListSizes() != null) {
+                || Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() == null && filterRequest.getListSizes() != null
+                && (sport.equalsIgnoreCase("-1") && brand.equalsIgnoreCase("-1"))) {
             page = service.priceAndFilterSize(pageable, priceStart, priceEnd, filterRequest.getListSizes());
             System.out.println("Case " + 7);
         }
         //price+color+size
         else if ((Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) != service.priceMax() || Integer.parseInt(priceStart) == 0 && Integer.parseInt(priceEnd) != service.priceMax()
-                || Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() != null && filterRequest.getListSizes() != null) {
+                || Integer.parseInt(priceStart) != 0 && Integer.parseInt(priceEnd) == service.priceMax()) && filterRequest.getListColors() != null && filterRequest.getListSizes() != null
+                && (sport.equalsIgnoreCase("-1") && brand.equalsIgnoreCase("-1"))) {
             page = service.priceAndFilterColorAndSize(pageable, priceStart, priceEnd, filterRequest.getListColors(), filterRequest.getListSizes());
             System.out.println("Case " + 8);
         } else {
+            page = service.pageClient(pageable);
             System.out.println("Error??");
         }
 

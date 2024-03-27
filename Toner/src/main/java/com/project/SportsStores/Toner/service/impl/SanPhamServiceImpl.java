@@ -152,4 +152,14 @@ public class SanPhamServiceImpl implements SanPhamService {
     public Integer priceMax() {
         return rp.priceMax();
     }
+
+    @Override
+    public Page<SanPham> filterSport(Pageable pageable, String sports) {
+        return rp.filterSport(sports,pageable);
+    }
+
+    @Override
+    public Page<SanPham> filterBrand(Pageable pageable, String brands) {
+        return rp.filterBrands(brands,pageable);
+    }
 }

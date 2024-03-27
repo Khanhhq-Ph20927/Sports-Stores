@@ -1202,10 +1202,9 @@
         } else {
             swal.fire({
                 title: "Bạn Có Muốn Thêm Mới?",
-                showDenyButton: true,
                 showCancelButton: true,
                 confirmButtonText: "Có",
-                denyButtonText: `Không`
+                cancelButtonText: "Không"
             }).then((result) => {
                 if (result.isConfirmed) {
 
@@ -1757,10 +1756,9 @@
     function updateStatus(idProduct, status) {
         swal.fire({
             title: "Bạn Có Muốn Thay Đổi Trạng Thái?",
-            showDenyButton: true,
             showCancelButton: true,
-            confirmButtonText: "Lưu Thay Đổi",
-            denyButtonText: `Quay Về`
+            confirmButtonText: "Lưu",
+            cancelButtonText: `Không`
         }).then((result) => {
             if (result.isConfirmed) {
                 fetch('/api/admin/product/update_status/' + idProduct + '/' + status, {

@@ -187,8 +187,9 @@
         <div class="row product-list justify-content-center">
             <div class="col-lg-8">
                 <div class="d-flex align-items-center mb-4">
-                    <h5 class="mb-0 flex-grow-1 fw-medium">There are <span class="fw-bold product-count"></span>
-                        products in your cart</h5>
+                    <h5 class="mb-0 flex-grow-1 fw-medium">Có <span class="fw-bold product-count"
+                                                                    id="product-count"></span>
+                        sản phẩm trong giỏ hàng của bạn.</h5>
                     <div class="flex-shrink-0 p-2" id="button-choose">
                         <button class="btn btn-hover btn-info" onclick="chooseAll()">
                             Chọn tất cả
@@ -473,12 +474,15 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 <script>
-    var userId;
-    var selectedProduct = [];
-    var selectedCart = [];
-    var selectedProductGroup = [];
-    var sub_total_global = 0;
-    var vat_global = 0;
+    let userId;
+    let selectedProduct = [];
+    let saveStatusCheck = [];
+    let saveStatusCheckGroup = [];
+    let selectedCart = [];
+    let productDataList = {};
+    let selectedProductGroup = [];
+    let sub_total_global = 0;
+    let vat_global = 0;
     const Toast = swal.mixin({
         toast: true,
         position: "top-end",
@@ -507,6 +511,21 @@
         return VND.format(money);
     }
 
+    function restoreCheckedState() {
+        saveStatusCheck.forEach(function (id) {
+            let currentCheckbox = document.getElementById(id);
+            if (currentCheckbox) {
+                currentCheckbox.checked = true;
+            }
+        });
+        saveStatusCheckGroup.forEach(function (id) {
+            let currentCheckbox = document.getElementById(id);
+            if (currentCheckbox) {
+                currentCheckbox.checked = true;
+            }
+        })
+    }
+
     async function loadPage() {
         var url = "/api/client/cart_detail/findAll/" + userId;
         var sub_total = 0;
@@ -519,6 +538,10 @@
         });
         var result = await response.json();
         console.log(result);
+        if (result.length > 0)
+            document.getElementById('product-count').innerText = result.length;
+        else
+            document.getElementById('product-count').innerText = 0;
         var list = result;
         var main = '';
         var groupedProducts = {};
@@ -528,6 +551,7 @@
             }
             groupedProducts[list[i].spct.sp.id].push(list[i]);
         }
+        productDataList = groupedProducts;
         var indexFor = 0;
         for (var key in groupedProducts) {
             indexFor += 1;
@@ -579,7 +603,7 @@
                                         </ul>
                                           <ul class="list-inline text-muted fs-13 mb-auto">
                                             <li class="list-inline-item">Quantity :</li><div class="input-step">
-                                            <button type="button" onclick="minusQuantity(${arrChild[j].id},${j + 1})" class="minus">–</button>
+                                            <button type="button" onclick="minusQuantity(${arrChild[j].id},${indexFor})" class="minus">–</button>
                                             <input type="number" class="product-quantity" id="product-quantity-${arrChild[j].id}-${indexFor}"
                                             onblur="editQuantity(${arrChild[j].id},${indexFor})" value="${arrChild[j].soLuong}" min="1" max="1000">
                                             <button type="button" onclick="addQuantity(${arrChild[j].id})" class="plus">+</button></div>
@@ -640,6 +664,7 @@
             vat = 0;
         }
         document.getElementById("card-product").innerHTML = main;
+        restoreCheckedState();
     }
 
     function formatMoney(money) {
@@ -659,16 +684,18 @@
         var product = {};
         if (check === -1) {
             selectedProductGroup.push(productId);
-            console.log(selectedProductGroup);
-
+            saveStatusCheckGroup.push('check-group-' + productId);
+            console.log('checked group :', saveStatusCheckGroup);
             nodeList.forEach(function (item) {
                 item.checked = true;
-                var index = selectedProduct.indexOf(item.value);
-
+                let index = selectedProduct.indexOf(item.value);
+                let index_id = saveStatusCheck.indexOf(item.id);
                 if (index === -1) {
                     selectedProduct.push(item.value + '');
+                    saveStatusCheck.push(item.id);
                 } else {
                     selectedProduct.splice(index, 1);
+                    saveStatusCheck.splice(index_id, 1);
                 }
 
             })
@@ -680,7 +707,11 @@
                     count = input.getAttribute('data-count');
                     cartId = input.getAttribute('data-id-cart');
                     product = {idGioHang: cartId, soLuong: count, idSanPhamChiTiet: input.value};
-                    selectedCart.push(product);
+                    if (selectedCart.some(obj => JSON.stringify(obj) === JSON.stringify(product))) {
+                        console.log('cart was selected');
+                    } else {
+                        selectedCart.push(product);
+                    }
                 }
             })
             console.log("Cart : ")
@@ -690,6 +721,9 @@
             handleInvoiceCalculation(sub_total_global, vat_global);
         } else {
             if (selectedProductGroup.length > 0) {
+                let index = saveStatusCheckGroup.indexOf('check-group-' + productId);
+                saveStatusCheckGroup.splice(index, 1);
+                console.log('after checked group :', saveStatusCheckGroup);
                 checkboxGroup.checked = false;
                 selectedProductGroup.splice(check, 1);
                 nodeList.forEach(function (item) {
@@ -723,19 +757,59 @@
     }
 
     function chooseProduct(productId, id) {
-        var currentCheckbox = document.getElementById('checkbox-' + productId + '-' + id);
+        let elemnt_id = 'checkbox-' + productId + '-' + id;
+        let currentCheckbox = document.getElementById(elemnt_id);
 
         // Kiểm tra xem ID đã được chọn có trong danh sách hay không?
-        var index = selectedProduct.indexOf(currentCheckbox.value);
+        let index = selectedProduct.indexOf(currentCheckbox.value);
+        let index_id = saveStatusCheck.indexOf(elemnt_id);
 
         if (index === -1) {
             // Nếu không tìm thấy, thêm ID vào danh sách!
             selectedProduct.push(currentCheckbox.value + '');
+            saveStatusCheck.push(elemnt_id);
+            for (let key in productDataList) {
+                if (productDataList.hasOwnProperty(key)) {
+                    var arr = productDataList[key];
+                    let allInSelectedProduct = true; // Giả định rằng tất cả đều nằm trong selectedProduct
+                    for (let i = 0; i < arr.length; i++) {
+                        console.log("Array ")
+                        arr.forEach(function (item) {
+                            console.log(item);
+                        })
+                        console.log("Product ")
+                        selectedProduct.forEach(function (item) {
+                            console.log(item);
+                        })
+                        if (!selectedProduct.includes(arr[i].spct.id + '')) {
+                            // Nếu một giá trị không nằm trong selectedProduct
+                            allInSelectedProduct = false;
+                            console.log("Not all are in select product!")
+                            break; // Không cần kiểm tra tiếp, đã có ít nhất một giá trị không nằm trong selectedProduct
+                        }
+                    }
+                    console.log(allInSelectedProduct);
+                    if (allInSelectedProduct) {
+                        console.log("all are in select product!")
+                        document.getElementById('check-group-' + productId).checked = true;
+                    }
+                }
+            }
         } else {
             // Nếu tìm thấy, loại bỏ ID khỏi danh sách!
             selectedProduct.splice(index, 1);
+            saveStatusCheck.splice(index_id, 1);
             document.getElementById('check-group-' + productId).checked = false;
         }
+
+        console.log("id_element");
+        saveStatusCheck.forEach(function (item) {
+            console.log(item);
+        })
+        console.log("select_product");
+        selectedProduct.forEach(function (item) {
+            console.log(item);
+        })
         var sub_total = 0;
         var vat = 0;
         var product = {};
@@ -749,7 +823,11 @@
                 count = input.getAttribute('data-count');
                 cartId = input.getAttribute('data-id-cart');
                 product = {idGioHang: cartId, soLuong: count, idSanPhamChiTiet: input.value};
-                selectedCart.push(product);
+                if (selectedCart.some(obj => JSON.stringify(obj) === JSON.stringify(product))) {
+                    console.log('cart was selected');
+                } else {
+                    selectedCart.push(product);
+                }
             }
         })
         console.log("Cart choose product: ")
@@ -831,6 +909,7 @@
         })
         selectedProduct = [];
         selectedProductGroup = [];
+        selectedCart = [];
         handleInvoiceCalculation(0, 0);
         var button = `<button class="btn btn-hover btn-info" onclick="chooseAll()">
                             Chọn Tất Cả
@@ -1012,7 +1091,7 @@
                 }
                 if (response.statusText === "failure") {
                     swal.fire({
-                        text: "Đừng thêm nữa e!",
+                        text: "Số Lượng Đạt Giới Hạn!",
                         icon: "error",
                         confirmButtonText: 'OK'
                     })
@@ -1026,15 +1105,16 @@
     }
 
     function minusQuantity(id, index) {
-        var count = document.getElementById('product-quantity-' + index).value;
+        let count = document.getElementById('product-quantity-' + id + '-' + index).value;
         console.log(count);
         if (parseInt(count) === 1) {
             swal.fire({
-                text: "Bạn chắc chắn muốn bỏ sản phẩm này?",
-                showDenyButton: true,
+                icon: 'question',
+                title: 'Thông báo',
+                text: "Bạn chắc chắn muốn xoá sản phẩm này khỏi giỏ hàng?",
                 showCancelButton: true,
                 confirmButtonText: "Có",
-                denyButtonText: `Không`
+                cancelButtonText: `Không`
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
@@ -1075,7 +1155,6 @@
                     if (response.statusText === "success") {
                         if (response.message === "success") {
                             loadPage();
-                            unchooseAll();
                         }
                     }
                 },
@@ -1113,6 +1192,7 @@
                             cancelButtonText: "OK"
                         })
                         loadPage();
+
                     } else {
                         swal.fire({
                             icon: "warning",

@@ -68,4 +68,10 @@ public interface SanPhamService {
     Page<SanPham> filterColorAndSize(Pageable pageable,  List<Integer> color,  List<String> size);
 
     Integer priceMax();
+
+    //sport
+    Page<SanPham> filterSport(Pageable pageable,  String sports);
+
+    //brands
+    Page<SanPham> filterBrand(Pageable pageable,  String brands);
 }

@@ -233,7 +233,8 @@
                     </div>
                     <div class="card overflow-hidden">
                         <div class="card-header border-bottom-dashed">
-                            <h5 class="card-title mb-0 fs-15">Order Summary</h5>
+                            <h5 class="card-title mb-0 fs-15">Tổng Giá Trị<span class="text-danger fw-bold">(Chưa Bao Gồm Phí Ship)</span>
+                            </h5>
                         </div>
                         <div class="card-body pt-4">
                             <div class="table-responsive table-card">
@@ -246,10 +247,6 @@
                                     <tr>
                                         <td>Mã giảm giá <span class="text-muted" disabled="">(Toner15)</span>:</td>
                                         <td class="text-end cart-discount">- 0%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Phí giao hàng</td>
-                                        <td class="text-end cart-shipping">0 VND</td>
                                     </tr>
                                     <tr>
                                         <td>VAT(10%) :</td>
@@ -1509,87 +1506,107 @@
     });
 
     function handlerOrder() {
-        let arrInvoiceDetail = [];
-        for (const item of listCart) {
-            let invoiceDetail = {
-                idGioHang: item.gh.id,
-                soLuong: item.soLuong,
-                idSanPhamChiTiet: item.spct.id
-            }
-            arrInvoiceDetail.push(invoiceDetail);
-        }
-        $.ajax({
-            url: '/api/client/order/invoice/save/' + userId + '/' + addressId,
-            method: 'POST',
-            contentType: 'application/json',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('user_token')
-            },
-            data: JSON.stringify(arrInvoiceDetail),
-            success: function (response) {
-                console.log(response);
-                if (response === "success") {
-                    swal.fire({
-                        icon: 'success',
-                        title: 'Thông báo',
-                        text: 'Đặt hàng thành công!'
-                    }).then(() => {
-                        window.location.href = '/client/product';
-                    })
-                } else {
-                    swal.fire({
-                        icon: 'error',
-                        title: 'Thông báo',
-                        text: 'Lỗi!'
-                    })
+        swal.fire({
+            icon: 'question',
+            title: 'Thông Báo',
+            text: 'Bạn có chắc muốn đặt hàng?',
+            confirmButtonText: 'Có',
+            showCancelButton: true,
+            cancelButtonText: 'Không'
+        }).then((result) => {
+            if (result.isConfirmed()) {
+                let arrInvoiceDetail = [];
+                for (const item of listCart) {
+                    let invoiceDetail = {
+                        idGioHang: item.gh.id,
+                        soLuong: item.soLuong,
+                        idSanPhamChiTiet: item.spct.id
+                    }
+                    arrInvoiceDetail.push(invoiceDetail);
                 }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error:', error);
+                $.ajax({
+                    url: '/api/client/order/invoice/save/' + userId + '/' + addressId,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('user_token')
+                    },
+                    data: JSON.stringify(arrInvoiceDetail),
+                    success: function (response) {
+                        console.log(response);
+                        if (response === "success") {
+                            swal.fire({
+                                icon: 'success',
+                                title: 'Thông báo',
+                                text: 'Đặt hàng thành công!'
+                            }).then(() => {
+                                window.location.href = '/client/product';
+                            })
+                        } else {
+                            swal.fire({
+                                icon: 'error',
+                                title: 'Thông báo',
+                                text: 'Lỗi!'
+                            })
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
             }
-        });
+        })
     }
 
     function handlerByNow() {
-        let product = {
-            id: productBuyNow.id,
-            idSanPham: productBuyNow.idSanPham,
-            idMauSac: productBuyNow.idMauSac,
-            size: productBuyNow.size,
-            donGia: productBuyNow.donGia,
-            soLuong: productBuyNow.soLuong
-        };
+        swal.fire({
+            icon: 'question',
+            title: 'Thông Báo',
+            text: 'Bạn có chắc muốn đặt hàng?',
+            confirmButtonText: 'Có',
+            showCancelButton: true,
+            cancelButtonText: 'Không'
+        }).then((result) => {
+            let product = {
+                id: productBuyNow.id,
+                idSanPham: productBuyNow.idSanPham,
+                idMauSac: productBuyNow.idMauSac,
+                size: productBuyNow.size,
+                donGia: productBuyNow.donGia,
+                soLuong: productBuyNow.soLuong
+            };
 
-        $.ajax({
-            url: '/api/client/order/invoice/buy-now/' + userId + '/' + addressId,
-            method: 'POST',
-            contentType: 'application/json',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('user_token')
-            },
-            data: JSON.stringify(product),
-            success: function (response) {
-                console.log(response);
-                if (response === "success") {
-                    swal.fire({
-                        icon: 'success',
-                        title: 'Thông báo',
-                        text: 'Đặt hàng thành công!'
-                    }).then(() => {
-                        window.location.href = '/client/product';
-                    })
-                } else {
-                    swal.fire({
-                        icon: 'error',
-                        title: 'Thông báo',
-                        text: 'Lỗi!'
-                    })
+            $.ajax({
+                url: '/api/client/order/invoice/buy-now/' + userId + '/' + addressId,
+                method: 'POST',
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('user_token')
+                },
+                data: JSON.stringify(product),
+                success: function (response) {
+                    console.log(response);
+                    if (response === "success") {
+                        swal.fire({
+                            icon: 'success',
+                            title: 'Thông báo',
+                            text: 'Đặt hàng thành công!'
+                        }).then(() => {
+                            window.location.href = '/client/product';
+                        })
+                    } else {
+                        swal.fire({
+                            icon: 'error',
+                            title: 'Thông báo',
+                            text: 'Lỗi!'
+                        })
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
                 }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error:', error);
-            }
-        });
+            });
+        })
     }
 </script>
 </body>

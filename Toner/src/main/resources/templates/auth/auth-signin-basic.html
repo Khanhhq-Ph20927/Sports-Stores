@@ -80,6 +80,7 @@
 </section>
 <div th:replace="auth/fragments/script::script"></div>
 </body>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/cjs/index.min.js"></script>
 <script>
@@ -109,7 +110,7 @@
                     headers: new Headers({
                         'Content-Type': 'application/json'
                     }),
-                    body: JSON.stringify(user)
+                    body: JSON.stringify(result.token)
                 });
                 localStorage.setItem("user_refreshToken", result.refreshToken);
                 localStorage.setItem("user_token", result.token);
@@ -128,7 +129,7 @@
                     headers: new Headers({
                         'Content-Type': 'application/json'
                     }),
-                    body: JSON.stringify(user)
+                    body: JSON.stringify(result.token)
                 });
                 localStorage.setItem("refreshToken", result.refreshToken);
                 localStorage.setItem("token", result.token);
@@ -139,7 +140,7 @@
                 }
                 localStorage.setItem("adminId", userItem.id);
                 localStorage.setItem("adminName", userItem.hoTen);
-                window.location.href = '/admin/index';
+                window.location.href = '/admin/sell-off';
             }
         }
         if (response.status > 300) {
